@@ -1,2 +1,2 @@
-REACT_APP_API = https://digi.api.developteam.net/digi-api
+REACT_APP_API = https://nails.api-v2.developteam.net
 GENERATE_SOURCEMAP=true
