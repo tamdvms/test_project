@@ -99,15 +99,17 @@
         &__collapsed {
             height: 80px;
             img {
-                width: 72px;
                 border-radius: 4px;
+                width: 100%;
+                padding: 8px;
             }
         }
         &__expanded {
             height: $navSiderExpandedWidth;
             img {
-                width: 206px;
                 border-radius: 10px;
+                width: 100%;
+                padding: 16px;
             }
         }
     }

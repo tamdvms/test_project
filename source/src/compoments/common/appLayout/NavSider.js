@@ -84,7 +84,7 @@ class NavSider extends Component {
                 onCollapse={onToggleNavSide}
                 className={navSidercollapsed ? 'nav-sider nav-sider__collapsed' : 'nav-sider nav-sider__expanded'}
                 >
-                <div className={navSidercollapsed ? 'logo logo__collapsed' : 'logo logo__expanded'} style={{ height: navSidercollapsed ? "80px" : "150px"}}>
+                <div className={navSidercollapsed ? 'logo logo__collapsed' : 'logo logo__expanded'} style={{ width: '100%' }}>
                     <img src={userData.logo ? `${AppConstants.contentRootUrl}/${userData.logo}` : logoUrl} alt="Mira"/>
                 </div>
                 <Menu
