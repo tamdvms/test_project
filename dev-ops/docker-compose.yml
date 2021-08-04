@@ -9,7 +9,7 @@ networks:
   basic:
     
 services:
-  web_admin:
+  nails_admin_v2:
     container_name: {CONTAINER_NAME}
     image: {CONTAINER_IMAGE}:1.0
     mem_limit: 200m
