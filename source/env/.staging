@@ -1,0 +1,2 @@
+REACT_APP_API = https://digi.api.developteam.net/digi-api
+GENERATE_SOURCEMAP=false
