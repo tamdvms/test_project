@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import { navMenuConfig } from '../../../constants/menuConfig';
-import logoUrl from '../../../assets/images/logo.png';
+import logoUrl from '../../../assets/images/logo.jpg';
 import { AppConstants } from '../../../constants'
 
 const { Sider } = Layout;
