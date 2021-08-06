@@ -352,6 +352,7 @@ class ListBasePage extends Component {
         return {
             title: 'Hành động',
             width: '100px',
+            align: 'center',
             render: (dataRow) => {
                 const actionColumns = [];
                 if(this.actionColumns.isEdit) {
@@ -447,8 +448,8 @@ class ListBasePage extends Component {
         const requiredPermissions = [];
         Object.keys(sitePathConfig) && Object.keys(sitePathConfig).forEach(key=>{
             if(sitePathConfig[key].path === pathname){
-                requiredPermissions.push(sitePathConfig[key].permissions[1]) //Get by id
-                requiredPermissions.push(sitePathConfig[key].permissions[3]) //Update
+                requiredPermissions.push(sitePathConfig[key].permissions?.[1]) //Get by id
+                requiredPermissions.push(sitePathConfig[key].permissions?.[3]) //Update
             }
         })
         return (<ElementWithPermission permissions={requiredPermissions}>
@@ -461,7 +462,7 @@ class ListBasePage extends Component {
         const requiredPermissions = [];
         Object.keys(sitePathConfig) && Object.keys(sitePathConfig).forEach(key=>{
             if(sitePathConfig[key].path === pathname){
-                requiredPermissions.push(sitePathConfig[key].permissions[2]) //Create
+                requiredPermissions.push(sitePathConfig[key].permissions?.[2]) //Create
             }
         })
         return (<ElementWithPermission permissions={requiredPermissions}>

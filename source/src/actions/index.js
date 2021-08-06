@@ -3,6 +3,7 @@ import { actions as accountActions, actionTypes as accountTypes } from './accoun
 import { actions as userActions, actionTypes as userTypes } from './user';
 import { actions as groupPermissionActions, actionTypes as groupPermissionTypes } from './groupPermission';
 import {actions as settingActions, actionTypes as settingTypes} from './setting';
+import {actions as customerActions, actionTypes as customerTypes} from './customer';
 
 export const actions = {
     ...appCommonActions,
@@ -10,6 +11,7 @@ export const actions = {
     ...userActions,
     ...groupPermissionActions,
     ...settingActions,
+    ...customerActions,
 }
 
 export const types = {
@@ -18,4 +20,5 @@ export const types = {
     ...userTypes,
     ...groupPermissionTypes,
     ...settingTypes,
+    ...customerTypes,
 }

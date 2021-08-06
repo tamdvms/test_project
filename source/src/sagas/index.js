@@ -4,14 +4,15 @@ import account from './account';
 import user from './user';
 import groupPermission from './groupPermission';
 import setting from './setting';
+import customer from './customer';
 
 const sagas = [
     ...appCommon,
     ...account,
     ...user,
     ...groupPermission,
-
     ...setting,
+    ...customer,
 ];
 
 function* rootSaga() {
