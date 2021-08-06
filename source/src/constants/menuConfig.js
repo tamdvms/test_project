@@ -1,6 +1,12 @@
 import React from 'react';
 
-import { UsergroupAddOutlined, ControlOutlined, FileTextOutlined, UserOutlined, QuestionOutlined } from '@ant-design/icons';
+import {
+    UsergroupAddOutlined,
+    ControlOutlined,
+    FileTextOutlined,
+    UserOutlined,
+    QuestionOutlined,
+} from '@ant-design/icons';
 import { sitePathConfig } from '../constants/sitePathConfig';
 const navMenuConfig = [
     {
@@ -25,6 +31,16 @@ const navMenuConfig = [
                 label: 'Quyền',
                 ...sitePathConfig.groupPermission
             },
+        ]
+    },
+    {
+        label: 'Khách hàng',
+        icon: <UserOutlined />,
+        children: [
+            {
+                label: 'Khách hàng',
+                ...sitePathConfig.customer,
+            }
         ]
     },
 ]

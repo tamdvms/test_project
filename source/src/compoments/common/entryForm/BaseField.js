@@ -27,9 +27,12 @@ class BaseField extends Component {
     }
 
     getRequiredMsg() {
-        const { fieldName, requiredMsg } = this.props;
+        const { fieldName, requiredMsg, label } = this.props;
         let fieldTitle = '';
-        if(fieldName) {
+        if(label) {
+                fieldTitle = label;
+        }
+        else if(fieldName) {
             if(Array.isArray(fieldName)) {
                 fieldTitle = Utils.convertStringToLowerCase(fieldName[fieldName.length - 1]);
             }

@@ -17,7 +17,6 @@ export const sitePathConfig = {
             apiConfig.user.deleteAdmin.path
         ]
     },
-   
     forbidden: {
         path: '/forbidden'
     },
@@ -40,6 +39,16 @@ export const sitePathConfig = {
             apiConfig.groupPermission.update.path,
             'not_have_delete',
             apiConfig.groupPermission.getPermissionList.path,
+        ]
+    },
+    customer: {
+        path: '/customer',
+        permissions: [
+            apiConfig.customer.getCustomerList.path,
+            apiConfig.customer.getCustomerById.path,
+            apiConfig.customer.createCustomer.path,
+            apiConfig.customer.updateCustomer.path,
+            apiConfig.customer.deleteCustomer.path,
         ]
     },
 }

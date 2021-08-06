@@ -92,6 +92,7 @@ const sendRequest = async (options, params = {}, token) => {
     if(fetchRequest.status === 401 && userData) {
         window.localStorage.removeItem(StorageKeys.userData);
         window.location.replace('/login');
+        return { success: false, responseData: {}}
     }
     else if(fetchRequest.status === 403) {
         // window.location.replace('/forbidden');

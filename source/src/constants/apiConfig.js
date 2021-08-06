@@ -113,7 +113,6 @@ const apiConfig = {
             headers: baseHeader
         },
     },
-   
     setting: {
         getSettingsList: {
             path: '/v1/settings/list',
@@ -137,6 +136,33 @@ const apiConfig = {
         },
         deleteSetting: {
             path: '/v1/settings/delete',
+            method: 'DELETE',
+            headers: baseHeader
+        }
+    },
+    customer: {
+        getCustomerList: {
+            path: '/v1/customer/list',
+            method: 'GET',
+            headers: baseHeader
+        },
+        createCustomer: {
+            path: '/v1/customer/create',
+            method: 'POST',
+            headers: baseHeader
+        },
+        getCustomerById: {
+            path: '/v1/customer/get',
+            method: 'GET',
+            headers: baseHeader
+        },
+        updateCustomer: {
+            path: '/v1/customer/update',
+            method: 'PUT',
+            headers: baseHeader
+        },
+        deleteCustomer: {
+            path: '/v1/customer/delete',
             method: 'DELETE',
             headers: baseHeader
         }
