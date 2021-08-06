@@ -12,6 +12,7 @@ import { convertStringToDateTime, convertDateTimeToString } from "../../utils/da
 import {
   AppConstants,
   UploadFileTypes,
+  STATUS_ACTIVE,
 } from "../../constants";
 import Utils from "../../utils";
 import { showErrorMessage } from "../../services/notifyService";
@@ -24,6 +25,19 @@ class CustomerForm extends BasicForm {
         ? `${AppConstants.contentRootUrl}/${props.dataDetail.customerAvatarPath}`
         : "",
       uploading: false,
+    }
+  }
+
+  getInitialValue = () => {
+    const { dataDetail, isEditing } = this.props;
+    if(!isEditing) {
+      return {
+        ...dataDetail,
+        status: STATUS_ACTIVE,
+      }
+    }
+    return {
+      ...dataDetail,
     }
   }
 
@@ -55,23 +69,23 @@ class CustomerForm extends BasicForm {
     });
   };
 
-  validateToConfirmPassword = (rule, value) => {
-    const {
-      current: { validateFields, isFieldTouched },
-    } = this.formRef;
-    if (isFieldTouched("confirmPassword")) {
-      validateFields(["confirmPassword"], { force: true });
-    }
-    return Promise.resolve();
-  };
-  compareToPassword = (rule, newPassword) => {
-    const password = this.getFieldValue("customerPassword");
-    if ((password || newPassword) && password !== newPassword) {
-      return Promise.reject("Mật khẩu không khớp");
-    } else {
-      return Promise.resolve();
-    }
-  };
+  // validateToConfirmPassword = (rule, value) => {
+  //   const {
+  //     current: { validateFields, isFieldTouched },
+  //   } = this.formRef;
+  //   if (isFieldTouched("confirmPassword")) {
+  //     validateFields(["confirmPassword"], { force: true });
+  //   }
+  //   return Promise.resolve();
+  // };
+  // compareToPassword = (rule, newPassword) => {
+  //   const password = this.getFieldValue("customerPassword");
+  //   if ((password || newPassword) && password !== newPassword) {
+  //     return Promise.reject("Mật khẩu không khớp");
+  //   } else {
+  //     return Promise.resolve();
+  //   }
+  // };
 
   render() {
     const { formId, dataDetail, commonStatus, loadingSave, isEditing } = this.props;
@@ -82,7 +96,7 @@ class CustomerForm extends BasicForm {
         ref={this.formRef}
         layout="vertical"
         onFinish={this.handleSubmit}
-        initialValues={dataDetail}
+        initialValues={this.getInitialValue()}
       >
 			<Row gutter={16}>
 				<Col span={12}>
@@ -93,8 +107,6 @@ class CustomerForm extends BasicForm {
 						imageUrl={avatar}
 						onChange={this.handleChangeAvatar}
 						uploadFile={this.uploadFileAvatar}
-						required
-						requiredMsg="Vui lòng tải hình lên"
 						disabled={loadingSave}
 					/>
 				</Col>
@@ -119,36 +131,44 @@ class CustomerForm extends BasicForm {
 				</Col>
 			</Row>
 			<Row gutter={16}>
-              <Col span={12}>
-                <TextField
-                  type="password"
-                  fieldName="customerPassword"
-                  label={isEditing ? "Mật khẩu mới" : "Mật khẩu"}
-                  required={!isEditing}
-                  validators={[this.validateToConfirmPassword]}
-                  minLength={6}
-                  disabled={loadingSave}
-                />
-              </Col>
-              <Col span={12}>
-                <TextField
-                  fieldName="confirmPassword"
-                  type="password"
-                  label={isEditing ? "Xác nhận mật khẩu mới" : "Xác nhận mật khẩu"}
-                  required={!isEditing || this.getFieldValue("password")}
-                  validators={[this.compareToPassword]}
-                  disabled={loadingSave}
-                />
-              </Col>
-            </Row>
+          <Col span={12}>
+            <TextField
+              type="password"
+              fieldName="customerPassword"
+              label={isEditing ? "Mật khẩu mới" : "Mật khẩu"}
+              required={!isEditing}
+              validators={[this.validateToConfirmPassword]}
+              minLength={6}
+              disabled={loadingSave}
+            />
+          </Col>
+          <Col span={12}>
+            <TextField
+              type="number"
+              fieldName="customerPhone"
+              label="Số điện thoại"
+              required
+              minLength={10}
+              disabled={loadingSave}
+            />
+          </Col>
+          {/* <Col span={12}>
+            <TextField
+              fieldName="confirmPassword"
+              type="password"
+              label={isEditing ? "Xác nhận mật khẩu mới" : "Xác nhận mật khẩu"}
+              required={!isEditing || this.getFieldValue("password")}
+              validators={[this.compareToPassword]}
+              disabled={loadingSave}
+            />
+          </Col> */}
+      </Row>
 			<Row gutter={16}>
-				<Col span={12}>
+        <Col span={12}>
 					<TextField
-						type="number"
-						fieldName="customerPhone"
-						label="Số điện thoại"
+						fieldName="customerAddress"
+						label="Địa chỉ"
 						required
-						minLength={10}
 						disabled={loadingSave}
 					/>
 				</Col>
@@ -158,27 +178,15 @@ class CustomerForm extends BasicForm {
 			</Row>
 
 			<Row gutter={16}>
-				<Col span={12}>
-					<TextField
-						fieldName="customerAddress"
-						label="Địa chỉ"
-						required
-						disabled={loadingSave}
-					/>
-				</Col>
-				{
-					isEditing ? (
-						<Col span={12}>
-							<DropdownField
-								fieldName="status"
-								label="Trạng thái"
-								required
-								options={commonStatus}
-								disabled={loadingSave}
-							/>
-						</Col>
-					) : null
-				}
+        <Col span={12}>
+          <DropdownField
+            fieldName="status"
+            label="Trạng thái"
+            required
+            options={commonStatus}
+            disabled={loadingSave}
+          />
+        </Col>
 			</Row>
       </Form>
     );
