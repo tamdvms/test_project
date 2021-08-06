@@ -14,8 +14,8 @@ import { convertUtcToLocalTime } from "../../utils/datetimeHelper";
 import { AppConstants } from "../../constants";
 
 const commonStatus = [
-  { value: 1, label: 'Active', color: 'green' },
-  { value: 0, label: 'Unactive', color: 'red' },
+  { value: 1, label: 'Kích hoạt', color: 'green' },
+  { value: 0, label: 'Khóa', color: 'red' },
 ]
 
 class CustomerListPage extends ListBasePage {
@@ -90,7 +90,7 @@ class CustomerListPage extends ListBasePage {
 
   renderStatusColumn() {
     return {
-        title: 'Status',
+        title: 'Trạng thái',
         dataIndex: 'status',
         width: '100px',
         render: (status) => {

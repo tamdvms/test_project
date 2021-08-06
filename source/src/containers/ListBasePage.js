@@ -352,6 +352,7 @@ class ListBasePage extends Component {
         return {
             title: 'Hành động',
             width: '100px',
+            align: 'center',
             render: (dataRow) => {
                 const actionColumns = [];
                 if(this.actionColumns.isEdit) {
