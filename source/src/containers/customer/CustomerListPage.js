@@ -33,6 +33,8 @@ class CustomerListPage extends ListBasePage {
       {
         title: "#",
         dataIndex: "customerAvatarPath",
+        align: 'center',
+        width: 100,
         render: (avatarPath) => (
           <Avatar
             style={{width: "70px", height: "70px", padding: "8px"}}
@@ -45,14 +47,14 @@ class CustomerListPage extends ListBasePage {
       },
       { title: 'Tên tài khoản', dataIndex: "customerUsername" },
       { title: 'Họ và tên', dataIndex: "customerFullName" },
-      { title: 'Số điện thoại', dataIndex: "customerPhone" },
+      { title: 'Số điện thoại', dataIndex: "customerPhone", width: 150 },
       { title: 'E-mail', dataIndex: "customerEmail", width: "200px" },
       {
-        title: 'Ngày tạo',
+        title: <div style={{ paddingRight: 20 }}>Ngày tạo</div>,
         dataIndex: "createdDate",
         align: "right",
-        width: 100,
-        render: (createdDate) => convertUtcToLocalTime(createdDate, "DD/MM/YYYY"),
+        width: 120,
+        render: (createdDate) => <div style={{ paddingRight: 20 }}>{convertUtcToLocalTime(createdDate, "DD/MM/YYYY")}</div>,
       },
       this.renderStatusColumn(),
       this.renderActionColumn(),
