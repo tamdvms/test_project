@@ -51,4 +51,37 @@ export const sitePathConfig = {
             apiConfig.customer.deleteCustomer.path,
         ]
     },
+    categoryImport: {
+        path: '/category-import',
+        childrenKeys: ['/category-import-child'],
+        permissions: [
+            apiConfig.category.getList.path,
+            apiConfig.category.getById.path,
+            apiConfig.category.create.path,
+            apiConfig.category.update.path,
+            apiConfig.category.delete.path,
+        ]
+    },
+    categoryExport: {
+        path: '/category-export',
+        childrenKeys: ['/category-export-child'],
+        permissions: [
+            apiConfig.category.getList.path,
+            apiConfig.category.getById.path,
+            apiConfig.category.create.path,
+            apiConfig.category.update.path,
+            apiConfig.category.delete.path,
+        ]
+    },
+    categoryProduct: {
+        path: '/category-product',
+        childrenKeys: ['/category-product-child'],
+        permissions: [
+            apiConfig.category.getList.path,
+            apiConfig.category.getById.path,
+            apiConfig.category.create.path,
+            apiConfig.category.update.path,
+            apiConfig.category.delete.path,
+        ]
+    },
 }

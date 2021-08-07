@@ -38,7 +38,7 @@ class CustomerListPage extends ListBasePage {
         render: (avatarPath) => (
           <Avatar
             style={{width: "70px", height: "70px", padding: "8px"}}
-            className="customer-avatar"
+            className="table-avatar"
             size="large"
             icon={<UserOutlined />}
             src={avatarPath ? `${AppConstants.contentRootUrl}${avatarPath}` : null}
@@ -96,8 +96,8 @@ class CustomerListPage extends ListBasePage {
         render: (status) => {
           const statusItem = commonStatus.find(s=>s.value === status);
           return (
-            <Tag className="tag-status" color={statusItem.color}>
-                {statusItem.label}
+            <Tag className="tag-status" color={statusItem?.color}>
+                {statusItem?.label}
             </Tag>
           )
         }

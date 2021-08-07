@@ -69,3 +69,13 @@ export const genders = [
     { value: GENDER_FEMALE, label: 'Nữ' },
     { value: GENDER_OTHER, label: 'Khác' },
 ]
+
+const CATEGORY_KIND_IMPORT = 1;
+const CATEGORY_KIND_EXPORT = 2;
+const CATEGORY_KIND_PRODUCT = 3;
+
+export const categoryKinds = {
+    CATEGORY_KIND_EXPORT,
+    CATEGORY_KIND_IMPORT,
+    CATEGORY_KIND_PRODUCT,
+}

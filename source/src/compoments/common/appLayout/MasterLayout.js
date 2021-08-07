@@ -148,7 +148,7 @@ class MasterLayout extends Component {
                                             {
                                                 breadcrumb.path
                                                 ?
-                                                    <Link to={breadcrumb.path}>{breadcrumb.name}</Link>
+                                                    <Link className="routing" to={breadcrumb.path}>{breadcrumb.name}</Link>
                                                 :
                                                     breadcrumb.name
                                             }

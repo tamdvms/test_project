@@ -247,7 +247,14 @@ body {
 .ant-picker-footer {
     display: none;
 }
-.customer-avatar img{
+
+.table-avatar {
+    width: 54px;
+    height: 54px;
+    margin: 8px;
+}
+
+.table-avatar img{
     border-radius: 50%;
 }
 
@@ -343,4 +350,9 @@ body {
     input, textarea, .ant-select-selection-item {
         color: #000 !important;
     }
+}
+
+.routing {
+    cursor: pointer;
+    color: #1890ff !important;
 }
