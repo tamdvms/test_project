@@ -67,6 +67,14 @@ class CategoryForm extends BasicForm {
         });
     };
 
+    handleSubmit(formValues) { 
+        const { onSubmit } = this.props;
+        onSubmit({
+            ...formValues,
+            categoryOrdering: 0,
+        });
+    }
+
     render() {
         const { formId, dataDetail, loadingSave, isEditing } = this.props;
         const { avatar, uploading } = this.state;
@@ -102,13 +110,14 @@ class CategoryForm extends BasicForm {
                 </Col>
                 <Col span={12}>
                     <TextField
-                        type="number"
-                        fieldName="categoryOrdering"
-                        label="Thứ tự"
-                        required
-                        minLength={0}
-                        disabled={loadingSave}
-                    />
+                    type="textarea"
+                    fieldName="categoryDescription"
+                    label="Mô tả"
+                    required
+                    style={{
+                        height: 100
+                    }}
+                    disabled={loadingSave}/>
                 </Col>
             </Row>
             <Row gutter={16}>
@@ -125,16 +134,6 @@ class CategoryForm extends BasicForm {
                         </Col>
                     ) : null
                 }
-                <Col span={12}>
-                    <TextField
-                    type="textarea"
-                    fieldName="categoryDescription"
-                    label="Mô tả"
-                    style={{
-                        height: 100
-                    }}
-                    disabled={loadingSave}/>
-                </Col>
             </Row>
         </Form>
         );

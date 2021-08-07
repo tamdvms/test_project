@@ -8,7 +8,7 @@ const BaseTable = (props) => (
         scroll={{ x: true }}
         // scroll={{ x: 'max-content' }}
         {...props}
-        pagination={{ ...props.pagination, showSizeChanger: false }}
+        pagination={{ ...props.pagination, showSizeChanger: false, hideOnSinglePage: true }}
     />
 )
 

@@ -356,3 +356,7 @@ body {
     cursor: pointer;
     color: #1890ff !important;
 }
+
+.base-table .ant-table-content {
+    overflow: overlay!important;
+}

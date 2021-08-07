@@ -14,7 +14,7 @@ import { FieldTypes } from "../../constants/formConfig";
 import { AppConstants } from "../../constants";
 import { commonStatus, categoryKinds } from "../../constants/masterData";
 
-const { CATEGORY_KIND_IMPORT } = categoryKinds;
+const { CATEGORY_KIND_PRODUCT } = categoryKinds;
 
 class CategoryImportListPage extends ListBasePage {
     initialSearch() {
@@ -79,14 +79,14 @@ class CategoryImportListPage extends ListBasePage {
     prepareCreateData(data) {
         return {
             ...data,
-            categoryKind: CATEGORY_KIND_IMPORT,
+            categoryKind: CATEGORY_KIND_PRODUCT,
         };
     }
 
     getList() {
         const { getDataList } = this.props;
         const page = this.pagination.current ? this.pagination.current - 1 : 0;
-        const params = { page, size: this.pagination.pageSize, search: this.search, kind: CATEGORY_KIND_IMPORT};
+        const params = { page, size: this.pagination.pageSize, search: this.search, kind: CATEGORY_KIND_PRODUCT};
         getDataList({ params });
     }
 
