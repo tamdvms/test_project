@@ -167,5 +167,32 @@ const apiConfig = {
             headers: baseHeader
         }
     },
+    category: {
+        getList: {
+            path: '/v1/category/list',
+            method: 'GET',
+            headers: baseHeader
+        },
+        create: {
+            path: '/v1/category/create',
+            method: 'POST',
+            headers: baseHeader
+        },
+        getById: {
+            path: '/v1/category/get',
+            method: 'GET',
+            headers: baseHeader
+        },
+        update: {
+            path: '/v1/category/update',
+            method: 'PUT',
+            headers: baseHeader
+        },
+        delete: {
+            path: '/v1/category/delete',
+            method: 'DELETE',
+            headers: baseHeader
+        }
+    },
 }
 export default apiConfig;

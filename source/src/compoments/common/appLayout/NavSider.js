@@ -13,7 +13,11 @@ const findNavMenuActive = (navMenu, pathname) => {
     const menuActive = Object.keys(navMenu).find(navMenuKey => {
         if(navMenu[navMenuKey].children)
         {
-            return  !!navMenu[navMenuKey].children.find(navChild => navChild.path === pathname);
+            return  !!navMenu[navMenuKey].children.find(
+                navChild =>
+                    navChild.path === pathname
+                    || navChild.childrenKeys?.includes(pathname)
+            );
         }
         else if(navMenu[navMenuKey].path === pathname)
             return true;

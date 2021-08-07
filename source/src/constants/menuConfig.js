@@ -6,6 +6,7 @@ import {
     FileTextOutlined,
     UserOutlined,
     QuestionOutlined,
+    UnorderedListOutlined,
 } from '@ant-design/icons';
 import { sitePathConfig } from '../constants/sitePathConfig';
 const navMenuConfig = [
@@ -41,6 +42,24 @@ const navMenuConfig = [
                 label: 'Khách hàng',
                 ...sitePathConfig.customer,
             }
+        ]
+    },
+    {
+        label: 'Danh mục',
+        icon: <UnorderedListOutlined />,
+        children: [
+            {
+                label: 'Danh mục thu',
+                ...sitePathConfig.categoryImport,
+            },
+            {
+                label: 'Danh mục chi',
+                ...sitePathConfig.categoryExport,
+            },
+            {
+                label: 'Danh mục sản phẩm',
+                ...sitePathConfig.categoryProduct,
+            },
         ]
     },
 ]
