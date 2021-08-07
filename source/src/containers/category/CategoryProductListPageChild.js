@@ -15,7 +15,7 @@ import { AppConstants } from "../../constants";
 import { sitePathConfig } from "../../constants/sitePathConfig";
 import { commonStatus, categoryKinds } from "../../constants/masterData";
 
-const { CATEGORY_KIND_IMPORT } = categoryKinds;
+const { CATEGORY_KIND_PRODUCT } = categoryKinds;
 
 class CategoryImportListPageChild extends ListBasePage {
     initialSearch() {
@@ -80,7 +80,7 @@ class CategoryImportListPageChild extends ListBasePage {
     prepareCreateData(data) {
         return {
             ...data,
-            categoryKind: CATEGORY_KIND_IMPORT,
+            categoryKind: CATEGORY_KIND_PRODUCT,
             parentId: this.parentId,
         };
     }
@@ -92,7 +92,7 @@ class CategoryImportListPageChild extends ListBasePage {
             page,
             size: this.pagination.pageSize,
             search: this.search,
-            kind: CATEGORY_KIND_IMPORT,
+            kind: CATEGORY_KIND_PRODUCT,
             parentId: this.parentId,
         };
         getDataList({ params });
