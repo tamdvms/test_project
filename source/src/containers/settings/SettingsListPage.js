@@ -22,10 +22,8 @@ class SettingsListPage extends ListBasePage {
     this.columns = [
       this.renderIdColumn(),
       { title: "Tên", dataIndex: "name" },
-      { title: "Key", dataIndex: "key" },
-      { title: "Nhóm", dataIndex: "group" },
-      { 
-        title: <div style={{paddingRight: "2vw"}}>Giá trị</div>, 
+      {
+        title: <div style={{paddingRight: "2vw"}}>Giá trị</div>,
         align: "right",
         width: 100,
         dataIndex: "value",
@@ -38,24 +36,9 @@ class SettingsListPage extends ListBasePage {
     ];
     this.actionColumns = {
       isEdit: true,
-      isDelete: true,
+      isDelete: false,
       isChangeStatus: false,
     };
-  }
-
-  getSearchFields() {
-    return [
-      {
-        key: "key",
-        seachPlaceholder: "Key",
-        initialValue: this.search.name,
-      },
-      {
-        key: "group",
-        seachPlaceholder: "Group",
-        initialValue: this.search.group,
-      },
-    ];
   }
 
   prepareCreateData(data) {
@@ -94,18 +77,7 @@ class SettingsListPage extends ListBasePage {
 
     return (
       <div>
-        {this.renderSearchForm()}
         <div className="action-bar">
-          {
-            this.renderCreateNewButton((
-              <Button
-              type="primary"
-              onClick={() => this.onShowModifiedModal(false)}
-            >
-              <PlusOutlined /> Cài đặt mới
-            </Button>
-            ))
-          }
         </div>
         <BaseTable
           loading={loading}
@@ -114,6 +86,7 @@ class SettingsListPage extends ListBasePage {
           dataSource={settings}
           pagination={this.pagination}
           onChange={this.handleTableChange}
+          className="base-table table-setting"
         />
         <BasicModal
           visible={isShowModifiedModal}
