@@ -40,17 +40,9 @@ class SettingForm extends BasicForm {
               fieldName="name"
               min={6}
               label="Tên"
-              required={!isEditing}
+              required
               disabled={loadingSave}
             />
-          </Col>
-          <Col span={12}>
-            <TextField fieldName="group" min={6} label="Nhóm" required disabled={isEditing || loadingSave}/>
-          </Col>
-        </Row>
-        <Row gutter={16}>
-          <Col span={12}>
-            <TextField fieldName="key" label="Key" required={!isEditing} disabled={isEditing || loadingSave}/>
           </Col>
           <Col span={12}>
             <TextField fieldName="value" label="Giá trị" required disabled={loadingSave}/>
@@ -61,9 +53,9 @@ class SettingForm extends BasicForm {
           <Col span={12}>
             <TextField type="textarea" fieldName="description" label="Mô tả" disabled={loadingSave}/>
           </Col>
-          <Col span={12} hidden={isEditing}>
+          {/* <Col span={12} hidden={isEditing}>
             <BooleanField fieldName="editable" label="Có thể chỉnh sửa" disabled={isEditing || loadingSave}/>
-          </Col>
+          </Col> */}
         </Row>
       </Form>
     );

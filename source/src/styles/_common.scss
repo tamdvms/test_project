@@ -52,7 +52,13 @@ body {
     align-items: flex-end;
 }
 
-
+.table-setting {
+    .ant-table-tbody {
+        .ant-table-cell {
+            height: 50px;
+        }
+    }
+}
 
 .no-padding {
     padding: 0;
