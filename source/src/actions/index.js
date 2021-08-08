@@ -5,6 +5,7 @@ import { actions as groupPermissionActions, actionTypes as groupPermissionTypes 
 import {actions as settingActions, actionTypes as settingTypes} from './setting';
 import {actions as customerActions, actionTypes as customerTypes} from './customer';
 import {actions as categoryActions, actionTypes as categoryTypes} from './category';
+import {actions as productActions, actionTypes as productTypes} from './product';
 
 export const actions = {
     ...appCommonActions,
@@ -14,6 +15,7 @@ export const actions = {
     ...settingActions,
     ...customerActions,
     ...categoryActions,
+    ...productActions,
 }
 
 export const types = {
@@ -24,4 +26,5 @@ export const types = {
     ...settingTypes,
     ...customerTypes,
     ...categoryTypes,
+    ...productTypes,
 }

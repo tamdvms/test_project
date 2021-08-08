@@ -7,6 +7,7 @@ import {
     UserOutlined,
     QuestionOutlined,
     UnorderedListOutlined,
+    InboxOutlined,
 } from '@ant-design/icons';
 import { sitePathConfig } from '../constants/sitePathConfig';
 const navMenuConfig = [
@@ -59,6 +60,16 @@ const navMenuConfig = [
             {
                 label: 'Danh mục sản phẩm',
                 ...sitePathConfig.categoryProduct,
+            },
+        ]
+    },
+    {
+        label: 'Sản phẩm',
+        icon: <InboxOutlined />,
+        children: [
+            {
+                label: 'Sản phẩm',
+                ...sitePathConfig.product,
             },
         ]
     },
