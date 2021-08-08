@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import { navMenuConfig } from '../../../constants/menuConfig';
 import logoUrl from '../../../assets/images/logo.jpg';
@@ -14,10 +14,11 @@ const findNavMenuActive = (navMenu, pathname) => {
         if(navMenu[navMenuKey].children)
         {
             return  !!navMenu[navMenuKey].children.find(
-                navChild =>
-                    navChild.path === pathname
-                    || navChild.childrenKeys?.includes(pathname)
-            );
+                navChild => (
+                        navChild.path === pathname
+                        || navChild.childrenKeys?.includes(pathname)
+                    )
+            ) || pathname.startsWith(navMenu[navMenuKey].path + '/');
         }
         else if(navMenu[navMenuKey].path === pathname)
             return true;
@@ -53,21 +54,35 @@ const findNavMenuItemActive = (navMenu, pathname) => {
 } 
 
 class NavSider extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            loadingMenuItem: null,
+        }
+    }
+
+    handleLoadingMenuItem = (menuPath) => {
+        this.setState({loadingMenuItem: menuPath})
+        return true;
+    }
 
     render() {
         const { onToggleNavSide, currentPathname, navSidercollapsed, userData } = this.props;
+        const {
+            loadingMenuItem,
+        } = this.state;
         const availableMenu = navMenuConfig.filter(navMenu => {
             if(navMenu.children) {
                 navMenu.children = navMenu.children.filter(navMenuChild => {
                     if(navMenuChild.permissions)
-                        return userData.permissions.indexOf(navMenuChild.permissions[0]) > -1;
+                        return userData.permissions?.indexOf(navMenuChild.permissions[0]) > -1;
                     return true;
                 });
 
-                return navMenu.children.length > 0;
+                return !!(navMenu.children.length > 0 || navMenu.handleOnClick);
             }
             else if(navMenu.permissions) {
-                return userData.permissions.indexOf(navMenu.permissions[0]) > -1;
+                return userData.permissions?.indexOf(navMenu.permissions[0]) > -1;
             }
             return true;
         });
@@ -105,24 +120,43 @@ class NavSider extends Component {
                             style={!navSidercollapsed ? { paddingLeft: '0 34px 0 10px' } : null}
                             key={idx}
                             title={
-                                <span>
+                                <>
+                                <span className="title">
                                     {
                                         navMenuItem.icon
                                     }
-                                    
                                     <span>{navMenuItem.label}</span>
                                 </span>
+                                {
+                                    navMenuItem.iconAfter && navMenuItem.iconAfter(this.props, `${window.location.host}/login/${userData.id}`)
+                                }
+                                <Spin size="small" spinning={loadingMenuItem === navMenuItem.path}></Spin>
+                                </>
                             }
                             className="custom-sub-nav"
+                            onTitleClick={
+                                () => {
+                                    navMenuItem.handleOnClick && navMenuItem.handleOnClick(this.props, this.handleLoadingMenuItem)
+                                }
+                            }
                         >
                             {
-                                navMenuItem.children.map(navChildMenu =>
-                                    <Menu.Item key={navChildMenu.path}>
-                                        <Link to={navChildMenu.path}>
-                                            <span>{navChildMenu.label}</span>
-                                        </Link>
-                                    </Menu.Item>
+                                (
+                                        currentPathname === navMenuItem.path
+                                    || currentPathname?.startsWith(navMenuItem.path + '/')
                                 )
+                                && navMenuItem.handleOnClick && navMenuItem.handleOnClick(this.props, this.handleLoadingMenuItem)
+                            }
+                            {
+                                navMenuItem.children.map(navChildMenu => {
+                                    return (
+                                        <Menu.Item key={navChildMenu.key || navChildMenu.path}>
+                                            <Link to={navChildMenu.path}>
+                                                <span>{navChildMenu.label}</span>
+                                            </Link>
+                                        </Menu.Item>
+                                    )
+                                })
                             }
                         </SubMenu>
                         :

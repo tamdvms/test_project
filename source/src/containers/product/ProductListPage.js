@@ -12,25 +12,41 @@ import BasicModal from "../../compoments/common/modal/BasicModal";
 import { actions } from "../../actions";
 import { FieldTypes } from "../../constants/formConfig";
 import { AppConstants } from "../../constants";
-import { categoryKinds, commonStatus } from "../../constants/masterData";
-
-const { CATEGORY_KIND_PRODUCT } = categoryKinds;
+import { commonStatus } from "../../constants/masterData";
+import Utils from "../../utils";
 
 class ProductListPage extends ListBasePage {
     initialSearch() {
-        return { name: "", categoryId: null, status: null };
+        return { name: "", status: null };
     }
 
     constructor(props) {
         super(props);
-        const { t } = props;
+        const { location: { search } } = props;
+        const { categoryName, categoryId } = qs.parse(search);
+        this.categoryId = categoryId;
         this.pagination = { pageSize: 100 };
         this.objectName =  "Sản phẩm";
         this.breadcrumbs = [
             { name: "Sản phẩm" },
+            { name: categoryName}
         ];
         this.columns = [
             this.renderIdColumn(),
+            {
+                title: "#",
+                dataIndex: "productImage",
+                align: 'center',
+                width: 100,
+                render: (avatarPath) => (
+                <Avatar
+                    className="table-avatar"
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={avatarPath ? `${AppConstants.contentRootUrl}${avatarPath}` : null}
+                />
+                ),
+            },
             {
                 title: 'Tên',
                 render: (dataRow) => {
@@ -42,22 +58,17 @@ class ProductListPage extends ListBasePage {
                 }
             },
             {
-                title: 'Danh mục',
-                dataIndex: 'categoryId',
-                render: (categoryId) => {
-                    const { categoryAutoComplete } = this.props;
-                    const findedCategory = categoryAutoComplete?.find(c => c.id === categoryId) || {};
-                    return (
-                        <div>{findedCategory.categoryName}</div>
-                    )
-                }
-            },
-            {
                 title: <div className="tb-al-r">Giá tiền (VNĐ)</div>,
                 dataIndex: 'productPrice',
                 align: 'right',
                 render: (productPrice) => {
-                    return <span className="tb-al-r">{productPrice}</span>
+                    return <span className="tb-al-r">{Utils.formatMoney(productPrice, {
+                        currentcy: " ",
+                        decimalPosition: -1,
+                        toFixed: 0,
+                        decimalSeparator: '.',
+                        groupSeparator: ',',
+                    })}</span>
                 }
             },
             this.renderStatusColumn(),
@@ -68,26 +79,69 @@ class ProductListPage extends ListBasePage {
             isDelete: true,
             isChangeStatus: false,
         };
+    }
 
-        this.props.getProductAutoComplete({ params: { kind: CATEGORY_KIND_PRODUCT }});
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.location.search !== this.props.location.search) {
+            const { location: { search } } = nextProps;
+            const { categoryName, categoryId } = qs.parse(search);
+            this.categoryId = categoryId;
+            this.pagination = { pageSize: 100 };
+            this.objectName =  "Sản phẩm";
+            this.breadcrumbs = [
+                { name: "Sản phẩm" },
+                { name: categoryName}
+            ];
+            const { changeBreadcrumb } = nextProps;
+            if(this.breadcrumbs.length > 0) {
+                changeBreadcrumb(this.breadcrumbs);
+            }
+            this.loadDataTable(nextProps);
+        }
+    }
+
+    prepareCreateData(data) {
+		return {
+			...data,
+            categoryId: this.categoryId,
+			description: data.description
+				&& data.description.replaceAll(
+					AppConstants.contentRootUrl,
+					"{{baseUrl}}"
+				),
+		}
+	}
+
+	prepareUpdateData(data) {
+        return {
+            ...data,
+            id: this.dataDetail.id,
+            categoryId: this.categoryId,
+			description: data.description
+				&& data.description.replaceAll(
+					AppConstants.contentRootUrl,
+					"{{baseUrl}}"
+				),
+        };
+    }
+
+    getDataDetailMapping(data) {
+        return {
+			...data,
+			description: data.description
+				&& data.description.replaceAll(
+					"{{baseUrl}}",
+					AppConstants.contentRootUrl
+				),
+		}
     }
 
     getSearchFields() {
-        const { categoryAutoComplete } = this.props;
         return [
             {
                 key: "name",
                 seachPlaceholder: 'Tên',
                 initialValue: this.search.name,
-            },
-            {
-                key: "categoryId",
-                seachPlaceholder: "Chọn danh mục",
-                fieldType: FieldTypes.SELECT,
-                options: categoryAutoComplete,
-                optionLabelKey: 'categoryName',
-                optionValueKey: 'id',
-                initialValue: this.search.categoryId,
             },
             {
                 key: "status",
@@ -99,12 +153,18 @@ class ProductListPage extends ListBasePage {
         ];
     }
 
+    getList() {
+        const { getDataList } = this.props;
+        const page = this.pagination.current ? this.pagination.current - 1 : 0;
+        const params = { page, size: this.pagination.pageSize, search: this.search, categoryId: this.categoryId};
+        getDataList({ params });
+    }
+
     render() {
         const {
             dataList,
             loading,
             uploadFile,
-            categoryAutoComplete,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading } = this.state;
         const productData = dataList.data || [];
@@ -145,7 +205,6 @@ class ProductListPage extends ListBasePage {
                 dataDetail={this.isEditing ? this.dataDetail : {}}
                 uploadFile={uploadFile}
                 loadingSave={isShowModifiedLoading}
-                categoryAutoComplete={categoryAutoComplete}
             />
             </BasicModal>
         </div>
@@ -165,7 +224,7 @@ const mapDispatchToProps = (dispatch) => ({
   updateData: (payload) => dispatch(actions.updateProduct(payload)),
   deleteData: (payload) => dispatch(actions.deleteProduct(payload)),
   createData: (payload) => dispatch(actions.createProduct(payload)),
-  getProductAutoComplete: (payload) => dispatch(actions.getProductCategoryAutoComplete(payload)),
+  uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductListPage);

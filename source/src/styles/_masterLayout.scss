@@ -88,6 +88,31 @@
             min-width: $navSiderExpandedWidth !important;
             width: $navSiderExpandedWidth !important;
         }
+        .ant-menu-submenu-title {
+            display: flex;
+            align-items: center;
+            .ant-spin-spinning {
+                flex-shrink: 0;
+                width: fit-content;
+                margin-left: auto;
+            }
+            .title {
+                flex: 1;
+                max-width: 89%;
+                overflow: hidden;
+            }
+        }
+        .redirect-login {
+            padding: 2px;
+            margin-right: 4px;
+            transition: all 0.2s;
+            border-radius: 3px;
+            color: #fff;
+        }
+        .redirect-login:hover {
+            background-color: #e6e6e6;
+            color: #000C17;
+        }
     }
     .logo {
         // height: $heighAppHeader;

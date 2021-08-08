@@ -90,8 +90,8 @@ const Utils = {
             const decimalSeparator = setting.decimalSeparator || ',';
             const currentcy = setting.currentcy || '€';
             //const currentcyPosition = setting.currentcyPosition || CurrentcyPositions.BACK;
-            value = value.toFixed(2);
-            const decimalPosition = value.toString().indexOf('.');
+            value = value.toFixed(setting.toFixed || setting.toFixed === 0 ? setting.toFixed : 2);
+            const decimalPosition = setting.decimalPosition || value.toString().indexOf('.');
             if(decimalPosition > 0) {
                 const intVal = value.toString().substring(0, decimalPosition);
                 const decimalVal = value.toString().substring(decimalPosition + 1);
