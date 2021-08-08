@@ -25,6 +25,7 @@ import CategoryImportListPage from '../containers/category/CategoryImportListPag
 import CategoryImportListPageChild from '../containers/category/CategoryImportListPageChild';
 import CategoryProductListPage from '../containers/category/CategoryProductListPage';
 import CategoryProductListPageChild from '../containers/category/CategoryProductListPageChild';
+import ProductListPage from '../containers/product/ProductListPage';
 
 const RootRoute = () => {
     const {
@@ -38,6 +39,7 @@ const RootRoute = () => {
         categoryExport,
         categoryImport,
         categoryProduct,
+        product,
     } = sitePathConfig;
 
     return (
@@ -64,6 +66,7 @@ const RootRoute = () => {
                 <PrivateRoute exact path={categoryImport.childrenKeys[0]} component={CategoryImportListPageChild}/>
                 <PrivateRoute exact path={categoryProduct.path} component={CategoryProductListPage}/>
                 <PrivateRoute exact path={categoryProduct.childrenKeys[0]} component={CategoryProductListPageChild}/>
+                <PrivateRoute exact path={product.path} component={ProductListPage}/>
 
                 {/* Error Page */}
                 <PrivateRoute exact path={forbidden.path} component={Forbidden}/>
