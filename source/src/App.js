@@ -2,9 +2,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 
 import RootRoute from './routes/index';
-import configureStore from './store';
-
-const store = configureStore();
+import store from './store';
 
 const App = () => {
     return (

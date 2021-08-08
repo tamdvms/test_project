@@ -22,15 +22,16 @@ function* getProductList({ payload: { params } }) {
     const apiParams = apiConfig.product.getList;
     const searchParams = { page: params.page, size: params.size };
 
+    if(params.categoryId) {
+        searchParams.categoryId = params.categoryId
+    }
+
     if(params.search) {
         if(params.search.name) {
             searchParams.name = params.search.name
         }
         if(params.search.status) {
             searchParams.status = params.search.status
-        }
-        if(params.search.categoryId) {
-            searchParams.categoryId = params.search.categoryId
         }
     }
     try {
@@ -99,7 +100,7 @@ function* deleteProduct({ payload: { params, onCompleted, onError } }) {
     }
 }
 
-function* getCategoryAutoComplete({ payload: { params } }) {
+function* getCategoryAutoComplete({ payload: { params, onCompleted, onError } }) {
 
     const apiParams = apiConfig.product.categoryAutoComplete;
     const searchParams = {};
@@ -107,11 +108,16 @@ function* getCategoryAutoComplete({ payload: { params } }) {
         searchParams.kind = params.kind;
     }
     try {
-        const result = yield call(sendRequest, apiParams, searchParams);
-        yield put({
-            type: defineActionSuccess(GET_PRODUCT_CATEGORY_AUTO_COMPLETE),
-            categoryAutoComplete: result.responseData && result.responseData.data?.data || [] ,
-        });
+        const { success, responseData } = yield call(sendRequest, apiParams, searchParams);
+        if (success && responseData.result) {
+            onCompleted && onCompleted(responseData.data?.data || [])
+            yield put({
+                type: defineActionSuccess(GET_PRODUCT_CATEGORY_AUTO_COMPLETE),
+                categoryAutoComplete: responseData.data?.data || [] ,
+            })
+        } else {
+            onError && onError(responseData)
+        }
     }
     catch(error) {
         yield put({ type: defineActionFailed(GET_PRODUCT_CATEGORY_AUTO_COMPLETE) });

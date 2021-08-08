@@ -66,7 +66,7 @@ const RootRoute = () => {
                 <PrivateRoute exact path={categoryImport.childrenKeys[0]} component={CategoryImportListPageChild}/>
                 <PrivateRoute exact path={categoryProduct.path} component={CategoryProductListPage}/>
                 <PrivateRoute exact path={categoryProduct.childrenKeys[0]} component={CategoryProductListPageChild}/>
-                <PrivateRoute exact path={product.path} component={ProductListPage}/>
+                <PrivateRoute exact path={product.path + "/:id"} component={ProductListPage}/>
 
                 {/* Error Page */}
                 <PrivateRoute exact path={forbidden.path} component={Forbidden}/>
