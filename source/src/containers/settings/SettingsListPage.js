@@ -24,14 +24,12 @@ class SettingsListPage extends ListBasePage {
       { title: "Tên", dataIndex: "name" },
       {
         title: <div style={{paddingRight: "2vw"}}>Giá trị</div>,
-        align: "right",
-        width: 100,
         dataIndex: "value",
         render: (value) => (
           <div style={{paddingRight: "2vw"}}>{value}</div>
         )
       },
-      { title: "Mô tả", dataIndex: "description", width: "200px" },
+      { title: "Mô tả", dataIndex: "description"},
       this.renderActionColumn(),
     ];
     this.actionColumns = {

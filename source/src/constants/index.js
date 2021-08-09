@@ -49,6 +49,11 @@ const ProvinceKinds = {
     }
 }
 
+const CurrentcyPositions = {
+    FRONT: 0,
+    BACK: 1,
+}
+
 const CategoryKinds = {
     CATEGORY_KIND_NEWS: 1,
     CATEGORY_KIND_UNIVERSITY: 2,
@@ -78,4 +83,5 @@ export {
     UploadFileTypes,
     ProvinceKinds,
     CategoryKinds,
+    CurrentcyPositions,
 };

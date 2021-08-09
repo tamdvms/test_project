@@ -62,13 +62,7 @@ class ProductListPage extends ListBasePage {
                 dataIndex: 'productPrice',
                 align: 'right',
                 render: (productPrice) => {
-                    return <span className="tb-al-r">{Utils.formatMoney(productPrice, {
-                        currentcy: " ",
-                        decimalPosition: -1,
-                        toFixed: 0,
-                        decimalSeparator: '.',
-                        groupSeparator: ',',
-                    })}</span>
+                    return <span className="tb-al-r">{Utils.formatMoney(productPrice)}</span>
                 }
             },
             this.renderStatusColumn(),

@@ -30,7 +30,10 @@ function* login({ payload: { params, onCompleted, onError } }) {
         {},
         responseData.data.token
       );
-      if (profileResult.success && profileResult.responseData.result) {
+      const settingResult = yield call(sendRequest, apiConfig.setting.getSettingsList, {}, responseData.data.token);
+      if (profileResult.success && profileResult.responseData.result
+        && settingResult.success && settingResult.responseData.result
+        && settingResult.responseData.data) {
         let permissions = [];
         if (
           profileResult.responseData.data.group &&
@@ -40,6 +43,14 @@ function* login({ payload: { params, onCompleted, onError } }) {
             (permission) => permission.action
           );
         }
+        const settingsData = settingResult.responseData.data?.data || [];
+        const groupedSettings = settingsData.reduce((r, a) => {
+          r[a.group] = {
+            [a.key]: a.value,
+            ...r[a.group],
+          };
+          return r;
+        }, {})
         onCompleted({
           token: responseData.data.token,
           id: profileResult.responseData.data.id,
@@ -50,6 +61,7 @@ function* login({ payload: { params, onCompleted, onError } }) {
           kind: profileResult.responseData.data.kind,
           isSuperAdmin: profileResult.responseData.data.isSuperAdmin,
           permissions,
+          settings: groupedSettings
         });
       } else {
         onError(responseData);
