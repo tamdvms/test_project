@@ -6,6 +6,8 @@ import {actions as settingActions, actionTypes as settingTypes} from './setting'
 import {actions as customerActions, actionTypes as customerTypes} from './customer';
 import {actions as categoryActions, actionTypes as categoryTypes} from './category';
 import {actions as productActions, actionTypes as productTypes} from './product';
+import {actions as importManagementActions, actionTypes as importManagementActionsTypes} from "./importManagement";
+import {actions as exportManagementActions, actionTypes as exportManagementActionsTypes} from "./exportManagement";
 
 export const actions = {
     ...appCommonActions,
@@ -16,6 +18,8 @@ export const actions = {
     ...customerActions,
     ...categoryActions,
     ...productActions,
+    ...importManagementActions,
+    ...exportManagementActions,
 }
 
 export const types = {
@@ -27,4 +31,6 @@ export const types = {
     ...customerTypes,
     ...categoryTypes,
     ...productTypes,
+    ...importManagementActionsTypes,
+    ...exportManagementActionsTypes,
 }

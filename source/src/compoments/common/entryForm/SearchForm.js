@@ -5,7 +5,8 @@ import { SearchOutlined } from '@ant-design/icons';
 import BasicForm from './BasicForm';
 import Utils from '../../../utils';
 import { FieldTypes } from '../../../constants/formConfig';
-import { DATE_FORMAT_DISPLAY } from '../../../constants'
+import { DATE_FORMAT_DISPLAY } from '../../../constants';
+const { RangePicker } = DatePicker;
 
 class SearchForm extends BasicForm {
 
@@ -83,6 +84,18 @@ class SearchForm extends BasicForm {
                     format={dateFormat}
                     onChange={(date) => this.onChangeDateField(date, fieldItem)}
                     disabledDate={fieldItem.disabledDate}
+                />
+            )
+        }
+        else if (fieldItem.fieldType === FieldTypes.DATE_RANGE) {
+            const dateFormat = fieldItem.format || DATE_FORMAT_DISPLAY;
+            return (
+                <RangePicker
+                    placeholder={this.getPlaceHolder(fieldItem)}
+                    disabledDate={fieldItem.disabledDate}
+                    style={{ width: fieldItem.width || 200 }}
+                    format={dateFormat}
+                    onChange={(date) => this.onChangeDateField(date, fieldItem)}
                 />
             )
         }

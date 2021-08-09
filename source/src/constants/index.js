@@ -29,6 +29,7 @@ const GroupPermissonTypes = {
 const UploadFileTypes = {
     AVATAR: 'AVATAR',
     LOGO: 'LOGO',
+    DOCUMENT: 'DOCUMENT',
 }
 
 const ProvinceKinds = {

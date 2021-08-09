@@ -79,3 +79,6 @@ export const categoryKinds = {
     CATEGORY_KIND_IMPORT,
     CATEGORY_KIND_PRODUCT,
 }
+
+export const IMPORT_EXPORT_KIND_IMPORT = 1;
+export const IMPORT_EXPORT_KIND_EXPORT = 2;

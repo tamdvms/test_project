@@ -7,6 +7,8 @@ import setting from './setting';
 import customer from './customer';
 import category from './category';
 import product from './product';
+import importManagement from './importManagement';
+import exportManagement from './exportManagement';
 
 const sagas = [
     ...appCommon,
@@ -17,6 +19,8 @@ const sagas = [
     ...customer,
     ...category,
     ...product,
+    ...importManagement,
+    ...exportManagement,
 ];
 
 function* rootSaga() {

@@ -94,4 +94,26 @@ export const sitePathConfig = {
             apiConfig.product.delete.path,
         ]
     },
+    importManagement: {
+        path: '/import-management',
+        permissions: [
+            apiConfig.importExportManagement.getList.path,
+            apiConfig.importExportManagement.getById.path,
+            apiConfig.importExportManagement.create.path,
+            apiConfig.importExportManagement.update.path,
+            apiConfig.importExportManagement.delete.path,
+            apiConfig.importExportManagement.getCategoryAutoComplete.path,
+        ]
+    },
+    exportManagement: {
+        path: '/export-management',
+        permissions: [
+            apiConfig.importExportManagement.getList.path,
+            apiConfig.importExportManagement.getById.path,
+            apiConfig.importExportManagement.create.path,
+            apiConfig.importExportManagement.update.path,
+            apiConfig.importExportManagement.delete.path,
+            apiConfig.importExportManagement.getCategoryAutoComplete.path,
+        ]
+    },
 }

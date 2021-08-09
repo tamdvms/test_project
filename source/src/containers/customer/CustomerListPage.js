@@ -10,7 +10,7 @@ import BasicModal from "../../compoments/common/modal/BasicModal";
 
 import { actions } from "../../actions";
 import { FieldTypes } from "../../constants/formConfig";
-import { convertUtcToLocalTime } from "../../utils/datetimeHelper";
+import { convertUtcToTimezone } from "../../utils/datetimeHelper";
 import { AppConstants } from "../../constants";
 
 const commonStatus = [
@@ -54,7 +54,7 @@ class CustomerListPage extends ListBasePage {
         dataIndex: "createdDate",
         align: "right",
         width: 120,
-        render: (createdDate) => <div style={{ paddingRight: 20 }}>{convertUtcToLocalTime(createdDate, "DD/MM/YYYY")}</div>,
+        render: (createdDate) => <div style={{ paddingRight: 20 }}>{convertUtcToTimezone(createdDate, "DD/MM/YYYY")}</div>,
       },
       this.renderStatusColumn(),
       this.renderActionColumn(),
