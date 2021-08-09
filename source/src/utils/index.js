@@ -70,22 +70,15 @@ const Utils = {
     isEmptyObject(obj) {
         return obj && Object.keys(obj).length === 0 && obj.constructor === Object;
     },
-    parserNumber(value, setting) {
-        if(!setting) setting = actions.getUserData()?.settings?.["Money and Number"] || {};
-        return value.replace(/\$\s?|(,*)/g, '')
-    },
     formatNumber(value, setting){
-        if(!setting) setting = actions.getUserData()?.settings?.["Money and Number"] || {};
         if(value) {
-            const groupSeparator = setting.groupSeparator || ',';
-            const decimalSeparator = setting.decimalSeparator || '.';
-            const decimalPosition = value.toString().indexOf(decimalSeparator);
+            const decimalPosition = value.toString().indexOf('.');
             if(decimalPosition > 0) {
                 const intVal = value.toString().substring(0, decimalPosition);
                 const decimalVal = value.toString().substring(decimalPosition + 1);
-                return `${intVal.replace(/\B(?=(\d{3})+(?!\d))/g, groupSeparator)}${decimalSeparator}${decimalVal}`;
+                return `${intVal.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}.${decimalVal}`;
             }
-            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, groupSeparator);
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         }
         else if(value === 0)
             return 0;
@@ -94,13 +87,17 @@ const Utils = {
     formatMoney(value, setting){
         if(!setting) setting = actions.getUserData()?.settings?.["Money and Number"] || {};
         if((value || value === 0) && !isNaN(value)) {
-            const groupSeparator = setting.groupSeparator || '.';
-            const decimalSeparator = setting.decimalSeparator || ',';
-            const currentcy = setting.currencySymbol || '€';
+            const groupSeparator = setting.groupSeparator || ',';
+            const decimalSeparator = setting.decimalSeparator || '.';
+            const currentcy = setting.currencySymbol || '';
             const currencySymbolPosition = setting.currencySymbolPosition;
-            if(value.toString().indexOf(".") === -1) {
+            if(value.toString().indexOf(decimalSeparator) === -1) {
                 value = value / setting.moneyRatio;
                 value = value.toFixed(Number(setting.decimal) || 0);
+                const decimalIndex = value.toString().lastIndexOf(".");
+                if(decimalIndex > -1) {
+                    value = value.toString().substring(0, decimalIndex) + decimalSeparator + value.toString().substring(decimalIndex + 1);
+                }
             }
             value = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, groupSeparator);
             if(currencySymbolPosition === CurrentcyPositions.FRONT) {

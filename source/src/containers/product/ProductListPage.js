@@ -58,7 +58,7 @@ class ProductListPage extends ListBasePage {
                 }
             },
             {
-                title: <div className="tb-al-r">Giá tiền (VNĐ)</div>,
+                title: <div className="tb-al-r">Giá tiền</div>,
                 dataIndex: 'productPrice',
                 align: 'right',
                 render: (productPrice) => {
