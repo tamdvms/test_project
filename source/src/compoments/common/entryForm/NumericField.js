@@ -7,6 +7,14 @@ import Utils from '../../../utils';
 
 class NumericField extends BaseField {
 
+    parser(value) {
+        return value.replace(/\$\s?|(,*)/g, '');
+    }
+
+    formatter(value) {
+        return Utils.formatNumber(value);
+    }
+
     render() {
         const {
             label,
@@ -16,7 +24,9 @@ class NumericField extends BaseField {
             max,
             width,
             onChange,
-            onBlur
+            onBlur,
+            formatter,
+            parser,
         } = this.props;
 
         return (
@@ -31,8 +41,8 @@ class NumericField extends BaseField {
                     min={min}
                     disabled={disabled}
                     style={{width: width || '60%'}}
-                    formatter={value => Utils.formatNumber(value)}
-                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                    formatter={formatter || this.formatter}
+                    parser={parser || this.parser}
                     onChange={onChange}
                     onBlur={onBlur}
                 />
