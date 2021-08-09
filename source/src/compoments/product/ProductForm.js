@@ -69,6 +69,10 @@ class ProductForm extends BasicForm {
         }
     }
 
+    validatePrice = (rule, price) => !!(/^[0-9]+$/.exec(price))
+        ? Promise.resolve()
+        : Promise.reject('Price chỉ bao gồm các ký tự 0-9')
+
     render() {
         const { formId, dataDetail, loadingSave, isEditing } = this.props;
         const { avatar, uploading } = this.state;
@@ -104,14 +108,15 @@ class ProductForm extends BasicForm {
                     />
                 </Col>
                 <Col span={12}>
-                    <NumericField
+                    <TextField
+                        type="number"
                         fieldName="productPrice"
                         label="Giá tiền"
-                        min={0}
                         required
+                        minLength={0}
                         width="100%"
-                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
                         disabled={loadingSave}
+                        validators={[this.validatePrice]}
                     />
                 </Col>
             </Row>
