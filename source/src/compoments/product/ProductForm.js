@@ -106,10 +106,11 @@ class ProductForm extends BasicForm {
                 <Col span={12}>
                     <NumericField
                         fieldName="productPrice"
-                        label="Giá tiền (VNĐ)"
+                        label="Giá tiền"
                         min={0}
                         required
                         width="100%"
+                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
                         disabled={loadingSave}
                     />
                 </Col>
