@@ -85,11 +85,10 @@ class ImportManagementForm extends BasicForm {
 							<UploadImageField
 								fieldName="filePath"
 								loading={uploading}
-								label="Hình đại diện"
+								label="Ảnh chứng từ"
 								imageUrl={avatar}
 								onChange={this.handleChangeAvatar}
 								uploadFile={this.uploadFileAvatar}
-								required
 								disabled={loadingSave}
 							/>
 						</Col>
@@ -126,7 +125,6 @@ class ImportManagementForm extends BasicForm {
 							<TextField
 							fieldName="code"
 							label="Mã chứng từ"
-							required
 							disabled={loadingSave}
 							/>
 						</Col>
@@ -142,6 +140,15 @@ class ImportManagementForm extends BasicForm {
 								width="100%"
 								disabled={loadingSave}
 								validators={[this.validatePrice]}
+							/>
+						</Col>
+						<Col span={12}>
+							<TextField
+							type="textarea"
+							fieldName="note"
+							label="Ghi chú"
+							disabled={loadingSave}
+							style={{ height: 110 }}
 							/>
 						</Col>
 					</Row>
