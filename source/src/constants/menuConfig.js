@@ -8,6 +8,7 @@ import {
     QuestionOutlined,
     UnorderedListOutlined,
     InboxOutlined,
+    CarryOutOutlined,
 } from '@ant-design/icons';
 import { sitePathConfig } from '../constants/sitePathConfig';
 import store from '../store';
@@ -111,6 +112,20 @@ const navMenuConfig = [
             )
             this.clicked = true;
         },
+    },
+    {
+        label: 'Quản lý bán hàng',
+        icon: <CarryOutOutlined />,
+        children: [
+            {
+                label: 'Quản lý thu',
+                ...sitePathConfig.importManagement
+            },
+            {
+                label: 'Quản lý chi',
+                ...sitePathConfig.exportManagement
+            },
+        ]
     },
 ]
 

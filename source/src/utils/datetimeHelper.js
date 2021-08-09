@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { DATE_FORMAT_VALUE, DATE_FORMAT_DISPLAY } from '../constants';
+import { actions } from '../actions';
 
 export const convertUtcToLocalTime = (utcTime, format = DATE_FORMAT_DISPLAY) => {
     try {
@@ -79,4 +80,27 @@ export const getDisabledMinutes = (selectedHour, minValue) => {
         }
     }
     return minutes;
+}
+
+export const convertUtcToTimezone = (utcTime, format = DATE_FORMAT_DISPLAY) => {
+    const utcOffset = Number(actions.getUserData()?.settings?.Datetime?.timezone) || 7;
+    try {
+        if(utcTime && format)
+            return moment.utc(utcTime, format).utcOffset(utcOffset).format(format)
+        return '';
+    }
+    catch(err) {
+        return '';
+    }
+}
+export const convertTimezoneToUtc = (localTime, format) => {
+    const utcOffset = Number(actions.getUserData()?.settings?.Datetime?.timezone) || 7;
+    try {
+        if(localTime && format)
+            return moment.utc(localTime, format).utcOffset(-utcOffset).format(format)
+        return '';
+    }
+    catch(err) {
+        return '';
+    }
 }

@@ -226,5 +226,37 @@ const apiConfig = {
             headers: baseHeader
         }
     },
+    importExportManagement: {
+        getList: {
+            path:  '/v1/import-export/list',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getById: {
+            path:  '/v1/import-export/get',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        create: {
+            path:  '/v1/import-export/create',
+            method: 'POST',
+            headers: baseHeader,
+        },
+        update: {
+            path:  '/v1/import-export/update',
+            method: 'PUT',
+            headers: baseHeader,
+        },
+        delete: {
+            path:  '/v1/import-export/delete',
+            method: 'DELETE',
+            headers: baseHeader,
+        },
+        getCategoryAutoComplete: {
+            path:  '/v1/category/auto-complete',
+            method: 'GET',
+            headers: baseHeader,
+        },
+    },
 }
 export default apiConfig;

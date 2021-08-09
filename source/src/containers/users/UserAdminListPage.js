@@ -11,7 +11,7 @@ import BasicModal from "../../compoments/common/modal/BasicModal";
 import { actions } from "../../actions";
 import { FieldTypes } from "../../constants/formConfig";
 import { commonStatus } from "../../constants/masterData";
-import { convertUtcToLocalTime } from "../../utils/datetimeHelper";
+import { convertUtcToTimezone } from "../../utils/datetimeHelper";
 import { AppConstants, UserTypes, GroupPermissonTypes } from "../../constants";
 
 class UserAdminListPage extends ListBasePage {
@@ -43,7 +43,7 @@ class UserAdminListPage extends ListBasePage {
       {
         title: "Ngày tạo",
         dataIndex: "createdDate",
-        render: (createdDate) => convertUtcToLocalTime(createdDate),
+        render: (createdDate) => convertUtcToTimezone(createdDate),
       },
 
       this.renderStatusColumn(),

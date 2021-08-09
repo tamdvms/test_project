@@ -14,7 +14,8 @@ const FieldTypes = {
   NUMBER: 'NUMBER_TYPE',
   SELECT: 'SELECT',
   AUTOCOMPLETE:'AUTOCOMPLETE',
-  DATE: 'DATE'
+  DATE: 'DATE',
+  DATE_RANGE: 'DATE_RANGE',
 }
 
 export {

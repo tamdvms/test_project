@@ -7,6 +7,8 @@ import settings from './setting';
 import customer from './customer';
 import category from './category';
 import product from './product';
+import importManagement from './importManagement';
+import exportManagement from './exportManagement';
 
 const rootReducer = combineReducers({
     appCommon: appCommon.reducer,
@@ -17,6 +19,8 @@ const rootReducer = combineReducers({
     customer: customer.reducer,
     category: category.reducer,
     product: product.reducer,
+    importManagement: importManagement.reducer,
+    exportManagement: exportManagement.reducer,
 });
 
 export default rootReducer;

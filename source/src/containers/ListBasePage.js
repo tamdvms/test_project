@@ -482,6 +482,21 @@ class ListBasePage extends Component {
             {children}
         </ElementWithPermission>)
     }
+
+    renderButton(children, permissions){
+        const { location : { pathname }} = this.props;
+        const requiredPermissions = [];
+        Object.keys(sitePathConfig) && Object.keys(sitePathConfig).forEach(key=>{
+            if(sitePathConfig[key].path === pathname){
+                permissions.forEach(id => {
+                    requiredPermissions.push(sitePathConfig[key].permissions[id])
+                })
+            }
+        })
+        return (<ElementWithPermission permissions={requiredPermissions}>
+            {children}
+        </ElementWithPermission>)
+    }
 }
 
 export default ListBasePage;
