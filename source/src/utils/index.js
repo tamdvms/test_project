@@ -140,6 +140,11 @@ const Utils = {
                 .replace(/đ/g, 'd').replace(/Đ/g, 'D');
         return str;
     },
+    validateUsernameForm(rule, username){
+        return (!!(/^[a-z0-9_]+$/.exec(username))
+        ? Promise.resolve()
+        : Promise.reject('Username chỉ bao gồm các ký tự a-z, 0-9, _'))
+    }
 }
 
 export default Utils;

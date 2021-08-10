@@ -126,6 +126,7 @@ class AdminForm extends BasicForm {
               label="Tên đăng nhập"
               disabled={isEditing || loadingSave}
               required={!isEditing}
+              validators={[Utils.validateUsernameForm]}
             />
           </Col>
           <Col span={12}>
