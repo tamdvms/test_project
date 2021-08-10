@@ -29,12 +29,8 @@ class LoginPage extends Component {
         if (responseData && responseData.token) {
           if (setUserData(responseData)) {
             // this.props.history.push(sitePathConfig.admin.path);
-            if (responseData.kind === UserTypes.ADMIN)
+            if (responseData.kind === UserTypes.ADMIN || responseData.kind === UserTypes.EMPLOYEE)
               this.redirectToAuthPage(getUserData());
-            else
-              this.props.history.push(
-                sitePathConfig.restaurantByShopAccount.path
-              );
           }
         } else {
           this.setState({ loading: false });

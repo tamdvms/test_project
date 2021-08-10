@@ -16,13 +16,13 @@ import { AppConstants, UserTypes, GroupPermissonTypes } from "../../constants";
 
 class EmployeeListPage extends ListBasePage {
   initialSearch() {
-    return { username: "", fullName: "", status: undefined };
+    return { username: "", fullName: "" };
   }
 
   constructor(props) {
     super(props);
-    this.objectName = "quản trị nhân viên";
-    this.breadcrumbs = [{ name: "Quản trị nhân viên" }];
+    this.objectName = "nhân viên";
+    this.breadcrumbs = [{ name: "Nhân viên" }];
     this.columns = [
       this.renderIdColumn(),
       {
@@ -68,13 +68,6 @@ class EmployeeListPage extends ListBasePage {
         key: "fullName",
         seachPlaceholder: "Họ và tên",
         initialValue: this.search.fullName,
-      },
-      {
-        key: "status",
-        seachPlaceholder: "Chọn trạng thái",
-        fieldType: FieldTypes.SELECT,
-        options: commonStatus,
-        initialValue: this.search.status,
       },
     ];
   }
@@ -123,7 +116,7 @@ class EmployeeListPage extends ListBasePage {
             type="primary"
             onClick={() => this.onShowModifiedModal(false)}
           >
-            <PlusOutlined /> Tạo mới
+            <PlusOutlined /> Tạo nhân viên mới
           </Button>
           ))}
         </div>
