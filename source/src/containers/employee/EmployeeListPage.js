@@ -14,15 +14,15 @@ import { commonStatus } from "../../constants/masterData";
 import { convertUtcToTimezone } from "../../utils/datetimeHelper";
 import { AppConstants, UserTypes, GroupPermissonTypes } from "../../constants";
 
-class UserAdminListPage extends ListBasePage {
+class EmployeeListPage extends ListBasePage {
   initialSearch() {
-    return { username: "", fullName: "", status: undefined,};
+    return { username: "", fullName: "", status: undefined };
   }
 
   constructor(props) {
     super(props);
-    this.objectName = "quản trị viên";
-    this.breadcrumbs = [{ name: "Quản trị viên" }];
+    this.objectName = "quản trị nhân viên";
+    this.breadcrumbs = [{ name: "Quản trị nhân viên" }];
     this.columns = [
       this.renderIdColumn(),
       {
@@ -81,7 +81,7 @@ class UserAdminListPage extends ListBasePage {
 
   prepareCreateData(values) {
     return {
-      kind: UserTypes.ADMIN,
+      kind: UserTypes.EMPLOYEE,
       avatarPath: values.avatar,
       ...values,
     };
@@ -90,7 +90,7 @@ class UserAdminListPage extends ListBasePage {
   prepareUpdateData(values) {
     return {
       id: this.dataDetail.id,
-      kind: UserTypes.ADMIN,
+      kind: UserTypes.EMPLOYEE,
       avatarPath: values.avatar,
       ...values,
     };
@@ -112,7 +112,7 @@ class UserAdminListPage extends ListBasePage {
       uploadFile,
     } = this.props;
     const { isShowModifiedModal, isShowModifiedLoading } = this.state;
-    const users = dataList.data || [];
+    const employees = dataList.data || [];
     this.pagination.total = dataList.totalElements || 0;
     return (
       <div>
@@ -123,7 +123,7 @@ class UserAdminListPage extends ListBasePage {
             type="primary"
             onClick={() => this.onShowModifiedModal(false)}
           >
-            <PlusOutlined /> Quản trị viên mới
+            <PlusOutlined /> Tạo mới
           </Button>
           ))}
         </div>
@@ -131,7 +131,7 @@ class UserAdminListPage extends ListBasePage {
           loading={loading}
           columns={this.columns}
           rowKey={(record) => record.id}
-          dataSource={users}
+          dataSource={employees}
           pagination={this.pagination}
           onChange={this.handleTableChange}
         />
@@ -156,17 +156,18 @@ class UserAdminListPage extends ListBasePage {
 }
 
 const mapStateToProps = (state) => ({
-  loading: state.user.tbUserAdminLoading,
-  dataList: state.user.userAdminData || {},
+  loading: state.employee.tbEmployeeLoading,
+  dataList: state.employee.employeeData || {},
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getDataList: (payload) => dispatch(actions.getUserAdminList(payload)),
-  getDataById: (payload) => dispatch(actions.getUserById(payload)),
-  createData: (payload) => dispatch(actions.createUser(payload)),
-  updateData: (payload) => dispatch(actions.updateUser(payload)),
-  deleteData: (payload) => dispatch(actions.deleteAdmin(payload)),
+  getDataList: (payload) => dispatch(actions.getEmployeeList(payload)),
+  searchGroupPermissionList: (payload) => dispatch(actions.searchGroupPermission(payload)),
+  getDataById: (payload) => dispatch(actions.getEmployeeById(payload)),
+  createData: (payload) => dispatch(actions.createEmployee(payload)),
+  updateData: (payload) => dispatch(actions.updateEmployee(payload)),
+  deleteData: (payload) => dispatch(actions.deleteEmployee(payload)),
   uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserAdminListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(EmployeeListPage);

@@ -17,13 +17,14 @@ const LayoutConfigs = {
 
 const UserTypes = {
     ADMIN: 1,
-    SHOP: 2
+    SHOP: 2,
+    EMPLOYEE: 3,
 }
 
 const GroupPermissonTypes = {
     ADMIN: 1,
-    AGENCY: 2,
-    CUSTOMER: 3
+    CUSTOMER: 2,
+    EMPLOYEE: 3,
 }
 
 const UploadFileTypes = {

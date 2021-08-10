@@ -116,4 +116,14 @@ export const sitePathConfig = {
             apiConfig.importExportManagement.getCategoryAutoComplete.path,
         ]
     },
+    employee: {
+        path: '/employee',
+        permissions: [
+            apiConfig.user.getAdminList.path,
+            apiConfig.user.getAdminById.path,
+            apiConfig.user.createAdmin.path,
+            apiConfig.user.updateAdmin.path,
+            apiConfig.user.deleteAdmin.path,
+        ]
+    },
 }

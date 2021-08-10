@@ -31,6 +31,10 @@ const navMenuConfig = [
                 label: 'Quản trị viên',
                 ...sitePathConfig.admin
             },
+            {
+                label: 'Quản trị nhân viên',
+                ...sitePathConfig.employee
+            },
         ]
     },
     {
