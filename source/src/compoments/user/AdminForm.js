@@ -23,7 +23,7 @@ class AdminForm extends BasicForm {
   constructor(props) {
     super(props);
     this.state = {
-      logo: props.dataDetail.avatarPath
+      logo: props.dataDetail.avatar
         ? `${AppConstants.contentRootUrl}/${props.dataDetail.avatar}`
         : "",
       uploading: false,
@@ -33,7 +33,7 @@ class AdminForm extends BasicForm {
 
   componentDidMount() {
     const { dataDetail } = this.props;
-    this.setFieldValue("avatar", dataDetail.avatarPath);
+    this.setFieldValue("avatar", dataDetail.avatar);
   }
 
   validateToConfirmPassword = (rule, value) => {
@@ -157,7 +157,7 @@ class AdminForm extends BasicForm {
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <TextField fieldName="email" label="E-mail" type="email" required disabled={loadingSave}/>
+            <TextField fieldName="email" label="E-mail" type="email" disabled={loadingSave}/>
           </Col>
           <Col span={12}>
             <TextField

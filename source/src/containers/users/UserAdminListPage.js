@@ -16,7 +16,7 @@ import { AppConstants, UserTypes, GroupPermissonTypes } from "../../constants";
 
 class UserAdminListPage extends ListBasePage {
   initialSearch() {
-    return { username: "", fullName: "", status: undefined,};
+    return { username: "", fullName: "" };
   }
 
   constructor(props) {
@@ -68,13 +68,6 @@ class UserAdminListPage extends ListBasePage {
         key: "fullName",
         seachPlaceholder: "Họ và tên",
         initialValue: this.search.fullName,
-      },
-      {
-        key: "status",
-        seachPlaceholder: "Chọn trạng thái",
-        fieldType: FieldTypes.SELECT,
-        options: commonStatus,
-        initialValue: this.search.status,
       },
     ];
   }

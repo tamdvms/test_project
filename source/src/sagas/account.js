@@ -26,7 +26,7 @@ function* login({ payload: { params, onCompleted, onError } }) {
         {},
         responseData.data.token
       );
-      const settingResult = yield call(sendRequest, apiConfig.setting.getSettingsList, {}, responseData.data.token);
+      const settingResult = yield call(sendRequest, apiConfig.setting.getSettingsClientList, {}, responseData.data.token);
       if (profileResult.success && profileResult.responseData.result
         && settingResult.success && settingResult.responseData.result
         && settingResult.responseData.data) {

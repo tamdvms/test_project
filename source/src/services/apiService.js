@@ -95,7 +95,8 @@ const sendRequest = async (options, params = {}, token) => {
         return { success: false, responseData: {}}
     }
     else if(fetchRequest.status === 403) {
-        // window.location.replace('/forbidden');
+        window.location.replace('/forbidden');
+        return { success: false, responseData: {}}
     }
     else if(fetchRequest.status === 200 || fetchRequest.status === 201) {
         const responseData = await fetchRequest.json();

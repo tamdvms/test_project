@@ -32,7 +32,7 @@ const navMenuConfig = [
                 ...sitePathConfig.admin
             },
             {
-                label: 'Quản trị nhân viên',
+                label: 'Nhân viên',
                 ...sitePathConfig.employee
             },
         ]
