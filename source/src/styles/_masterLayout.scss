@@ -88,6 +88,9 @@
             min-width: $navSiderExpandedWidth !important;
             width: $navSiderExpandedWidth !important;
         }
+        .ant-menu-inline-collapsed .ant-menu-submenu-title {
+            padding: 0 31px !important;
+        }
         .ant-menu-submenu-title {
             display: flex;
             align-items: center;

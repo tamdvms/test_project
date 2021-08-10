@@ -138,14 +138,13 @@ class CustomerForm extends BasicForm {
               type="password"
               fieldName="customerPassword"
               label={isEditing ? "Mật khẩu mới" : "Mật khẩu"}
-              required={!isEditing}
               validators={[this.validateToConfirmPassword]}
               minLength={6}
               disabled={loadingSave}
             />
           </Col>
           <Col span={12}>
-					  <TextField fieldName="customerEmail" label="E-mail" type="email" disabled={loadingSave} required/>
+					  <TextField fieldName="customerEmail" label="E-mail" type="email" disabled={loadingSave} />
 				  </Col>
           {/* <Col span={12}>
             <TextField
@@ -163,7 +162,6 @@ class CustomerForm extends BasicForm {
 					<TextField
 						fieldName="customerAddress"
 						label="Địa chỉ"
-						required
 						disabled={loadingSave}
 					/>
 				</Col>
