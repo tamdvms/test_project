@@ -267,7 +267,7 @@ class ExportManagementListPage extends ListBasePage {
 		<div>
 			{this.renderSearchForm()}
 			<div className="action-bar province">
-				<div className="summary text-red">Tổng chi: {Utils.formatMoney(dataList.sum) || Utils.formatMoney(0)}</div>
+				<div className="summary text-red">TỔNG CHI: {Utils.formatMoney(dataList.sum) || Utils.formatMoney(0)}</div>
 				{
 					this.renderButton((
 						<Button
