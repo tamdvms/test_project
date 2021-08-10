@@ -6,6 +6,7 @@ import TextField from "../common/entryForm/TextField";
 import DropdownField from "../common/entryForm/DropdownField";
 
 import { commonStatus, commonLanguages } from "../../constants/masterData";
+import CropImageFiled from "../common/entryForm/CropImageFiled";
 
 import {
   AppConstants,
@@ -22,38 +23,18 @@ class AdminForm extends BasicForm {
   constructor(props) {
     super(props);
     this.state = {
-      logo: props.dataDetail.logoPath
-        ? `${AppConstants.contentRootUrl}/${props.dataDetail.logoPath}`
+      logo: props.dataDetail.avatarPath
+        ? `${AppConstants.contentRootUrl}/${props.dataDetail.avatar}`
         : "",
       uploading: false,
     };
-    // this.otherData.logoPath = props.dataDetail.logoPath;
   }
 
-  componentWillMount() {
-    const { searchGroupPermissionList,  kind } = this.props;
-    searchGroupPermissionList({ params: { page: 0, size: 100, kind } });
-    // const userData = getUserData();
-  }
 
   componentDidMount() {
     const { dataDetail } = this.props;
-    this.setFieldValue("logoPath", dataDetail.logoPath);
+    this.setFieldValue("avatar", dataDetail.avatarPath);
   }
-
-  componentWillReceiveProps(nextProps) {
-    const { isEditing, roles } = this.props;
-    if (
-      !isEditing &&
-      nextProps.roles !== roles &&
-      nextProps.roles &&
-      nextProps.roles.length > 0
-    ) {
-      this.setFieldValue("groupId", nextProps.roles[0].id);
-    }
-  }
-
-
 
   validateToConfirmPassword = (rule, value) => {
     const {
@@ -68,23 +49,10 @@ class AdminForm extends BasicForm {
   compareToPassword = (rule, newPassword) => {
     const password = this.getFieldValue("password");
     if ((password || newPassword) && password !== newPassword) {
-      return Promise.reject("Password that you enter is inconsistent!");
+      return Promise.reject("Mật khẩu không khớp!");
     } else {
       return Promise.resolve();
     }
-  };
-
-  getRoles = () => {
-    const { ddlRoleLoading, roles, dataDetail } = this.props;
-    if (ddlRoleLoading && dataDetail.group) {
-      return [
-        {
-          id: dataDetail.group.id,
-          name: dataDetail.group.name,
-        },
-      ];
-    }
-    return roles;
   };
 
   handleChangeLogo = (info) => {
@@ -100,10 +68,10 @@ class AdminForm extends BasicForm {
     const { uploadFile } = this.props;
     this.setState({ uploading: true });
     uploadFile({
-      params: { fileObjects: { file }, type: UploadFileTypes.LOGO },
+      params: { fileObjects: { file }, type: UploadFileTypes.AVATAR },
       onCompleted: (result) => {
         // this.otherData.logoPath = result.data.filePath;
-        this.setFieldValue("logoPath", result.data.filePath);
+        this.setFieldValue("avatar", result.data.filePath);
         this.setState({ uploading: false });
         onSuccess();
       },
@@ -128,7 +96,7 @@ class AdminForm extends BasicForm {
 
   render() {
     const { isEditing, formId, loadingSave } = this.props;
-    // const userData = getUserData();
+    const { uploading, logo } = this.state;
     return (
       <Form
         id={formId}
@@ -137,6 +105,19 @@ class AdminForm extends BasicForm {
         onFinish={this.handleSubmit}
         initialValues={this.getInitialFormValues()}
       >
+        <Row gutter={16}>
+          <Col span={12}>
+            <CropImageFiled
+              fieldName="avatar"
+              loading={uploading}
+              label="Ảnh đại diện"
+              imageUrl={logo}
+              onChange={this.handleChangeLogo}
+              uploadFile={this.uploadFileLogo}
+              disabled={loadingSave}
+            />
+          </Col>
+        </Row>
         <Row gutter={16}>
           <Col span={12}>
             <TextField
@@ -176,29 +157,20 @@ class AdminForm extends BasicForm {
         </Row>
         <Row gutter={16}>
           <Col span={12}>
-            <TextField fieldName="email" label="E-mail" type="email" disabled={loadingSave}/>
+            <TextField fieldName="email" label="E-mail" type="email" required disabled={loadingSave}/>
           </Col>
           <Col span={12}>
             <TextField
               type="number"
               fieldName="phone"
               label="Số điện thoại"
-              required={!isEditing}
+              required
               minLength={10}
               disabled={loadingSave}
             />
           </Col>
         </Row>
-        <Row gutter={16}>         
-          <Col span={12}>
-            <DropdownField
-              fieldName="lang"
-              label="Ngôn ngữ"
-              required
-              options={commonLanguages}
-              disabled={loadingSave}
-            />
-          </Col>
+        <Row gutter={16}>
           <Col span={12}>
               <DropdownField
                 fieldName="status"

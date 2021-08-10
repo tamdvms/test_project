@@ -20,13 +20,9 @@ function* login({ payload: { params, onCompleted, onError } }) {
     const result = yield call(sendRequest, apiConfig.account.login, params);
     const { success, responseData } = result;
     if (success && responseData.result) {
-      const apiProfileConfig =
-        responseData.data.kind === UserTypes.ADMIN
-          ? apiConfig.account.getAdminProfile
-          : apiConfig.account.getShopAccountProfile;
       const profileResult = yield call(
         sendRequest,
-        apiProfileConfig,
+        apiConfig.account.getAdminProfile,
         {},
         responseData.data.token
       );
@@ -85,11 +81,7 @@ function* logout() {
 
 function* getProfile({ payload }) {
   try {
-    const apiProfileConfig =
-      payload.kind === UserTypes.ADMIN
-        ? apiConfig.account.getAdminProfile
-        : apiConfig.account.getShopAccountProfile;
-    const result = yield call(sendRequest, apiProfileConfig);
+    const result = yield call(sendRequest, apiConfig.account.getAdminProfile);
     yield put({
       type: defineActionSuccess(GET_PROFILE),
       data: result.responseData && result.responseData.data,
@@ -101,14 +93,8 @@ function* getProfile({ payload }) {
 }
 
 function* updateProfile({ payload: { params, onCompleted, onError } }) {
-  let apiParams;
-  if (params.kind === UserTypes.ADMIN) {
-    apiParams = apiConfig.account.updateProfileAdmin;
-  } else {
-    apiParams = apiConfig.account.updateShopAccountProfile;
-  }
   try {
-    const userData = yield call(sendRequest, apiParams, params);
+    const userData = yield call(sendRequest, apiConfig.account.updateProfileAdmin, params);
     onCompleted(userData);
   } catch (error) {
     onError();
