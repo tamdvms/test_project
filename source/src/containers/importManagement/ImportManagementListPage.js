@@ -41,7 +41,7 @@ class ImportManagementListPage extends ListBasePage {
 		this.columns = [
 			{
 				title: "Danh mục",
-				width: "30%",
+				width: "21%",
 				dataIndex: ["categoryDto", "categoryName"],
 			},
 			{
@@ -266,7 +266,7 @@ class ImportManagementListPage extends ListBasePage {
 		<div>
 			{this.renderSearchForm()}
 			<div className="action-bar province">
-				<div className="summary">Tổng thu: {Utils.formatMoney(dataList.sum) || Utils.formatMoney(0)}</div>
+				<div className="summary text-green">Tổng thu: {Utils.formatMoney(dataList.sum) || Utils.formatMoney(0)}</div>
 				{
 					this.renderButton((
 						<Button
