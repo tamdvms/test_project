@@ -31,6 +31,7 @@ class ImportManagementListPage extends ListBasePage {
 	constructor(props) {
 		super(props);
 		this.objectName = "Quản lý thu";
+		this.pagination = { pageSize: 100 };
 		this.breadcrumbs = [
 			{
 				name: "Quản lý thu",
@@ -40,14 +41,16 @@ class ImportManagementListPage extends ListBasePage {
 		this.columns = [
 			{
 				title: "Danh mục",
+				width: "30%",
 				dataIndex: ["categoryDto", "categoryName"],
 			},
 			{
 				title:  <div style={{paddingRight: "20px"}}>Giá tiền</div>,
 				dataIndex: "money",
 				align: "right",
+				width: 150,
 				render: (money) => {
-					return <div style={{paddingRight: "20px"}}>{Utils.formatMoney(money)}</div>
+					return <div style={{paddingRight: "20px", whiteSpace: 'nowrap'}}>{Utils.formatMoney(money)}</div>
 				}
 			},
 			{
@@ -262,17 +265,18 @@ class ImportManagementListPage extends ListBasePage {
 		return (
 		<div>
 			{this.renderSearchForm()}
-			<div className="action-bar">
-			{
-				this.renderButton((
-					<Button
-						type="primary"
-						onClick={() => this.onShowModifiedModal(false)}
-					>
-						<PlusOutlined /> Tạo mới
-					</Button>
-				), [2, 5])
-			}
+			<div className="action-bar province">
+				<div className="summary">Tổng thu: {Utils.formatMoney(dataList.sum) || Utils.formatMoney(0)}</div>
+				{
+					this.renderButton((
+						<Button
+							type="primary"
+							onClick={() => this.onShowModifiedModal(false)}
+						>
+							<PlusOutlined /> Tạo mới
+						</Button>
+					), [2, 5])
+				}
 			</div>
 			<BaseTable
 				loading={loading}
