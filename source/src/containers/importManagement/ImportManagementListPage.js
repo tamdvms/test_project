@@ -38,39 +38,44 @@ class ImportManagementListPage extends ListBasePage {
 		];
 
 		this.columns = [
-		{
-			title: "Mã chứng từ",
-			dataIndex: "code",
-		},
-		{
-			title: "Danh mục",
-			dataIndex: ["categoryDto", "categoryName"],
-		},
-		{
-			title: "Nhân viên",
-			dataIndex: ["accountAdminDto", "fullName"],
-		},
-		{
-			title: "Giá tiền",
-			dataIndex: "money",
-			align: "right",
-			render: (money) => {
-				return <div>{Utils.formatMoney(money)}</div>
-			}
-		},
-		{
-			title: <div style={{paddingRight: "20px"}}>Ngày tạo</div>,
-			dataIndex: "createdDate",
-			align: "right",
-			width: 180,
-			render: (createdDate) => (
-				<div style={{paddingRight: "20px"}}>
-				{convertUtcToTimezone(createdDate, "DD/MM/YYYY HH:mm")}
-				</div>
-			)
-		},
-		this.renderStatusColumn(),
-		this.renderActionColumn(),
+			{
+				title: "Danh mục",
+				dataIndex: ["categoryDto", "categoryName"],
+			},
+			{
+				title:  <div style={{paddingRight: "20px"}}>Giá tiền</div>,
+				dataIndex: "money",
+				align: "right",
+				render: (money) => {
+					return <div style={{paddingRight: "20px"}}>{Utils.formatMoney(money)}</div>
+				}
+			},
+			{
+				title: "Nhân viên",
+				width: 150,
+				dataIndex: ["accountAdminDto", "fullName"],
+				render: (fullName) => {
+					return <div style={{ whiteSpace: 'nowrap' }}>{fullName}</div>
+				}
+			},
+			{
+				title: "Ghi chú",
+				width: 200,
+				dataIndex: "note",
+			},
+			{
+				title: <div style={{paddingRight: "20px"}}>Ngày tạo</div>,
+				dataIndex: "createdDate",
+				align: "right",
+				width: 180,
+				render: (createdDate) => (
+					<div style={{paddingRight: "20px"}}>
+					{convertUtcToTimezone(createdDate, "DD/MM/YYYY HH:mm")}
+					</div>
+				)
+			},
+			this.renderStatusColumn(),
+			this.renderActionColumn(),
 		];
 		this.actionColumns = {
 			isEdit: true,
