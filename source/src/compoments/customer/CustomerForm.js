@@ -114,12 +114,14 @@ class CustomerForm extends BasicForm {
 
 			<Row gutter={16}>
 				<Col span={12}>
-					<TextField
-					fieldName="customerUsername"
-					label="Tên tài khoản"
-					required
-					disabled={loadingSave || isEditing}
-					/>
+          <TextField
+            type="number"
+            fieldName="customerPhone"
+            label="Số điện thoại"
+            required
+            minLength={10}
+            disabled={loadingSave || isEditing}
+          />
 				</Col>
 				<Col span={12}>
 					<TextField
@@ -143,15 +145,8 @@ class CustomerForm extends BasicForm {
             />
           </Col>
           <Col span={12}>
-            <TextField
-              type="number"
-              fieldName="customerPhone"
-              label="Số điện thoại"
-              required
-              minLength={10}
-              disabled={loadingSave}
-            />
-          </Col>
+					  <TextField fieldName="customerEmail" label="E-mail" type="email" disabled={loadingSave} required/>
+				  </Col>
           {/* <Col span={12}>
             <TextField
               fieldName="confirmPassword"
@@ -173,12 +168,6 @@ class CustomerForm extends BasicForm {
 					/>
 				</Col>
 				<Col span={12}>
-					<TextField fieldName="customerEmail" label="E-mail" type="email" disabled={loadingSave} required/>
-				</Col>
-			</Row>
-
-			<Row gutter={16}>
-        <Col span={12}>
           <DropdownField
             fieldName="status"
             label="Trạng thái"
