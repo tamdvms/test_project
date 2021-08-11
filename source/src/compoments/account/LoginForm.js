@@ -51,7 +51,7 @@ const LoginForm = ({ loading, onLogin }) => {
                 </Button>
                 
             </FormItem>
-            <center className="s-mt4px"><small>Copyright © Digi, All Rights Reserved.</small></center>
+            <center className="s-mt4px"><small>Copyright © Nails, All Rights Reserved.</small></center>
         </Form>
     );
 }

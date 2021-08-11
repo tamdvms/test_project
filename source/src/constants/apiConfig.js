@@ -229,7 +229,7 @@ const apiConfig = {
             path: '/v1/category/auto-complete',
             method: 'GET',
             headers: baseHeader
-        }
+        },
     },
     importExportManagement: {
         getList: {
@@ -263,5 +263,12 @@ const apiConfig = {
             headers: baseHeader,
         },
     },
+    booking: {
+        getProductAutoComplete: {
+            path:  '/v1/product/auto-complete',
+            method: 'GET',
+            headers: baseHeader,
+        },
+    }
 }
 export default apiConfig;

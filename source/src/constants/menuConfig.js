@@ -119,9 +119,14 @@ const navMenuConfig = [
         },
     },
     {
-        label: 'Đặt hàng',
+        label: 'Bán hàng',
         icon: <ShoppingCartOutlined />,
-        ...sitePathConfig.booking
+        children: [
+            {
+                label: 'Đặt hàng',
+                ...sitePathConfig.booking
+            }
+        ]
     },
     {
         label: 'Quản lý bán hàng',

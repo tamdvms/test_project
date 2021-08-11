@@ -1,12 +1,42 @@
 import React from 'react'
-import { Input, Empty, Button, Avatar } from 'antd'
-import { EditOutlined, SearchOutlined, CloseCircleOutlined, ShoppingFilled } from '@ant-design/icons'
+import { Input, Empty, Avatar, Spin, Modal } from 'antd'
+import { SearchOutlined } from '@ant-design/icons'
+
 import Utils from '../../utils'
 import { AppConstants } from '../../constants'
+import Cart from './Cart'
+
+const { confirm } = Modal
 
 const BookingPage = ({
-    products = [],
+    itemList = [],
+    selectedItems = [],
+    isPaymenting,
+    showingDescriptionList,
+    setIsPaymenting,
+    totalPrice,
+    handleChangeSearchInput,
+    handleEventOnItem,
+    listLoading,
+    handleSelectingItem,
+    handleDeselectingItem,
 }) => {
+
+    const handleRemoveSelectingItem = (product) => {
+        confirm({
+            title: `Bạn có chắc muốn xóa sản phẩm này?`,
+            content: '',
+            okText: 'Có',
+            okType: 'danger',
+            cancelText: 'Không',
+            onOk: () => {
+                handleDeselectingItem(product)
+            },
+            onCancel() {
+            },
+          });
+    }
+
     return (
         <div className="booking-page">
             <div className="content">
@@ -15,15 +45,22 @@ const BookingPage = ({
                         className="input"
                         placeholder="Nhập tên sản phẩm"
                         prefix={<SearchOutlined />}
+                        onChange={handleChangeSearchInput}
                     />
                 </div>
                 <div className="list">
                     <ul className="products">
                         {
-                            products.length > 0 ? (
-                                products.map(product => {
+                            itemList.length > 0 ? (
+                                itemList.map(product => {
                                     return (
-                                        <li key={product.id} className="product-item">
+                                        <li
+                                        key={product.id}
+                                        className="product-item"
+                                        >
+                                            <div
+                                            className="overlay"
+                                            onClick={() => handleSelectingItem(product)}></div>
                                             <Avatar
                                                 className="avatar"
                                                 src={AppConstants.contentRootUrl + product.productImage}
@@ -34,113 +71,21 @@ const BookingPage = ({
                                     )
                                 })
                             ) : (
-                                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                                listLoading
+                                ? <Spin className="loading" spinning={listLoading}></Spin>
+                                : (<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />)
                             )
                         }
                     </ul>
                 </div>
             </div>
             <div className="sidebar">
-                <div className="header">
-                    <h2>Giỏ hàng</h2>
-                </div>
-                <div className="list">
-                    <ul className="orders">
-                        <li className="item">
-                            <div className="col col-1">
-                                <p className="title">
-                                    Cà Phê Sen Vàng Hạnh Nhân Đá Xay
-                                </p>
-                                <div className="action">
-                                    <Button className="description-btn" type="ghost">Thêm mô tả<EditOutlined /></Button>
-                                    <CloseCircleOutlined className="delete-btn"/>
-                                </div>
-                            </div>
-                            <div className="col col-2">
-                                <p className="price">
-                                    {Utils.formatMoney(100000)}
-                                </p>
-                                <div className="quantity-edition">
-                                    <Button className="minus">-</Button>
-                                    <span className="quantity">3</span>
-                                    <Button className="plus">+</Button>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="item">
-                            <div className="col col-1">
-                                <p className="title">
-                                    Cà Phê Sen Vàng Hạnh Nhân Đá Xay
-                                </p>
-                                <div className="action">
-                                    <Button className="description-btn" type="ghost">Thêm mô tả<EditOutlined /></Button>
-                                    <CloseCircleOutlined className="delete-btn"/>
-                                </div>
-                            </div>
-                            <div className="col col-2">
-                                <p className="price">
-                                    {Utils.formatMoney(100000)}
-                                </p>
-                                <div className="quantity-edition">
-                                    <Button className="minus">-</Button>
-                                    <span className="quantity">3</span>
-                                    <Button className="plus">+</Button>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="item">
-                            <div className="col col-1">
-                                <p className="title">
-                                    Cà Phê Sen Vàng Hạnh Nhân Đá Xay
-                                </p>
-                                <div className="action">
-                                    <Button className="description-btn" type="ghost">Thêm mô tả<EditOutlined /></Button>
-                                    <CloseCircleOutlined className="delete-btn"/>
-                                </div>
-                            </div>
-                            <div className="col col-2">
-                                <p className="price">
-                                    {Utils.formatMoney(100000)}
-                                </p>
-                                <div className="quantity-edition">
-                                    <Button className="minus">-</Button>
-                                    <span className="quantity">3</span>
-                                    <Button className="plus">+</Button>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="item">
-                            <div className="col col-1">
-                                <p className="title">
-                                    Cà Phê Sen Vàng Hạnh Nhân Đá Xay
-                                </p>
-                                <div className="action">
-                                    <Button className="description-btn" type="ghost">Thêm mô tả<EditOutlined /></Button>
-                                    <CloseCircleOutlined className="delete-btn"/>
-                                </div>
-                            </div>
-                            <div className="col col-2">
-                                <p className="price">
-                                    {Utils.formatMoney(100000)}
-                                </p>
-                                <div className="quantity-edition">
-                                    <Button className="minus">-</Button>
-                                    <span className="quantity">3</span>
-                                    <Button className="plus">+</Button>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div className="bottom">
-                    <div className="calculate-total">
-                        <div className="title">Tổng tiền</div>
-                        <div className="total">
-                            {Utils.formatMoney(100000)}
-                        </div>
-                    </div>
-                    <Button className="payment" type="primary">Thanh toán</Button>
-                </div>
+                <Cart
+                selectedItems={selectedItems}
+                handleEventOnItem={handleEventOnItem}
+                handleRemoveSelectingItem={handleRemoveSelectingItem}
+                totalPrice={totalPrice}
+                />
             </div>
         </div>
     )

@@ -7,7 +7,7 @@ const AppConstants = {
 
 
 const StorageKeys = {
-    userData: 'digi-user-data'
+    userData: 'nails-user-data'
 }
 
 const LayoutConfigs = {
