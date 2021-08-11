@@ -9,6 +9,7 @@ import {
     UnorderedListOutlined,
     InboxOutlined,
     CarryOutOutlined,
+    ShoppingCartOutlined,
 } from '@ant-design/icons';
 import { sitePathConfig } from '../constants/sitePathConfig';
 import store from '../store';
@@ -116,6 +117,11 @@ const navMenuConfig = [
             )
             this.clicked = true;
         },
+    },
+    {
+        label: 'Đặt hàng',
+        icon: <ShoppingCartOutlined />,
+        ...sitePathConfig.booking
     },
     {
         label: 'Quản lý bán hàng',

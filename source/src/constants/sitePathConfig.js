@@ -126,4 +126,10 @@ export const sitePathConfig = {
             apiConfig.user.deleteAdmin.path,
         ]
     },
+    booking: {
+        path: '/booking',
+        siteConfig: {
+            contentClass: 'booking-site',
+        }
+    }
 }

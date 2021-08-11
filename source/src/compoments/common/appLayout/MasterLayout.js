@@ -111,9 +111,11 @@ class MasterLayout extends Component {
             location: { pathname },
             fullScreenLoading,
             showFullScreenLoading,
-            hideFullScreenLoading
+            hideFullScreenLoading,
+            siteConfig,
         } = this.props;
         const { breadcrumbs, navSidercollapsed, userData } = this.state;
+        const contentClass = siteConfig?.contentClass || '';
 
         if(!userData)
             return null;
@@ -157,10 +159,8 @@ class MasterLayout extends Component {
                                     :
                                     null
                                 }
-                    
-                                {/* <Breadcrumb.Item>Bill</Breadcrumb.Item> */}
                             </Breadcrumb>
-                            <div className="content-wrapper">
+                            <div className={`content-wrapper ${contentClass}`}>
                                 {React.cloneElement(children, {
                                     changeUserData: this.onChangeUserData,
                                     currentUser: userData,
@@ -168,7 +168,6 @@ class MasterLayout extends Component {
                                     showFullScreenLoading,
                                     hideFullScreenLoading
                                 })}
-                                
                             </div>
                             <Footer className="app-footer">
                                 Copyright © Digi, All Rights Reserved.
