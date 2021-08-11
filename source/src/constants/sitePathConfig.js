@@ -128,6 +128,9 @@ export const sitePathConfig = {
     },
     booking: {
         path: '/booking',
+        permissions: [
+            apiConfig.booking.getProductAutoComplete.path,
+        ],
         siteConfig: {
             contentClass: 'booking-site',
         }

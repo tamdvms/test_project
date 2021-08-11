@@ -94,7 +94,6 @@ class ProductForm extends BasicForm {
                         onChange={this.handleChangeAvatar}
                         uploadFile={this.uploadFileAvatar}
                         disabled={loadingSave}
-                        required
                     />
                 </Col>
             </Row>

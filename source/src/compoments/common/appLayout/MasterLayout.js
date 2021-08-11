@@ -170,7 +170,7 @@ class MasterLayout extends Component {
                                 })}
                             </div>
                             <Footer className="app-footer">
-                                Copyright © Digi, All Rights Reserved.
+                                Copyright © Nails, All Rights Reserved.
                             </Footer>
                         </Content>
                     </Layout>
