@@ -29,6 +29,7 @@ import ProductListPage from '../containers/product/ProductListPage';
 import ImportManagementListPage from "../containers/importManagement/ImportManagementListPage";
 import ExportManagementListPage from "../containers/exportManagement/ExportManagementListPage";
 import EmployeeListPage from "../containers/employee/EmployeeListPage";
+import BookingContainer from "../containers/booking/BookingContainer";
 
 const RootRoute = () => {
     const {
@@ -46,6 +47,7 @@ const RootRoute = () => {
         importManagement,
         exportManagement,
         employee,
+        booking,
     } = sitePathConfig;
 
     return (
@@ -76,6 +78,7 @@ const RootRoute = () => {
                 <PrivateRoute exact path={importManagement.path} component={ImportManagementListPage}/>
                 <PrivateRoute exact path={exportManagement.path} component={ExportManagementListPage}/>
                 <PrivateRoute exact path={employee.path} component={EmployeeListPage}/>
+                <PrivateRoute exact path={booking.path} component={BookingContainer}/>
                 {/* Error Page */}
                 <PrivateRoute exact path={forbidden.path} component={Forbidden}/>
                 {/* <Route exact path="/error" component={ErrorServer} /> */}
