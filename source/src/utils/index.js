@@ -99,6 +99,9 @@ const Utils = {
                     value = value.toString().substring(0, decimalIndex) + decimalSeparator + value.toString().substring(decimalIndex + 1);
                 }
             }
+            else {
+                value = value.toFixed(Number(setting.decimal) || 0);
+            }
             value = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, groupSeparator);
             if(currencySymbolPosition === CurrentcyPositions.FRONT) {
                 return `${currentcy} ${value}`;

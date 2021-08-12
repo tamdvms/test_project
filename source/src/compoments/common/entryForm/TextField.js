@@ -45,11 +45,14 @@ class TextField extends BaseField {
             onBlur,
             validateStatus,
             help,
-            style
+            style,
+            className,
+            onChange,
         } = this.props;
 
         return (
             <Form.Item
+                className={className}
                 label={label}
                 name={fieldName}
                 validateStatus={validateStatus}
@@ -62,9 +65,9 @@ class TextField extends BaseField {
                 {
                     type === 'textarea'
                     ?
-                    <TextArea style={style} placeholder={this.getPlaceHolder()} disabled={disabled} onBlur={onBlur}/>
+                    <TextArea onChange={onChange} style={style} placeholder={this.getPlaceHolder()} disabled={disabled} onBlur={onBlur}/>
                     :
-                    <Input style={style} size={size} placeholder={this.getPlaceHolder()} disabled={disabled} type={type} onBlur={onBlur}/>
+                    <Input onChange={onChange} style={style} size={size} placeholder={this.getPlaceHolder()} disabled={disabled} type={type} onBlur={onBlur}/>
                 } 
             </Form.Item>
         )

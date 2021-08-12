@@ -9,6 +9,7 @@ import { actions } from '../../actions'
 const { TextArea } = Input
 
 const Cart = ({
+    hide,
     selectedItems,
     handleEventOnItem,
     handleRemoveSelectingItem,
@@ -26,7 +27,7 @@ const Cart = ({
         }, "submitNote")
     }
     return (
-        <div className="cart">
+        <div className={`cart${hide ? ' hide' : ''}`}>
             <div className="header">
                 <h2>Giỏ hàng</h2>
             </div>
@@ -132,20 +133,20 @@ const Cart = ({
                 </ul>
             </div>
             <div className="bottom">
-            <div className="calculate-total product">
+                <div className="calculate-total product">
                     <div className="title">Tổng tiền đơn hàng:</div>
                     <div className="total">
                         {Utils.formatMoney(totalPrice)}
                     </div>
                 </div>
                 <div className="calculate-total vat">
-                    <div className="title">VAT:</div>
+                    <div className="title">VAT ({VAT}%):</div>
                     <div className="total">
-                        {VAT} %
+                        {Utils.formatMoney(totalPrice * (VAT / 100))}
                     </div>
                 </div>
                 <div className="calculate-total product-vat">
-                    <div className="title">Tổng tiền:</div>
+                    <div className="title">Tổng tiền thanh toán:</div>
                     <div className="total">
                         {Utils.formatMoney(totalPrice + totalPrice * Number(VAT / 100))}
                     </div>

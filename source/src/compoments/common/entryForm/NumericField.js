@@ -27,6 +27,8 @@ class NumericField extends BaseField {
             onBlur,
             formatter,
             parser,
+            className,
+            defaultValue,
         } = this.props;
 
         return (
@@ -34,6 +36,7 @@ class NumericField extends BaseField {
                 label={label}
                 name={fieldName}
                 rules={this.getRules()}
+                className={className}
             >
                 <InputNumber
                     placeholder={this.getPlaceHolder()}
@@ -45,6 +48,7 @@ class NumericField extends BaseField {
                     parser={parser || this.parser}
                     onChange={onChange}
                     onBlur={onBlur}
+                    defaultValue={defaultValue}
                 />
                 
             </Form.Item>
