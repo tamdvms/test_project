@@ -31,6 +31,7 @@ class AutoCompleteField extends BaseField {
             renderCustomOption,
             optionLabelProp,
             autoComplete,
+            className,
         } = this.props;
 
         const optionValueKey = optionValue || 'value';
@@ -44,6 +45,7 @@ class AutoCompleteField extends BaseField {
                 label={label}
                 name={fieldName}
                 rules={this.getRules()}
+                className={className}
             >
               
                 {

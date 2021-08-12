@@ -61,7 +61,7 @@ const BookingPage = ({
 					{
 						loadmoreLoading
 						? <div className="loader">Loading...</div>
-						: <Button onClick={handleChangeLoadMore}>Xem thêm {numLoadMore}</Button>
+						: <Button onClick={handleChangeLoadMore}>Xem thêm {numLoadMore} (sản phẩm)</Button>
 					}
 				</div>
 			</div>
@@ -81,7 +81,7 @@ const BookingPage = ({
                 <div className="list">
                     <ul className="products">
                         {
-                            itemList.length > 0 ? (
+                            !listLoading && itemList.length > 0 ? (
                                 itemList.map(product => {
                                     return (
                                         <li
@@ -111,30 +111,27 @@ const BookingPage = ({
                 </div>
             </div>
             <div className="sidebar">
-                {
-                    isPaymenting ? (
-                        <Payment
-                        selectedItems={selectedItems}
-                        totalPrice={totalPrice}
-                        setIsPaymenting={setIsPaymenting}
-                        loadingSave={loadingSave}
-                        handleSubmitPayment={handleSubmitPayment}
-                        handleChangePhoneCustomer={handleChangePhoneCustomer}
-                        customersList={customersList}
-                        listCustomerLoading={listCustomerLoading}
-                        phoneInput={phoneInput}
-                        setPhoneInput={setPhoneInput}
-                        />
-                    ) : (
-                        <Cart
-                        selectedItems={selectedItems}
-                        handleEventOnItem={handleEventOnItem}
-                        handleRemoveSelectingItem={handleRemoveSelectingItem}
-                        totalPrice={totalPrice}
-                        setIsPaymenting={setIsPaymenting}
-                        />
-                    )
-                }
+                <Payment
+                hide={!isPaymenting}
+                selectedItems={selectedItems}
+                totalPrice={totalPrice}
+                setIsPaymenting={setIsPaymenting}
+                loadingSave={loadingSave}
+                handleSubmitPayment={handleSubmitPayment}
+                handleChangePhoneCustomer={handleChangePhoneCustomer}
+                customersList={customersList}
+                listCustomerLoading={listCustomerLoading}
+                phoneInput={phoneInput}
+                setPhoneInput={setPhoneInput}
+                />
+                <Cart
+                hide={isPaymenting}
+                selectedItems={selectedItems}
+                handleEventOnItem={handleEventOnItem}
+                handleRemoveSelectingItem={handleRemoveSelectingItem}
+                totalPrice={totalPrice}
+                setIsPaymenting={setIsPaymenting}
+                />
             </div>
         </div>
     )

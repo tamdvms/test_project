@@ -73,7 +73,8 @@
                         .product-item {
                             position: relative;
                             cursor: pointer;
-                            padding: 2px 24px;
+                            padding: 2px 16px;
+                            padding-left: 10px;
                             margin-bottom: 8px;
                             border-radius: 10px;
                             border: 1px solid #d9d9d9;
@@ -118,8 +119,8 @@
                             .price {
                                 margin-left: auto;
                                 color: #000;
-                                font-weight: bold;
-                                font-size: 1.1rem;
+                                font-weight: 500;
+                                font-size: 1.1rem !important;
                                 flex-shrink: 0;
                             }
                         }
@@ -222,6 +223,9 @@
                 position: relative;
                 z-index: 2;
                 background-color: #fff;
+                .cart.hide, .payment-form.hide {
+                    display: none;
+                }
                 .cart, .payment-form {
                     height: 100%;
                     display: flex;
@@ -231,9 +235,16 @@
                         margin: 0;
                         border-bottom: #f0f0f0 1px solid;
                         margin-top: -5px;
+                        height: 37px;
+                        display: flex;
+                        justify-content: center;
+                        padding-bottom: 8px;
+                        box-sizing: content-box;
                         h2 {
                             text-transform: uppercase;
                             text-align: center;
+                            font-size: 1.1rem !important;
+                            margin-bottom: 0 !important;
                         }
                     }
                     .list {
@@ -355,7 +366,7 @@
                         }
                     }
                     .bottom {
-                        height: 148px;
+                        height: 163px;
                         margin-top: auto;
                         display: flex;
                         flex-direction: column;
@@ -372,16 +383,24 @@
                         .calculate-total.product {
                             padding-top: 8px;
                         }
-                        .calculate-total.product, .calculate-total.vat {
+                        .calculate-total.product, .calculate-total.vat, .calculate-total.discount {
                             .title, .total {
                                 font-weight: 500;
                                 font-size: 14px;
                             }
                         }
+                        .calculate-total.vat {
+                            padding-bottom: 8px;
+                        }
                         .calculate-total.product-vat {
+                            padding: 8px 16px;
+                            border-top: 1px solid #f0f0f0;
                             .title, .total {
                                 font-weight: bold;
-                                font-size: 16px;
+                                font-size: 14px;
+                            }
+                            .total {
+                                font-weight: 500;
                             }
                         }
                         .payment {
@@ -415,6 +434,12 @@
                         margin-right: -16px;
                         .form {
                             margin-top: 8px;
+                            .form-item-email, .form-item-discount {
+                                margin-bottom: 8px;
+                            }
+                            .form-item-phone, .form-item-fullname {
+                                margin-bottom: 12px;
+                            }
                         }
                         .list {
                             padding-top: 0;
@@ -436,12 +461,22 @@
                                 }
                                 .note-content {
                                     margin: 0 !important;
+                                    padding-left: 22px;
                                 }
                             }
                         }
                     }
+                    .bottom {
+                        height: 185px !important;
+                    }
                 }
             }
+        }
+        .ant-avatar.avatar.ant-avatar-circle {
+            width: 46px !important;
+            height: 46px !important;
+            margin: 8px;
+            padding: 0 !important;
         }
     }
 }
