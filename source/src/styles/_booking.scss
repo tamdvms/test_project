@@ -131,7 +131,81 @@
                             justify-content: center;
                             align-items: center;
                         }
+                        .load-more {
+                            position: relative;
+                            .loader-container {
+                                justify-content: center;
+                                &::before {
+                                    display: none;
+                                }
+                                .loader {
+                                    -webkit-animation-delay: -0.16s !important;
+                                    animation-delay: -0.16s !important;
+                                }
+                                .loader,
+                                .loader:before,
+                                .loader:after {
+                                    background: #808080;
+                                    -webkit-animation: loadmore-booking 1s infinite ease-in-out;
+                                    animation: loadmore-booking 1s infinite ease-in-out;
+                                    width: 0.5em;
+                                    height: 2em;
+                                    box-shadow: 0 0 #808080;
+                                }
+                                .loader:before,
+                                .loader:after {
+                                    position: absolute;
+                                    top: 0;
+                                    content: '';
+                                }
+                                .loader:before {
+                                    left: -1em;
+                                    -webkit-animation-delay: -0.32s;
+                                    animation-delay: -0.32s;
+                                }
+                                .loader:after {
+                                    left: 1em;
+                                }
+                                @-webkit-keyframes loadmore-booking {
+                                    0%,
+                                    80%,
+                                    100% {
+                                        height: 1em;
+                                        box-shadow: 0 0 #808080;
+                                    }
+                                    40% {
+                                        height: 2em;
+                                        box-shadow: 0 -0.5em #808080;
+                                    }
+                                }
+                                @keyframes loadmore-booking {
+                                    0%,
+                                    80%,
+                                    100% {
+                                        height: 1em;
+                                        box-shadow: 0 0 #808080;
+                                    }
+                                    40% {
+                                        height: 2em;
+                                        box-shadow: 0 -0.5em #808080;
+                                    }
+                                }
+                            }
+                        }
                     }
+                }
+            }
+            .content.disabled {
+                &::before {
+                    content: "";
+                    cursor: inherit;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    z-index: 1;
+                    background-color: #80808086;
                 }
             }
             .sidebar {
@@ -143,7 +217,10 @@
                 box-shadow: -8px 3px 8px -8px rgba(66, 66, 66, 0.1);
                 padding: 16px;
                 padding-bottom: 0;
-                .cart {
+                position: relative;
+                z-index: 2;
+                background-color: #fff;
+                .cart, .payment-form {
                     height: 100%;
                     display: flex;
                     flex-direction: column;
@@ -151,6 +228,7 @@
                         padding: 0 16px;
                         margin: 0;
                         border-bottom: #f0f0f0 1px solid;
+                        margin-top: -5px;
                         h2 {
                             text-transform: uppercase;
                             text-align: center;
@@ -169,7 +247,7 @@
                             .item {
                                 border-bottom: 1px solid #f0f0f0;
                                 margin: 8px 0;
-                                padding: 11px 0;
+                                padding: 12px 0;
                                 padding-right: 16px;
                                 position: relative;
                                 &:first-child {
@@ -209,10 +287,10 @@
                                         margin-left: 16px;
                                         margin-right: 8px;                                display: flex;
                                         flex-direction: column;
-                                        align-items: center;
+                                        align-items: flex-end;
                                         justify-content: space-between;
                                         .price {
-                                            color: #1166c6;
+                                            color: #000;
                                             font-weight: bold;
                                             margin-bottom: 8px;
                                         }
@@ -301,6 +379,35 @@
                             height: 38px;
                             text-transform: uppercase;
                             font-weight: bold;
+                        }
+                    }
+                }
+                .payment-form {
+                    position: relative;
+                    .header {
+                        margin-bottom: 8px;
+                        padding-bottom: 4px;
+                        .back {
+                            position: absolute;
+                            left: -4px;
+                            top: -4px;
+                            cursor: pointer;
+                        }
+                    }
+                    .payment-content {
+                        flex: 1;
+                        overflow-y: auto;
+                        overflow-x: hidden;
+                        padding-right: 16px;
+                        margin-right: -16px;
+                        .form {
+                            margin-top: 8px;
+                        }
+                        .list {
+                            padding-top: 0;
+                            .item {
+                                padding-right: 0;
+                            }
                         }
                     }
                 }

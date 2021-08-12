@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import BookingPage from '../../compoments/booking/BookingPage'
 import { actions } from '../../actions'
+import { showSucsessMessage } from '../../services/notifyService'
+
+const DEFAULT_ITEM_SIZE = 20
 
 const BookingContainer = ({
     changeBreadcrumb,
@@ -21,6 +24,15 @@ const BookingContainer = ({
     const [searchInput, setSearchInput] = useState("")
     const [listLoading, setListLoading] = useState(false)
     const [selectedItems, setSelectedItems] = useState([])
+    const [pagination, setPagination] = useState({
+        size: DEFAULT_ITEM_SIZE,
+        numLoadMore: DEFAULT_ITEM_SIZE,
+    })
+    const [loadmoreLoading, setLoadmoreLoading] = useState(false)
+    const [loadingSave, setLoadingSave] = useState(false)
+    const [phoneInput, setPhoneInput] = useState("")
+    const [customersList, setCustomersList] = useState([])
+    const [listCustomerLoading, setListCustomerLoading] = useState(false)
 
     const findMaxOrder = (arr) => {
         let max = arr[0].order;
@@ -117,16 +129,56 @@ const BookingContainer = ({
         setSearchInput(event.target.value)
     }
 
-    const fetchProductsList = () => {
-        setListLoading(true)
+    const fetchProductsList = (size) => {
+        size ? setLoadmoreLoading(true) : setListLoading(true)
         dispatch(actions.getProductAutoComplete({
             params: {
                 name: searchInput,
+                size: size || pagination.size,
             },
-            onCompleted: (data = []) => {
-                setListLoading(false)
+            onCompleted: (data = [], newPagination) => {
+                size ? setLoadmoreLoading(false) : setListLoading(false)
                 setItemList(data)
+                setPagination(newPagination)
             },
+            defaultItemSize: DEFAULT_ITEM_SIZE,
+        }))
+    }
+
+    const handleChangeLoadMore = () => {
+        fetchProductsList(pagination.size + pagination.numLoadMore)
+    }
+
+    const handleSubmitPayment = (values) => {
+        console.log(values)
+        setLoadingSave(true)
+        setTimeout(() => {
+            setLoadingSave(false)
+            setIsPaymenting(false)
+            setSelectedItems([])
+            setCustomersList([])
+            showSucsessMessage("Đặt hàng thành công")
+        }, 2000)
+    }
+
+    const handleChangePhoneCustomer = (value) => {
+        setPhoneInput(value)
+    }
+
+    const fetchCustomerList = () => {
+        setListCustomerLoading(true)
+        dispatch(actions.getCustomerAutoComplete({
+            params: {
+                phone: phoneInput,
+                size: 10
+            },
+            onCompleted: (data) => {
+                setListCustomerLoading(false)
+                setCustomersList(data)
+            },
+            onDone: () => {
+                setListCustomerLoading(false)
+            }
         }))
     }
 
@@ -148,6 +200,10 @@ const BookingContainer = ({
         setTotalPrice(total)
     }, [selectedItems])
 
+    useEffect(() => {
+        phoneInput ? fetchCustomerList() : setCustomersList([])
+    }, [phoneInput])
+
     return (
         <div className="booking-container">
             <BookingPage
@@ -155,12 +211,22 @@ const BookingContainer = ({
                 itemList={itemList}
                 selectedItems={selectedItems}
                 isPaymenting={isPaymenting}
+                totalPrice={totalPrice}
+                numLoadMore={pagination.numLoadMore}
+                loadmoreLoading={loadmoreLoading}
+                loadingSave={loadingSave}
+                customersList={customersList}
+                listCustomerLoading={listCustomerLoading}
+                phoneInput={phoneInput}
                 handleEventOnItem={handleEventOnItem}
                 setIsPaymenting={setIsPaymenting}
-                totalPrice={totalPrice}
                 handleChangeSearchInput={handleChangeSearchInput}
                 handleSelectingItem={handleSelectingItem}
                 handleDeselectingItem={handleDeselectingItem}
+                handleChangeLoadMore={handleChangeLoadMore}
+                handleSubmitPayment={handleSubmitPayment}
+                handleChangePhoneCustomer={handleChangePhoneCustomer}
+                setPhoneInput={setPhoneInput}
             />
         </div>
     )

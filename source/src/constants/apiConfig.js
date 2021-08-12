@@ -269,6 +269,11 @@ const apiConfig = {
             method: 'GET',
             headers: baseHeader,
         },
+        getCustomerAutoComplete: {
+            path: '/v1/customer/auto-complete',
+            method: 'GET',
+            headers: baseHeader,
+        }
     }
 }
 export default apiConfig;

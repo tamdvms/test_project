@@ -2,6 +2,8 @@ import React from 'react'
 import { Input, Empty, Button, Avatar, Form, Modal, Spin } from 'antd'
 import { EditOutlined, SearchOutlined, CloseCircleOutlined, ShoppingFilled, PlusOutlined } from '@ant-design/icons'
 import Utils from '../../utils'
+import ElementWithPermission from '../common/elements/ElementWithPermission'
+import { sitePathConfig } from '../../constants/sitePathConfig'
 
 const { TextArea } = Input
 
@@ -10,6 +12,7 @@ const Cart = ({
     handleEventOnItem,
     handleRemoveSelectingItem,
     totalPrice,
+    setIsPaymenting,
 }) => {
 
     const handleSubmitNote = (values, product) => {
@@ -131,7 +134,14 @@ const Cart = ({
                         {Utils.formatMoney(totalPrice)}
                     </div>
                 </div>
-                <Button className="payment" type="primary" disabled={selectedItems.length <= 0}>Tiếp theo</Button>
+                <ElementWithPermission permissions={[sitePathConfig.booking.permissions[1]]}>
+                    <Button
+                    className="payment"
+                    type="primary"
+                    disabled={selectedItems.length <= 0}
+                    onClick={() => setIsPaymenting(true)}
+                    >Tiếp theo</Button>
+                </ElementWithPermission>
             </div>
         </div>
     )

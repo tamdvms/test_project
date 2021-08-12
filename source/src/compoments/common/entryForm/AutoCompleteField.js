@@ -29,7 +29,8 @@ class AutoCompleteField extends BaseField {
             onSearch,
             onBlur,
             renderCustomOption,
-            optionLabelProp
+            optionLabelProp,
+            autoComplete,
         } = this.props;
 
         const optionValueKey = optionValue || 'value';
@@ -62,6 +63,7 @@ class AutoCompleteField extends BaseField {
                         onDeselect={onDeselect}
                         onBlur={onBlur}
                         mode={mode}
+                        autoComplete={autoComplete}
                     >
                     {
                         selectOptions
