@@ -273,6 +273,11 @@ const apiConfig = {
             path: '/v1/customer/auto-complete',
             method: 'GET',
             headers: baseHeader,
+        },
+        createOrders: {
+            path: '/v1/orders/create',
+            method: 'POST',
+            headers: baseHeader,
         }
     }
 }

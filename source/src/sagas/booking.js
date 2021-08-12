@@ -10,6 +10,7 @@ const { defineActionLoading, defineActionSuccess, defineActionFailed } = reduxUt
 const {
     GET_PRODUCT_AUTOCOMPLETE,
     GET_CUSTOMER_AUTOCOMPLETE,
+    CREATE_ORDERS,
 } = actionTypes;
 
 
@@ -42,9 +43,29 @@ function* getCustomerAutoComplete({ payload: { params, onCompleted, onDone } }) 
     }
 }
 
+function* createOrders({ payload: { params, onCompleted, onError, onDone } }) {
+    try {
+        const { responseData, success } = yield call(sendRequest, apiConfig.booking.createOrders, params);
+
+        if(success && responseData.result) {
+            onCompleted && onCompleted()
+        }
+        else {
+            onError && onError()
+        }
+    }
+    catch(error) {
+        onError && onError()
+    }
+    finally {
+        onDone && onDone()
+    }
+}
+
 const sagas = [
     takeLatest(GET_PRODUCT_AUTOCOMPLETE, getProductAutoComplete),
     takeLatest(GET_CUSTOMER_AUTOCOMPLETE, getCustomerAutoComplete),
+    takeLatest(CREATE_ORDERS, createOrders),
 ]
 
 export default sagas;

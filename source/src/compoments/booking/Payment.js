@@ -13,6 +13,8 @@ import TextField from "../common/entryForm/TextField";
 import AutoCompleteField from '../common/entryForm/AutoCompleteField';
 import { actions } from '../../actions'
 import NumericField from '../common/entryForm/NumericField';
+import { sitePathConfig } from '../../constants/sitePathConfig';
+import ElementWithPermission from '../common/elements/ElementWithPermission';
 
 const Payment = ({
     hide,
@@ -33,6 +35,11 @@ const Payment = ({
     const settings = actions.getUserData()?.settings
     const VAT =  settings && settings.Booking.vat
 
+    const discountPrice = totalPrice * (discount / 100)
+    const totalPriceAfterDiscount = totalPrice - discountPrice
+    const vatPrice = totalPriceAfterDiscount * Number(VAT / 100)
+    const finalPrice = totalPriceAfterDiscount + vatPrice
+
     const handleSelectPhone = (value) => {
         setSelectedPhone(value)
         setPhoneInput(value)
@@ -52,22 +59,27 @@ const Payment = ({
         setDiscount(value)
     }
 
-    useEffect(() => {
-        formRef.current.setFieldsValue({
-            customerDiscount: 0
+    const handleSubmit = (values) => {
+        handleSubmitPayment({
+            ...values,
+            totalPayment: finalPrice,
+        }, (result) => {
+            if(result) formRef.current.resetFields()
         })
-    }, [])
+    }
+
+    useEffect(() => {
+        const currentDiscount = formRef.current.getFieldValue("customerDiscount")
+        formRef.current.setFieldsValue({
+            customerDiscount: currentDiscount || 0
+        })
+    }, [hide])
 
     useEffect(() => {
         const selectedCustomer = customersList.find(customer => customer.customerPhone === selectedPhone)
         formRef.current.setFieldsValue(selectedCustomer)
     }, [selectedPhone])
 
-    const discountPrice = totalPrice * (discount / 100)
-    const totalPriceAfterDiscount = totalPrice - discountPrice
-    const vatPrice = totalPriceAfterDiscount * Number(VAT / 100)
-    const finalPrice = totalPriceAfterDiscount + vatPrice
-    console.log({discountPrice, totalPriceAfterDiscount, vatPrice, finalPrice})
     return (
         <div className={`payment-form${hide ? ' hide' : ''}`}>
             <div className="header">
@@ -81,7 +93,7 @@ const Payment = ({
                         id="payment-form"
                         ref={formRef}
                         layout="vertical"
-                        onFinish={handleSubmitPayment}
+                        onFinish={handleSubmit}
                     >
                         <Row gutter={16}>
                             <Col span={12}>
@@ -130,11 +142,7 @@ const Payment = ({
                                 className="form-item-discount"
                                 onChange={handleChangeDiscount}
                                 width="100%"
-                                parser={(value) => {
-                                    value = value.replace(/\$\s?|(,*)/g, '')
-                                    value = value.replace(/\$\s?|(\.*)/g, '')
-                                    return value
-                                }}
+                                parser={(value) => Utils.formatIntegerNumber(value)}
                                 />
                             </Col>
                             <Col span={12}>
@@ -144,6 +152,11 @@ const Payment = ({
                                     disabled={loadingSave}
                                     type="textarea"
                                     style={{ height: 102 }}
+                                />
+                            </Col>
+                            <Col hidden>
+                                <TextField
+                                    fieldName="id"
                                 />
                             </Col>
                         </Row>
@@ -200,16 +213,18 @@ const Payment = ({
                         {Utils.formatMoney(finalPrice)}
                     </div>
                 </div>
-                <Button
-                form="payment-form"
-                htmlType="submit"
-                className="payment"
-                type="primary"
-                disabled={selectedItems.length <= 0}
-                loading={loadingSave}
-                >
-                    Đặt hàng
-                </Button>
+                <ElementWithPermission permissions={[sitePathConfig.booking.permissions[2]]}>
+                    <Button
+                    form="payment-form"
+                    htmlType="submit"
+                    className="payment"
+                    type="primary"
+                    disabled={selectedItems.length <= 0}
+                    loading={loadingSave}
+                    >
+                        Đặt hàng
+                    </Button>
+                </ElementWithPermission>
             </div>
         </div>
     )
