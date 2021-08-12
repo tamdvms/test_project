@@ -11,6 +11,7 @@ import {
 import Utils from '../../utils'
 import TextField from "../common/entryForm/TextField";
 import AutoCompleteField from '../common/entryForm/AutoCompleteField';
+import { actions } from '../../actions'
 
 const Payment = ({
     selectedItems,
@@ -26,6 +27,8 @@ const Payment = ({
 }) => {
     const formRef = useRef()
     const [selectedPhone, setSelectedPhone] = useState("")
+    const settings = actions.getUserData()?.settings
+    const VAT =  settings && settings.Booking.vat
 
     const handleSelectPhone = (value) => {
         setSelectedPhone(value)
@@ -102,6 +105,7 @@ const Payment = ({
                                     fieldName="customerAddress"
                                     label="Địa chỉ"
                                     disabled={loadingSave}
+                                    type="textarea"
                                 />
                             </Col>
                         </Row>
@@ -116,16 +120,13 @@ const Payment = ({
                                     <div className="item-content">
                                         <div className="col col-1">
                                             <p className="title">
-                                                {product.productName}
+                                                { product.quantity + " x " + product.productName}
                                             </p>
                                         </div>
                                         <div className="col col-2">
                                             <p className="price">
                                                 {Utils.formatMoney(product.productPrice * product.quantity)}
                                             </p>
-                                            <div className="quantity-edition">
-                                                <span className="quantity">Số lượng: {product.quantity}</span>
-                                            </div>
                                         </div>
                                     </div>
                                     <p className="note-content">{product.note}</p>
@@ -137,10 +138,22 @@ const Payment = ({
                 </div>
             </div>
             <div className="bottom">
-                <div className="calculate-total">
-                    <div className="title">Tổng tiền</div>
+                <div className="calculate-total product">
+                    <div className="title">Tổng tiền đơn hàng:</div>
                     <div className="total">
                         {Utils.formatMoney(totalPrice)}
+                    </div>
+                </div>
+                <div className="calculate-total vat">
+                    <div className="title">VAT:</div>
+                    <div className="total">
+                        {VAT} %
+                    </div>
+                </div>
+                <div className="calculate-total product-vat">
+                    <div className="title">Tổng tiền:</div>
+                    <div className="total">
+                        {Utils.formatMoney(totalPrice + totalPrice * Number(VAT / 100))}
                     </div>
                 </div>
                 <Button
