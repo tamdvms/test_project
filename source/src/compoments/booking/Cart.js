@@ -4,6 +4,7 @@ import { EditOutlined, SearchOutlined, CloseCircleOutlined, ShoppingFilled, Plus
 import Utils from '../../utils'
 import ElementWithPermission from '../common/elements/ElementWithPermission'
 import { sitePathConfig } from '../../constants/sitePathConfig'
+import { actions } from '../../actions'
 
 const { TextArea } = Input
 
@@ -14,6 +15,9 @@ const Cart = ({
     totalPrice,
     setIsPaymenting,
 }) => {
+
+    const settings = actions.getUserData()?.settings
+    const VAT =  settings && settings.Booking.vat
 
     const handleSubmitNote = (values, product) => {
         handleEventOnItem({
@@ -128,10 +132,22 @@ const Cart = ({
                 </ul>
             </div>
             <div className="bottom">
-                <div className="calculate-total">
-                    <div className="title">Tổng tiền</div>
+            <div className="calculate-total product">
+                    <div className="title">Tổng tiền đơn hàng:</div>
                     <div className="total">
                         {Utils.formatMoney(totalPrice)}
+                    </div>
+                </div>
+                <div className="calculate-total vat">
+                    <div className="title">VAT:</div>
+                    <div className="total">
+                        {VAT} %
+                    </div>
+                </div>
+                <div className="calculate-total product-vat">
+                    <div className="title">Tổng tiền:</div>
+                    <div className="total">
+                        {Utils.formatMoney(totalPrice + totalPrice * Number(VAT / 100))}
                     </div>
                 </div>
                 <ElementWithPermission permissions={[sitePathConfig.booking.permissions[1]]}>
