@@ -147,6 +147,11 @@ const Utils = {
         return (!!(/^[a-z0-9_]+$/.exec(username))
         ? Promise.resolve()
         : Promise.reject('Username chỉ bao gồm các ký tự a-z, 0-9, _'))
+    },
+    formatIntegerNumber(value){
+        value = value.replace(/\$\s?|(,*)/g, '')
+        value = value.replace(/\$\s?|(\.*)/g, '')
+        return value
     }
 }
 

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import BookingPage from '../../compoments/booking/BookingPage'
 import { actions } from '../../actions'
-import { showSucsessMessage } from '../../services/notifyService'
+import { showErrorMessage, showSucsessMessage } from '../../services/notifyService'
 
 const DEFAULT_ITEM_SIZE = 20
 
@@ -149,16 +149,40 @@ const BookingContainer = ({
         fetchProductsList(pagination.size + pagination.numLoadMore)
     }
 
-    const handleSubmitPayment = (values) => {
-        console.log(values)
+    const handleSubmitPayment = (values, cb) => {
         setLoadingSave(true)
-        setTimeout(() => {
-            setLoadingSave(false)
-            setIsPaymenting(false)
-            setSelectedItems([])
-            setCustomersList([])
-            showSucsessMessage("Đặt hàng thành công")
-        }, 2000)
+        const ordersDetailDtos = selectedItems.map(item => ({
+            productId: item.id,
+            note: item.note,
+            price: item.productPrice,
+            amount: item.quantity,
+        }))
+        dispatch(actions.createOrders({
+            params: {
+                customerEmail: values.customerEmail,
+                customerFullName: values.customerFullName,
+                customerPhone: values.customerPhone,
+                ordersAddress: values.customerAddress,
+                ordersCustomerId: values.id,
+                ordersDocument: values.ordersDocument,
+                ordersSaleOff: values.customerDiscount,
+                ordersTotalMoney: values.totalPayment,
+                ordersDetailDtos,
+            },
+            onCompleted: () => {
+                setLoadingSave(false)
+                setIsPaymenting(false)
+                setSelectedItems([])
+                setCustomersList([])
+                showSucsessMessage("Đặt hàng thành công")
+                cb(true)
+            },
+            onError: () => {
+                setLoadingSave(false)
+                showErrorMessage("Đặt hàng thất bại. Vui lòng thử lại!")
+                cb(false)
+            },
+        }))
     }
 
     const handleChangePhoneCustomer = (value) => {
