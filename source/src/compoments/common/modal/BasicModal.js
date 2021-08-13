@@ -15,7 +15,7 @@ class BasicModal extends Component {
     }
 
     render() {
-        const { visible, onOk, onCancel, loading, children, objectName, width, top, formId, bodyStyle, maskClosable } = this.props;
+        const { visible, onOk, onCancel, loading, children, objectName, width, top, formId, bodyStyle, maskClosable, noFooter, additionalButton } = this.props;
         const formSubmitId = formId || `form-${objectName}`;
         let footerComponent = [<Button key="back" onClick={onCancel}>Đóng</Button>];
         if(onOk) {
@@ -23,6 +23,11 @@ class BasicModal extends Component {
                 <Button key="submit" htmlType="submit" type="primary" loading={loading} form={formSubmitId}>
                     Lưu
                 </Button>
+            )
+        }
+        if(additionalButton) {
+            footerComponent.push(
+                additionalButton
             )
         }
         return (
@@ -36,7 +41,7 @@ class BasicModal extends Component {
                 title={this.getTitle()}
                 onOk={onOk}
                 onCancel={onCancel}
-                footer={footerComponent}
+                footer={noFooter || footerComponent}
                 >
                     {React.cloneElement(children, {
                         formId: formSubmitId,

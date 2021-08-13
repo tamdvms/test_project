@@ -27,7 +27,6 @@ const Payment = ({
     customersList,
     listCustomerLoading,
     phoneInput,
-    setPhoneInput,
 }) => {
     const formRef = useRef()
     const [discount, setDiscount] = useState(0)
@@ -41,8 +40,7 @@ const Payment = ({
     const finalPrice = totalPriceAfterDiscount + vatPrice
 
     const handleSelectPhone = (value) => {
-        setSelectedPhone(value)
-        setPhoneInput(value)
+        setSelectedPhone(value + "")
     }
 
     const handleSearchPhone = (value) => {
@@ -63,6 +61,7 @@ const Payment = ({
         handleSubmitPayment({
             ...values,
             totalPayment: finalPrice,
+            ordersVat: VAT,
         }, (result) => {
             if(result) formRef.current.resetFields()
         })

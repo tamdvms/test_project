@@ -11,6 +11,7 @@ import importManagement from './importManagement';
 import exportManagement from './exportManagement';
 import employee from './employee';
 import booking from './booking';
+import orders from './orders';
 
 const sagas = [
     ...appCommon,
@@ -25,6 +26,7 @@ const sagas = [
     ...exportManagement,
     ...employee,
     ...booking,
+    ...orders,
 ];
 
 function* rootSaga() {

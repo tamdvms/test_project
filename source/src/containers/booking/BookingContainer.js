@@ -154,7 +154,6 @@ const BookingContainer = ({
         const ordersDetailDtos = selectedItems.map(item => ({
             productId: item.id,
             note: item.note,
-            price: item.productPrice,
             amount: item.quantity,
         }))
         dispatch(actions.createOrders({
@@ -166,7 +165,6 @@ const BookingContainer = ({
                 ordersCustomerId: values.id,
                 ordersDocument: values.ordersDocument,
                 ordersSaleOff: values.customerDiscount,
-                ordersTotalMoney: values.totalPayment,
                 ordersDetailDtos,
             },
             onCompleted: () => {
@@ -250,7 +248,6 @@ const BookingContainer = ({
                 handleChangeLoadMore={handleChangeLoadMore}
                 handleSubmitPayment={handleSubmitPayment}
                 handleChangePhoneCustomer={handleChangePhoneCustomer}
-                setPhoneInput={setPhoneInput}
             />
         </div>
     )

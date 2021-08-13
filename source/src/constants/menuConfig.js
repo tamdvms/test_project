@@ -125,7 +125,11 @@ const navMenuConfig = [
             {
                 label: 'Đặt hàng',
                 ...sitePathConfig.booking
-            }
+            },
+            {
+                label: 'Quản lý đơn hàng',
+                ...sitePathConfig.orders
+            },
         ]
     },
     {
