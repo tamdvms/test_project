@@ -473,7 +473,7 @@ body {
 }
 
 .disabled {
-    cursor: not-allowed;
+    cursor: not-allowed !important;
 }
 .ql-container {
     input {

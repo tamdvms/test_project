@@ -29,7 +29,6 @@ const BookingPage = ({
     customersList,
     listCustomerLoading,
     phoneInput,
-    setPhoneInput,
 }) => {
 
     const handleRemoveSelectingItem = (product) => {
@@ -122,7 +121,6 @@ const BookingPage = ({
                 customersList={customersList}
                 listCustomerLoading={listCustomerLoading}
                 phoneInput={phoneInput}
-                setPhoneInput={setPhoneInput}
                 />
                 <Cart
                 hide={isPaymenting}

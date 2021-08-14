@@ -136,5 +136,15 @@ export const sitePathConfig = {
         siteConfig: {
             contentClass: 'booking-site',
         }
-    }
+    },
+    orders: {
+        path: '/orders-management',
+        permissions: [
+            apiConfig.orders.getList.path,
+            apiConfig.orders.getById.path,
+            'no-create',
+            apiConfig.orders.update.path,
+            apiConfig.orders.cancelOrders.path,
+        ],
+    },
 }

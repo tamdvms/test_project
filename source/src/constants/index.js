@@ -1,3 +1,6 @@
+import React from 'react'
+import { HourglassOutlined , SolutionOutlined, CarOutlined, StopOutlined, CheckCircleOutlined } from '@ant-design/icons';
+
 const AppConstants = {
     apiRootUrl: process.env.REACT_APP_API,
     contentRootUrl: `${process.env.REACT_APP_API}/v1/file/download`,
@@ -61,6 +64,40 @@ const CategoryKinds = {
     CATEGORY_KIND_UNIVERSITY: 2,
     CATEGORY_KIND_JOB: 3,
 }
+
+const OrdersStates = [
+    {
+        value: 0,
+        label: 'Đang chờ',
+        color: 'yellow',
+        icon: <HourglassOutlined />,
+    },
+    {
+        value: 1,
+        label: 'Đã duyệt',
+        color: 'orange',
+        icon: <SolutionOutlined />,
+    },
+    {
+        value: 2,
+        label: 'Đang vận chuyển',
+        color: 'blue',
+        icon: <CarOutlined />,
+    },
+    {
+        value: 3,
+        label: 'Đã giao',
+        color: 'green',
+        icon: <CheckCircleOutlined />,
+    },
+    {
+        value: 4,
+        label: <div className="cancel">Đã hủy</div>,
+        color: 'grey',
+        icon: <StopOutlined className="cancel"/>,
+    },
+]
+
 export const LIMIT_IMAGE_SIZE = 512000;
 
 // Pagination config
@@ -86,4 +123,5 @@ export {
     ProvinceKinds,
     CategoryKinds,
     CurrentcyPositions,
+    OrdersStates,
 };

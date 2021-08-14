@@ -279,6 +279,28 @@ const apiConfig = {
             method: 'POST',
             headers: baseHeader,
         }
+    },
+    orders: {
+        getList: {
+            path:  '/v1/orders/list',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getById: {
+            path: '/v1/orders/get',
+            method: 'GET',
+            headers: baseHeader
+        },
+        update: {
+            path: '/v1/orders/update',
+            method: 'PUT',
+            headers: baseHeader
+        },
+        cancelOrders: {
+            path: '/v1/orders/cancel-orders',
+            method: 'PUT',
+            headers: baseHeader
+        }
     }
 }
 export default apiConfig;
