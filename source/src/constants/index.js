@@ -80,19 +80,19 @@ const OrdersStates = [
     },
     {
         value: 2,
-        label: 'Đang vận chuyển',
+        label: 'Vận chuyển',
         color: 'blue',
         icon: <CarOutlined />,
     },
     {
         value: 3,
-        label: 'Đã giao',
+        label: 'Hoàn tất',
         color: 'green',
         icon: <CheckCircleOutlined />,
     },
     {
         value: 4,
-        label: <div>Đã hủy</div>,
+        label: 'Đã hủy',
         color: 'red',
         icon: <StopOutlined/>,
     },

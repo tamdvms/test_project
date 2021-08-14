@@ -47,6 +47,10 @@
                 .submenu-title-wrapper {
                     display: flex;
                     align-items: center;
+                    .ant-avatar {
+                        width: 32px;
+                        height: 32px;
+                    }
                     .ant-avatar-icon {
                         margin-right: 5px;
                         .anticon-user {

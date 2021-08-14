@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Col, Row } from "antd";
+import { SketchPicker } from 'react-color';
 
 import BasicForm from "../common/entryForm/BasicForm";
 import TextField from "../common/entryForm/TextField";
@@ -25,8 +26,32 @@ class ProductForm extends BasicForm {
             ? `${AppConstants.contentRootUrl}/${props.dataDetail.productImage}`
             : "",
         uploading: false,
+        color: props.dataDetail.labelColor ? props.dataDetail.labelColor : Utils.getRandomColor(),
+		displayColorPicker: false,
         }
     }
+
+    handleSubmit(formValues) {
+		const { onSubmit } = this.props;
+		const { color } = this.state;
+		onSubmit({
+			...formValues,
+			...this.otherData,
+			labelColor: color
+		});
+	}
+
+    handleClick = () => {
+		this.setState({ displayColorPicker: !this.state.displayColorPicker })
+	};
+
+	handleClose = () => {
+		this.setState({ displayColorPicker: false })
+	};
+
+	handleChange = (color) => {
+		this.setState({ color: color.hex })
+	};
 
     handleChangeAvatar = (info) => {
         console.log(info);
@@ -75,7 +100,12 @@ class ProductForm extends BasicForm {
 
     render() {
         const { formId, dataDetail, loadingSave, isEditing } = this.props;
-        const { avatar, uploading } = this.state;
+        const {
+			uploading,
+			avatar,
+			color,
+			displayColorPicker,
+		} = this.state;
         return (
         <Form
             id={formId}
@@ -129,6 +159,51 @@ class ProductForm extends BasicForm {
                         disabled={loadingSave}
                     />
                 </Col>
+                <Col span={12}>
+					<Form.Item
+					label="Chọn nhãn màu"
+					>
+						<div
+						style={{
+							padding: '5px',
+							background: '#fff',
+							borderRadius: '1px',
+							boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+							display: 'inline-block',
+							cursor: 'pointer',
+						}}
+						onClick={ this.handleClick }
+						>
+							<div style={{
+								width: '36px',
+								height: '14px',
+								borderRadius: '2px',
+								background: color,
+							}} />
+						</div>
+						{
+						displayColorPicker
+						? (
+							<>
+							<div style={{
+								position: 'absolute',
+								top: '0px',
+								right: '0px',
+								bottom: '0px',
+								left: '0px',
+							}} onClick={ this.handleClose }/>
+							<div style={{
+								position: 'static',
+								zIndex: '2',
+							}}>
+								<SketchPicker color={ color } onChange={ this.handleChange }/>
+							</div>
+							</>
+						)
+							: null
+						}
+					</Form.Item>
+				</Col>
             </Row>
             <Row gutter={16}>
                 <Col span={24}>

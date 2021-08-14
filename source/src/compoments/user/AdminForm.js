@@ -28,7 +28,7 @@ class AdminForm extends BasicForm {
 				? `${AppConstants.contentRootUrl}/${props.dataDetail.avatar}`
 				: "",
 			uploading: false,
-			color: props.dataDetail.labelColor ? props.dataDetail.labelColor : '#498D49',
+			color: props.dataDetail.labelColor ? props.dataDetail.labelColor : Utils.getRandomColor(),
 			displayColorPicker: false,
 		};
 	}
