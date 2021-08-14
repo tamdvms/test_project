@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Form, Col, Row, Steps } from "antd";
+import { Form, Col, Row, Steps, Button, Modal } from "antd";
+import { CloseCircleOutlined } from '@ant-design/icons'
 
 import TextField from "../common/entryForm/TextField";
 import {
@@ -9,29 +10,36 @@ import { OrdersStates } from "../../constants";
 import Utils from "../../utils";
 import FieldSet from "../common/elements/FieldSet";
 import { sitePathConfig } from "../../constants/sitePathConfig";
+import NumericField from "../common/entryForm/NumericField";
 
-const { Step } = Steps;
+const { Step } = Steps
+const { confirm } = Modal
 
 const OrdersForm = ({
     dataDetail,
     handleUpdateState,
     handleSubmit,
+    handleCancelStateNoConfirm,
+    loadingSave,
 }) => {
 
     const {
         ordersDetailDtos,
-        ordersTotalMoney,
         ordersVat,
         ordersState,
         ordersSaleOff,
         ordersPrevState,
     } = dataDetail
-    const priceAfterDiscount = ordersTotalMoney / (1 + (ordersVat / 100))
-    const priceBeforeDiscount = priceAfterDiscount / (1 - ordersSaleOff / 100)
-    const priceVAT = ordersTotalMoney - priceAfterDiscount
-    const priceDiscount = priceBeforeDiscount - priceAfterDiscount
 
     const [isReadonlyForm, setIsReadonlyForm] = useState(true)
+    const [productsList, setProductsList] = useState(ordersDetailDtos)
+    const [totalPrice, setTotalPrice] = useState(0)
+    const [saleOff, setSaleOff] = useState(ordersSaleOff)
+
+    const discountPrice = totalPrice * (saleOff / 100)
+    const totalPriceAfterDiscount = totalPrice - discountPrice
+    const vatPrice = totalPriceAfterDiscount * Number(ordersVat / 100)
+    const finalPrice = totalPriceAfterDiscount + vatPrice
 
     const handleChangeStep = (current) => {
         if(current > ordersState && current <  OrdersStates.length - 1) {
@@ -42,6 +50,62 @@ const OrdersForm = ({
             })
         }
     }
+
+    const prepareDataSubmit = (values) => {
+        handleSubmit({
+            id: dataDetail.id,
+            customerEmail: values.customerDto?.customerEmail,
+            customerFullName: values.customerDto?.customerFullName,
+            customerPhone: values.customerDto?.customerPhone,
+            ordersAddress: values.ordersAddress,
+            ordersCustomerId: values.customerDto?.id,
+            ordersSaleOff: values.ordersSaleOff,
+            ordersDetailDtos: productsList,
+        })
+    }
+
+    const handleRemoveSelectingItem = (product, isCancel) => {
+        confirm({
+            title: `${isCancel ? "Xóa sản phẩm cuối cùng sẽ chuyển trạng thái đơn hàng thành 'Đã hủy' (vẫn giữ lại sản phẩm)! Bạn có muốn thực hiện?" : "Bạn có chắc muốn xóa sản phẩm này?"}`,
+            content: '',
+            okText: 'Có',
+            okType: 'danger',
+            cancelText: 'Không',
+            onOk: () => {
+                if(!isCancel) {
+                    const newProductsList = [...productsList]
+                    newProductsList.splice(newProductsList.findIndex(p => p.productDto.id === product.id), 1)
+                    setProductsList(newProductsList)
+                }
+                else {
+                    handleCancelStateNoConfirm({
+                        id: dataDetail.id,
+                        ordersState: OrdersStates[4].value
+                    })
+                }
+            },
+            onCancel() {
+            },
+          });
+    }
+
+    const handleChangeAmountItem = (product, value) => {
+        const newProductsList = [...productsList]
+        newProductsList[newProductsList.findIndex(p => p.productDto.id === product.id)].amount += value
+        setProductsList(newProductsList)
+    }
+
+    const handleChangeSaleOff = (value) => {
+        setSaleOff(value)
+    }
+
+    useEffect(() => {
+        let total = 0
+        productsList.forEach(p => {
+            total += p.price * p.amount
+        })
+        setTotalPrice(total)
+    }, [productsList])
 
     useEffect(() => {
         setIsReadonlyForm(!Utils.checkPermission([sitePathConfig.orders.permissions[5]]) || ordersState > OrdersStates[0].value)
@@ -54,6 +118,7 @@ const OrdersForm = ({
             {
                 ordersState < OrdersStates[3].value
                 ? OrdersStates.map((state, i) => {
+                    if(i >= OrdersStates.length - 1) return null
                     if(ordersState > state.value) {
                         return <Step
                         key={state.value}
@@ -122,15 +187,15 @@ const OrdersForm = ({
                         id="customer-info-form"
                         layout="vertical"
                         initialValues={dataDetail}
-                        className={`${ isReadonlyForm ? 'readonly-form' : ''}`}
-                        onFinish={handleSubmit}
+                        className={`${ isReadonlyForm || loadingSave ? 'readonly-form' : ''}`}
+                        onFinish={prepareDataSubmit}
                     >
                         <Row gutter={16}>
                             <Col span={12}>
                                 <TextField
                                 fieldName={["customerDto", "customerFullName"]}
                                 label="Họ và tên"
-                                disabled={isReadonlyForm}
+                                disabled={isReadonlyForm || loadingSave}
                                 className="form-item-fullname"
                                 />
                             </Col>
@@ -138,7 +203,7 @@ const OrdersForm = ({
                                 <TextField
                                 fieldName={["customerDto", "customerPhone"]}
                                 label="Số điện thoại"
-                                disabled={isReadonlyForm}
+                                disabled={isReadonlyForm || loadingSave}
                                 className="form-item-fullname"
                                 />
                             </Col>
@@ -153,21 +218,26 @@ const OrdersForm = ({
                                 <TextField
                                 fieldName={["customerDto", "customerEmail"]}
                                 label="E-mail"
-                                disabled={isReadonlyForm}
+                                disabled={isReadonlyForm || loadingSave}
                                 className="form-item-email"
                                 />
-                                <TextField
+                                <NumericField
                                 fieldName="ordersSaleOff"
-                                label="Giảm giá(%)"
-                                disabled
-                                className="form-item-email"
+                                label="Giảm giá (%)"
+                                min={0}
+                                max={100}
+                                className="form-item-discount"
+                                disabled={isReadonlyForm || loadingSave}
+                                onChange={handleChangeSaleOff}
+                                width="100%"
+                                parser={(value) => Utils.formatIntegerNumber(value)}
                                 />
                             </Col>
                             <Col span={12}>
                                 <TextField
                                     fieldName="ordersAddress"
                                     label="Địa chỉ"
-                                    disabled={isReadonlyForm}
+                                    disabled={isReadonlyForm || loadingSave}
                                     type="textarea"
                                     style={{ height: 102 }}
                                 />
@@ -177,21 +247,47 @@ const OrdersForm = ({
                 </FieldSet>
             </div>
             <div className="list">
-                <FieldSet title="Danh sách mặt hàng">
+                <FieldSet title="Danh sách mặt hàng" className="custom-fieldset fieldset-list">
                     <ul className="orders">
                         {
-                            ordersDetailDtos.map(ordersDetail => {
-                                return (<li key={ordersDetail.id} className="item">
+                            productsList.map(ordersDetail => {
+                                return (<li key={ordersDetail.id} className={`item${isReadonlyForm ? '' : ' padding-top'}`} style={{ backgroundColor: ordersDetail.productDto.labelColor }}>
                                     <div className="item-content">
                                         <div className="col col-1">
+                                            <div className="quantity-edition">
+                                                <Button
+                                                className={`minus${isReadonlyForm ? ' display-none' : ''}`}
+                                                onClick={() => {
+                                                    if(ordersDetail.amount <= 1) {
+                                                        handleRemoveSelectingItem(ordersDetail.productDto, productsList.length === 1)
+                                                    }
+                                                    else {
+                                                        handleChangeAmountItem(ordersDetail.productDto, -1)
+                                                    }
+                                                }}
+                                                >
+                                                    -
+                                                </Button>
+                                                <span className="quantity">{ordersDetail.amount}</span>
+                                                <Button
+                                                className={`plus${isReadonlyForm ? ' display-none' : ''}`}
+                                                onClick={() => handleChangeAmountItem(ordersDetail.productDto, 1)}
+                                                >
+                                                    +
+                                                </Button>
+                                            </div>
                                             <p className="title">
-                                                { ordersDetail.amount + " x " + ordersDetail.productDto.productName}
+                                                {" x " + ordersDetail.productDto.productName}
                                             </p>
                                         </div>
                                         <div className="col col-2">
                                             <p className="price">
-                                                {Utils.formatMoney( ordersDetail.productDto.productPrice * ordersDetail.amount)}
+                                                {Utils.formatMoney( ordersDetail.price * ordersDetail.amount)}
                                             </p>
+                                            <CloseCircleOutlined
+                                            className={`delete-btn${isReadonlyForm ? ' display-none' : ''}`}
+                                            onClick={() => handleRemoveSelectingItem(ordersDetail.productDto, productsList.length === 1)}
+                                            />
                                         </div>
                                     </div>
                                     <p className="note-content">{ ordersDetail.note}</p>
@@ -208,25 +304,25 @@ const OrdersForm = ({
                 <div className="calculate-total product">
                     <div className="title">Tổng tiền đơn hàng:</div>
                     <div className="total">
-                        {Utils.formatMoney(priceBeforeDiscount)}
+                        {Utils.formatMoney(totalPrice)}
                     </div>
                 </div>
                 <div className="calculate-total discount">
                     <div className="title">Giảm giá{ordersSaleOff > 0 ? ` (${ordersSaleOff}%)`: ''}:</div>
                     <div className="total">
-                        {Utils.formatMoney(priceDiscount)}
+                        {Utils.formatMoney(discountPrice)}
                     </div>
                 </div>
                 <div className="calculate-total vat">
                     <div className="title">VAT ({ordersVat}%):</div>
                     <div className="total">
-                        {Utils.formatMoney(priceVAT)}
+                        {Utils.formatMoney(vatPrice)}
                     </div>
                 </div>
                 <div className="calculate-total product-vat">
                     <div className="title">Tổng tiền thanh toán:</div>
                     <div className="total">
-                        {Utils.formatMoney(ordersTotalMoney)}
+                        {Utils.formatMoney(finalPrice)}
                     </div>
                 </div>
             </FieldSet>

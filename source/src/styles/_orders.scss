@@ -7,6 +7,22 @@
     flex-direction: column;
     position: relative;
     margin: -18px -6px;
+    .display-none {
+        display: none !important;
+    }
+    .loading {
+        position: absolute;
+        top: -6px;
+        left: -18px;
+        right: -18px;
+        bottom: -6px;
+        z-index: 1;
+        display: flex;
+        cursor: not-allowed;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0, 0, 0, 0.13);
+    }
     ul {
         list-style: none;
         padding: 0;
@@ -25,6 +41,9 @@
     .custom-fieldset {
         margin-bottom: 16px;
         padding: 8px 16px 0;
+    }
+    .fieldset-list {
+        margin-bottom: 8px;
     }
     .ant-steps {
         margin-bottom: 24px;
@@ -91,12 +110,19 @@
                 overflow-y: auto;
                 overflow-x: hidden;
                 padding-right:  0;
+                .item.padding-top {
+                    padding-top: 20px;
+                }
                 .item {
                     border-bottom: 1px solid #f0f0f0;
-                    padding: 12px 0;
+                    padding: 12px 8px;
                     position: relative;
                     margin: 0;
-                    padding-right: 0;
+                    margin-top: 8px;
+                    border-radius: 3px;
+                    &:first-child {
+                        margin-top: 0;
+                    }
                     &:last-child {
                         border-bottom: none;
                     }
@@ -104,6 +130,8 @@
                         display: flex;
                         .col-1 {
                             flex: 1;
+                            display: flex;
+                            justify-content: flex-start;
                             .title {
                                 font-weight: 400;
                                 margin: 0;
@@ -124,6 +152,25 @@
                                     right: 0px;
                                 }
                             }
+                            .quantity-edition {
+                                display: flex;
+                                .minus, .plus {
+                                    margin-top: auto;
+                                    width: 25px;
+                                    height: 25px;
+                                    padding: 0;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                }
+                                .quantity {
+                                    margin-top: auto;
+                                    margin: 0 8px;
+                                }
+                                .plus {
+                                    margin-right: 8px;
+                                }
+                            }
                         }
                         .col-2 {
                             display: flex;
@@ -139,22 +186,12 @@
                                 font-weight: 400;
                                 margin: 0;
                             }
-                            .quantity-edition {
-                                display: flex;
-                                .minus, .plus {
-                                    margin-top: auto;
-                                    width: 25px;
-                                    height: 25px;
-                                    padding: 0;
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                }
-                                .quantity {
-                                    margin-top: auto;
-                                    margin: 0 8px;
-                                    font-weight: bold;
-                                }
+                            .delete-btn {
+                                cursor: pointer;
+                                color: red;
+                                position: absolute;
+                                top: 3px;
+                                right: 3px;
                             }
                         }
                     }
@@ -233,7 +270,7 @@
                 font-size: 14px;
             }
             .total {
-                font-weight: 500;
+                font-weight: bold;
             }
         }
         .payment {
@@ -259,6 +296,7 @@
             background: red;
             border: none;
             color: white;
+            margin-left: 0;
         }
         .btn-update-orders {
             order: 2;

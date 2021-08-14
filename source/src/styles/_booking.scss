@@ -300,7 +300,8 @@
                                         width: fit-content;
                                         flex-shrink: 0;
                                         margin-left: 16px;
-                                        margin-right: 8px;                                display: flex;
+                                        margin-right: 8px;
+                                        display: flex;
                                         flex-direction: column;
                                         align-items: flex-end;
                                         justify-content: space-between;
@@ -321,7 +322,8 @@
                                                 justify-content: center;
                                             }
                                             .quantity {
-                                                margin-top: auto;                                    font-weight: bold;
+                                                margin-top: auto;
+                                                font-weight: bold;
                                                 margin: 0 8px;
                                             }
                                         }

@@ -1,8 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Avatar, Tag, Button } from "antd";
-import { UserOutlined, PlusOutlined } from "@ant-design/icons";
+import { Avatar, Tag, Button, Divider } from "antd";
+import { UserOutlined, PlusOutlined, CheckOutlined, DeleteOutlined, EditOutlined, LockOutlined } from "@ant-design/icons";
 import qs from 'query-string';
+import StatusTag from '../../compoments/common/elements/StatusTag';
 
 import ListBasePage from "../ListBasePage";
 import ProductForm from "../../compoments/product/ProductForm";
@@ -14,6 +15,7 @@ import { FieldTypes } from "../../constants/formConfig";
 import { AppConstants } from "../../constants";
 import { commonStatus } from "../../constants/masterData";
 import Utils from "../../utils";
+import { STATUS_ACTIVE } from "../../constants";
 
 class ProductListPage extends ListBasePage {
     initialSearch() {
@@ -32,40 +34,88 @@ class ProductListPage extends ListBasePage {
             { name: categoryName}
         ];
         this.columns = [
-            this.renderIdColumn(),
+            {
+                title: 'ID',
+                dataIndex: 'id',
+                width: '50px',
+                align: 'center',
+                render: (id, dataRow) => {
+                    return {
+                        props: {
+                            style: { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <div>{id}</div>
+                        ),
+                    }
+                }
+            },
             {
                 title: "#",
                 dataIndex: "productImage",
                 align: 'center',
                 width: 100,
-                render: (avatarPath) => (
-                <Avatar
-                    className="table-avatar"
-                    size="large"
-                    icon={<UserOutlined />}
-                    src={avatarPath ? `${AppConstants.contentRootUrl}${avatarPath}` : null}
-                />
-                ),
+                render: (avatarPath, dataRow) => {
+                    return {
+                        props: {
+                            style: { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <Avatar
+                                className="table-avatar"
+                                size="large"
+                                icon={<UserOutlined />}
+                                src={avatarPath ? `${AppConstants.contentRootUrl}${avatarPath}` : null}
+                            />
+                        ),
+                    }
+                }
             },
             {
                 title: 'Tên',
                 render: (dataRow) => {
-                    return (
-                        <span>
-                            {dataRow.productName}
-                        </span>
-                    )
+                    return {
+                        props: {
+                            style: { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <span>
+                                {dataRow.productName}
+                            </span>
+                        ),
+                    }
                 }
             },
             {
                 title: <div className="tb-al-r">Giá tiền</div>,
                 dataIndex: 'productPrice',
                 align: 'right',
-                render: (productPrice) => {
-                    return <span className="tb-al-r">{Utils.formatMoney(productPrice)}</span>
+                render: (productPrice, dataRow) => {
+                    return {
+                        props: {
+                            style: { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <span className="tb-al-r">{Utils.formatMoney(productPrice)}</span>
+                        ),
+                    }
                 }
             },
-            this.renderStatusColumn(),
+            {
+                title: 'Trạng thái',
+                dataIndex: 'status',
+                width: '100px',
+                render: (status, dataRow) => {
+                    return {
+                        props: {
+                            style: { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <StatusTag status={status}/>
+                        ),
+                    }
+                }
+            },
             this.renderActionColumn(),
         ];
         this.actionColumns = {
@@ -73,6 +123,70 @@ class ProductListPage extends ListBasePage {
             isDelete: true,
             isChangeStatus: false,
         };
+    }
+
+    renderActionColumn = () => {
+        return {
+            title: 'Hành động',
+            width: '100px',
+            align: 'center',
+            render: (dataRow) => {
+                return {
+                    props: {
+                        style: { background: dataRow.labelColor },
+                    },
+                    children: this.getActionColumn(dataRow)
+                }
+            }
+        }
+    }
+
+    getActionColumn = (dataRow) => {
+        const actionColumns = [];
+        if(this.actionColumns.isEdit) {
+            actionColumns.push(this.renderEditButton((
+                <Button type="link" onClick={() => this.getDetail(dataRow.id)} className="no-padding">
+                    { this.actionColumns.isEdit.icon || <EditOutlined/> }
+                </Button>
+            )))
+        }
+        if(this.actionColumns.isChangeStatus) {
+            actionColumns.push(
+                <Button type="link" onClick={() => this.showChangeStatusConfirm(dataRow) } className="no-padding">
+                    {
+                        dataRow.status === STATUS_ACTIVE
+                        ?
+                        <LockOutlined/>
+                        :
+                        <CheckOutlined/>
+                    }
+                </Button>
+            )
+        }
+        if(this.actionColumns.isDelete) {
+            actionColumns.push(
+                this.renderDeleteButton((
+                    <Button type="link" onClick={() => this.showDeleteConfirm(dataRow.id) } className="no-padding">
+                        { this.actionColumns.isDelete.icon || <DeleteOutlined/> }
+                    </Button>
+                ))
+            )
+        }
+        const actionColumnsWithDivider = [];
+        actionColumns.forEach((action, index) => {
+            actionColumnsWithDivider.push(action);
+            if(index !== (actionColumns.length -1))
+            {
+                actionColumnsWithDivider.push(<Divider type="vertical" />);
+            }
+        })
+        return (
+            <span>
+                {
+                    actionColumnsWithDivider.map((action, index) => <span key={index}>{action}</span>)
+                }
+            </span>
+        )
     }
 
     componentWillReceiveProps(nextProps) {

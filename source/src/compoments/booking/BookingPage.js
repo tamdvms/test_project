@@ -86,6 +86,7 @@ const BookingPage = ({
                                         <li
                                         key={product.id}
                                         className="product-item"
+                                        style={{ backgroundColor: product.labelColor }}
                                         >
                                             <div
                                             className="overlay"

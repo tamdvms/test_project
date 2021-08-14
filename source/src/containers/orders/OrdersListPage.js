@@ -18,6 +18,7 @@ import { OrdersStates } from "../../constants";
 import { showErrorMessage, showSucsessMessage } from "../../services/notifyService";
 import ElementWithPermission from "../../compoments/common/elements/ElementWithPermission";
 import { sitePathConfig } from "../../constants/sitePathConfig";
+import { convertUtcToTimezone } from "../../utils/datetimeHelper";
 
 const { confirm } = Modal
 
@@ -52,9 +53,11 @@ class OrdersListPage extends ListBasePage {
                 dataIndex: 'employeeDto',
                 render: (employeeDto) => {
                     return (
-                        <div>
+                        employeeDto.labelColor
+                            ? (<div>
                             <Tag color={employeeDto.labelColor}>{employeeDto.fullName}</Tag>
-                        </div>
+                            </div>)
+                            : employeeDto.fullName
                     )
                 }
             },
@@ -69,6 +72,13 @@ class OrdersListPage extends ListBasePage {
                         </div>
                     )
                 }
+            },
+            {
+                title: <div style={{ paddingRight: 20 }}>Ngày tạo</div>,
+                dataIndex: "createdDate",
+                align: "right",
+                width: 120,
+                render: (createdDate) => <div style={{ paddingRight: 20 }}>{convertUtcToTimezone(createdDate, "DD/MM/YYYY")}</div>,
             },
             {
                 title: 'Tình trạng',
@@ -135,6 +145,32 @@ class OrdersListPage extends ListBasePage {
                 initialValue: this.search.state,
             },
         ];
+    }
+
+    handleCancelStateNoConfirm = (values) => {
+        const { updateStateOrders, cancelOrders } = this.props
+        this.setState({
+            isShowModifiedLoading: true,
+        })
+        cancelOrders({
+            params: {
+                ...values,
+            },
+            onCompleted: () => {
+                this.getList()
+                this.getDetail(this.dataDetail.id)
+                showSucsessMessage("Cập nhật thành công!")
+                this.setState({
+                    isShowModifiedLoading: false,
+                })
+            },
+            onError: (error) => {
+                showErrorMessage(error.message || "Cập nhật thất bại. Vui lòng thử lại!")
+                this.setState({
+                    isShowModifiedLoading: false,
+                })
+            }
+        })
     }
 
     handleUpdateState = (values) => {
@@ -272,16 +308,7 @@ class OrdersListPage extends ListBasePage {
 
     handleSubmit = (values) => {
         this.dataDetail.ordersState === OrdersStates[0].value
-        && this.handleUpdate(
-            {
-                id: this.dataDetail.id,
-                customerEmail: values.customerDto?.customerEmail,
-                customerFullName: values.customerDto?.customerFullName,
-                customerPhone: values.customerDto?.customerPhone,
-                ordersAddress: values.ordersAddress,
-                ordersCustomerId: values.customerDto?.id,
-            }
-        )
+        && this.handleUpdate(values)
     }
 
     render() {
@@ -318,6 +345,8 @@ class OrdersListPage extends ListBasePage {
                 dataDetail={this.isEditing ? this.dataDetail : {}}
                 handleUpdateState={this.handleUpdateState}
                 handleSubmit={this.handleSubmit}
+                handleCancelStateNoConfirm={this.handleCancelStateNoConfirm}
+                loadingSave={isShowModifiedLoading}
             />
             </BasicModal>
         </div>
