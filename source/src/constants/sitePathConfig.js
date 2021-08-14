@@ -143,8 +143,9 @@ export const sitePathConfig = {
             apiConfig.orders.getList.path,
             apiConfig.orders.getById.path,
             'no-create',
-            apiConfig.orders.update.path,
+            apiConfig.orders.updateState.path,
             apiConfig.orders.cancelOrders.path,
+            apiConfig.orders.update.path,
         ],
     },
 }

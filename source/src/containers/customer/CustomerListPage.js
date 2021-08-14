@@ -37,7 +37,6 @@ class CustomerListPage extends ListBasePage {
         width: 100,
         render: (avatarPath) => (
           <Avatar
-            style={{width: "70px", height: "70px", padding: "8px"}}
             className="table-avatar"
             size="large"
             icon={<UserOutlined />}

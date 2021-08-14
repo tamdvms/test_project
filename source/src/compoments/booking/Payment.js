@@ -40,14 +40,15 @@ const Payment = ({
     const finalPrice = totalPriceAfterDiscount + vatPrice
 
     const handleSelectPhone = (value) => {
-        setSelectedPhone(value + "")
+        setSelectedPhone(value)
     }
 
     const handleSearchPhone = (value) => {
         if(value) {
             const selectedCustomer = customersList.find(customer => customer.customerPhone === value)
             formRef.current.setFieldsValue(selectedCustomer || {
-                customerPhone: value
+                customerPhone: value,
+                id: null
             })
             handleChangePhoneCustomer(value)
         }
@@ -60,10 +61,13 @@ const Payment = ({
     const handleSubmit = (values) => {
         handleSubmitPayment({
             ...values,
-            totalPayment: finalPrice,
-            ordersVat: VAT,
+            // totalPayment: finalPrice,
+            // ordersVat: VAT,
         }, (result) => {
-            if(result) formRef.current.resetFields()
+            if(result) {
+                setSelectedPhone("")
+                formRef.current.resetFields()
+            }
         })
     }
 

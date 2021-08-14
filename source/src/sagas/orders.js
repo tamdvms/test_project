@@ -11,6 +11,7 @@ const {
     GET_ORDERS_LIST,
     GET_ORDERS_BY_ID,
     UPDATE_ORDERS,
+    UPDATE_STATE_ORDERS,
     CANCEL_ORDERS,
 } = actionTypes;
 
@@ -56,6 +57,17 @@ function* getOrdersById({ payload: { params, onCompleted, onError } }) {
     }
 }
 
+function* updateStateOrders({ payload: { params, onCompleted, onError } }) {
+    try {
+        const apiParams = apiConfig.orders.updateState;
+        const result = yield call(sendRequest, apiParams, params);
+        handleApiResponse(result, onCompleted, onError);
+    }
+    catch(error) {
+        onError(error);
+    }
+}
+
 function* updateOrders({ payload: { params, onCompleted, onError } }) {
     try {
         const apiParams = apiConfig.orders.update;
@@ -81,6 +93,7 @@ function* cancelOrders({ payload: { params, onCompleted, onError } }) {
 const sagas = [
     takeLatest(defineActionLoading(GET_ORDERS_LIST), getOrdersList),
     takeLatest(GET_ORDERS_BY_ID, getOrdersById),
+    takeLatest(UPDATE_STATE_ORDERS, updateStateOrders),
     takeLatest(UPDATE_ORDERS, updateOrders),
     takeLatest(CANCEL_ORDERS, cancelOrders),
 ]

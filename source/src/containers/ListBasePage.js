@@ -358,7 +358,7 @@ class ListBasePage extends Component {
                 if(this.actionColumns.isEdit) {
                     actionColumns.push(this.renderEditButton((
                         <Button type="link" onClick={() => this.getDetail(dataRow.id)} className="no-padding">
-                            <EditOutlined/>
+                            { this.actionColumns.isEdit.icon || <EditOutlined/> }
                         </Button>
                     )))
                 }
@@ -379,7 +379,7 @@ class ListBasePage extends Component {
                     actionColumns.push(
                         this.renderDeleteButton((
                             <Button type="link" onClick={() => this.showDeleteConfirm(dataRow.id) } className="no-padding">
-                                <DeleteOutlined/>
+                                { this.actionColumns.isDelete.icon || <DeleteOutlined/> }
                             </Button>
                         ))
                     )

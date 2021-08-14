@@ -68,7 +68,7 @@ const CategoryKinds = {
 const OrdersStates = [
     {
         value: 0,
-        label: 'Đang chờ',
+        label: 'Đã tạo',
         color: 'yellow',
         icon: <HourglassOutlined />,
     },
@@ -92,9 +92,9 @@ const OrdersStates = [
     },
     {
         value: 4,
-        label: <div className="cancel">Đã hủy</div>,
-        color: 'grey',
-        icon: <StopOutlined className="cancel"/>,
+        label: <div>Đã hủy</div>,
+        color: 'red',
+        icon: <StopOutlined/>,
     },
 ]
 

@@ -141,6 +141,7 @@ class EmployeeListPage extends ListBasePage {
             dataDetail={this.isEditing ? this.dataDetail : {}}
             loadingSave={isShowModifiedLoading}
             uploadFile={uploadFile}
+            showColorPicker={true}
           />
         </BasicModal>
       </div>
