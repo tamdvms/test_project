@@ -75,7 +75,7 @@
         height: 100vh;
         position: fixed;
         left: 0px;
-        z-index: 2;
+        z-index: 3;
         &__collapsed {
             flex: 0 0 $navSiderCollapsedWidth;
             max-width: $navSiderCollapsedWidth;

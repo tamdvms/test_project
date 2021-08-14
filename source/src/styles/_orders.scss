@@ -1,27 +1,5 @@
 .orders-list-page {
-    .base-table .ant-table-row td.ant-table-cell {
-        padding: 0 !important;
-    }
-    .cell-fill-parent {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 4px 8px;
-        margin-bottom: 1px;
-    }
-    .cell-fill-parent.align-right {
-        justify-content: flex-end;
-    }
-    .cell-fill-parent.align-left {
-        justify-content: flex-start;
-    }
-    .cell-fill-parent.absolute {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
+    
 }
 .orders-form {
     height: 100%;
@@ -38,38 +16,52 @@
         font-weight: 400;
         margin: 1em 0.5em 32px;
     }
+
+    .custom-fieldset.none-legend {
+        legend {
+            display: none;
+        }
+    }
     .custom-fieldset {
         margin-bottom: 16px;
         padding: 8px 16px 0;
     }
     .ant-steps {
         margin-bottom: 24px;
-        .ant-steps-item-finish {
+        .finish {
             .ant-steps-item-container {
                 cursor: default !important;
             }
-            .ant-steps-item-title {
-                color: rgba(0, 0, 0, 0.65) !important;
+            .ant-steps-icon, .ant-steps-item-title {
+                color: green !important;
             }
-            .cancel {
+            &.has-prev-state {
+                flex: unset;
+                width: 25%;
+            }
+            &.is-prev-state {
+                flex: 1;
+            }
+        }
+        .process {
+            .ant-steps-icon, .ant-steps-item-title {
+                color: blue !important;
+            }
+        }
+        .process.cancel {
+            .ant-steps-item-container {
+                cursor: default !important;
+            }
+            .ant-steps-icon, .ant-steps-item-title {
                 color: red !important;
-                .ant-steps-item-container {
-                    cursor: default !important;
-                }
-                .ant-steps-icon {
-                    color: red !important;
-                }
             }
         }
-        .cancel {
-            color: rgba(0, 0, 0, 0.25) !important;
+        .wait.cancel {
             .ant-steps-item-container {
-                cursor: default !important;
+                cursor: not-allowed !important;
             }
-        }
-        .done {
-            .ant-steps-icon {
-                color: green;
+            .ant-steps-icon, .ant-steps-item-title {
+                color: rgba(0, 0, 0, 0.25) !important;
             }
         }
     }
@@ -91,7 +83,7 @@
         .list {
             flex: 1;
             overflow: hidden;
-            padding: 16px 0;
+            padding: 0;
             padding-top: 0;
             margin-right: 0;
             .orders {
@@ -214,15 +206,12 @@
         margin-top: auto;
         display: flex;
         flex-direction: column;
-        border-top: 1px solid #f0f0f0;
         padding-top: 4px;
         padding-bottom: 16px;
-        margin-left: -16px;
-        margin-right: -16px;
         .calculate-total {
             display: flex;
             justify-content: space-between;
-            padding: 0px 28px;
+            padding: 0px;
         }
         .calculate-total.product {
             padding-top: 8px;
@@ -237,7 +226,7 @@
             padding-bottom: 8px;
         }
         .calculate-total.product-vat {
-            padding: 8px 28px;
+            padding: 8px 0px;
             border-top: 1px solid #f0f0f0;
             .title, .total {
                 font-weight: bold;
@@ -255,6 +244,32 @@
             height: 38px;
             text-transform: uppercase;
             font-weight: bold;
+        }
+    }
+}
+
+.orders-modal {
+    .ant-modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        .btn-cancel-orders {
+            order: 0;
+            margin-right: auto;
+            flex-shrink: 0;
+            background: red;
+            border: none;
+            color: white;
+        }
+        .btn-update-orders {
+            order: 2;
+            flex-shrink: 0;
+        }
+        .btn-cancel-orders.disabled, .btn-update-orders.disabled {
+            background-color: #ccc;
+        }
+        .modal-btn-close, .modal-btn-save {
+            order: 1;
+            flex-shrink: 0;
         }
     }
 }

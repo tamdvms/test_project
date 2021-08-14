@@ -52,11 +52,9 @@ body {
     align-items: flex-end;
 }
 
-.table-setting {
-    .ant-table-tbody {
-        .ant-table-cell {
-            height: 50px;
-        }
+.ant-table-tbody {
+    .ant-table-cell {
+        height: 50px;
     }
 }
 
@@ -273,11 +271,6 @@ body {
     display: none;
 }
 
-.table-avatar {
-    width: 54px;
-    height: 54px;
-    margin: 8px;
-}
 
 .table-avatar img{
     border-radius: 50%;

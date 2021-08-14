@@ -2,6 +2,9 @@ import { commonStatus,commonKinds } from '../constants/masterData';
 import { STATUS_DELETE, CurrentcyPositions } from '../constants';
 import { showErrorMessage } from '../services/notifyService';
 import { actions } from '../actions';
+
+const { getUserData } = actions;
+
 const Utils = {
     camelCaseToTitleCase(camelCase) {
         if (camelCase === null || camelCase === '') {
@@ -160,6 +163,10 @@ const Utils = {
           color += letters[Math.floor(Math.random() * letters.length)];
         }
         return color;
+    },
+    checkPermission(permissions = []) {
+        const userData = getUserData();
+        return !!!permissions.some(permission=>userData.permissions.indexOf(permission) < 0)
     }
 }
 

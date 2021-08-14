@@ -49,6 +49,7 @@
     "query-string": "^6.9.0",
     "rc-color-picker": "^1.2.6",
     "react": "^16.11.0",
+    "react-color": "^2.19.3",
     "react-dom": "^16.11.0",
     "react-places-autocomplete": "^7.3.0",
     "react-redux": "^7.0.2",

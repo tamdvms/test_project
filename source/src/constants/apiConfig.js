@@ -300,7 +300,12 @@ const apiConfig = {
             path: '/v1/orders/cancel-orders',
             method: 'PUT',
             headers: baseHeader
-        }
+        },
+        updateState: {
+            path: '/v1/orders/update-state',
+            method: 'PUT',
+            headers: baseHeader
+        },
     }
 }
 export default apiConfig;
