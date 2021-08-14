@@ -64,7 +64,7 @@ class OrdersListPage extends ListBasePage {
                 align: 'right',
                 render: (ordersTotalMoney, dataRow) => {
                     return (
-                        <div>
+                        <div className="tb-al-r">
                             {Utils.formatMoney(ordersTotalMoney)}
                         </div>
                     )
