@@ -21,6 +21,8 @@ import RichTextField from "../common/entryForm/RichTextField";
 class ProductForm extends BasicForm {
     constructor(props) {
         super(props);
+        this.colorPickerRef = React.createRef();
+        this.toggleColorPickerRef = React.createRef();
         this.defaultColor = '#ffffff00'
         this.state = {
         avatar: props.dataDetail.productImage
@@ -105,6 +107,12 @@ class ProductForm extends BasicForm {
         ? Promise.resolve()
         : Promise.reject('Price chỉ bao gồm các ký tự 0-9')
 
+    handleCloseColorPicker = (e) => {
+        if(!this.colorPickerRef.current.contains(e.target) && !this.toggleColorPickerRef.current.contains(e.target)) {
+            this.handleClose()
+        }
+    }
+
     render() {
         const { formId, dataDetail, loadingSave, isEditing } = this.props;
         const {
@@ -120,6 +128,7 @@ class ProductForm extends BasicForm {
             layout="vertical"
             onFinish={this.handleSubmit}
             initialValues={this.getInitialValue()}
+            onClick={this.handleCloseColorPicker}
         >
             <Row gutter={16}>
                 <Col span={12}>
@@ -175,6 +184,7 @@ class ProductForm extends BasicForm {
                             alignItems: 'start',
                         }}>
                             <div
+                            ref={this.toggleColorPickerRef}
                             style={{
                                 marginTop: '1px',
                                 padding: '5px',
@@ -200,27 +210,16 @@ class ProductForm extends BasicForm {
                             }}
                             >Reset</Button>
                         </div>
-						{
-						displayColorPicker
-						? (
-							<>
-							<div style={{
-								position: 'absolute',
-								top: '0px',
-								right: '0px',
-								bottom: '0px',
-								left: '0px',
-							}} onClick={ this.handleClose }/>
-							<div style={{
-								position: 'static',
-								zIndex: '2',
-							}}>
-								<SketchPicker color={ color } onChange={ this.handleChange }/>
-							</div>
-							</>
-						)
-							: null
-						}
+                        <div
+                        ref={this.colorPickerRef}
+                        style={{
+                            position: 'absolute',
+                            zIndex: '2',
+                            display: displayColorPicker ? 'block' : 'none'
+                        }}
+                        >
+                            <SketchPicker color={ color } onChange={ this.handleChange }/>
+                        </div>
 					</Form.Item>
 				</Col>
             </Row>
