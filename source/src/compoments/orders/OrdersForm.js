@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, Col, Row, Steps, Button, Modal } from "antd";
-import { CloseCircleOutlined } from '@ant-design/icons'
+import { CloseCircleOutlined, DeleteOutlined } from '@ant-design/icons'
 
 import TextField from "../common/entryForm/TextField";
 import {
@@ -35,6 +35,7 @@ const OrdersForm = ({
     const [productsList, setProductsList] = useState(ordersDetailDtos)
     const [totalPrice, setTotalPrice] = useState(0)
     const [saleOff, setSaleOff] = useState(ordersSaleOff)
+    const [deletedOrdersDetailsList , setDeletedOrdersDetailsList] = useState([])
 
     const discountPrice = totalPrice * (saleOff / 100)
     const totalPriceAfterDiscount = totalPrice - discountPrice
@@ -60,7 +61,17 @@ const OrdersForm = ({
             ordersAddress: values.ordersAddress,
             ordersCustomerId: values.customerDto?.id,
             ordersSaleOff: values.ordersSaleOff,
-            ordersDetailDtos: productsList,
+            ordersDetailDtos: productsList.map(p => ({
+                amount: p.amount,
+                employeeCommission: p.employeeCommission,
+                id: p.id,
+                ordersId: p.ordersId,
+                price: p.price,
+                productId: p.productDto.id,
+                note: p.note,
+            })),
+            deletingOrdersDetails: deletedOrdersDetailsList,
+
         })
     }
 
@@ -74,8 +85,11 @@ const OrdersForm = ({
             onOk: () => {
                 if(!isCancel) {
                     const newProductsList = [...productsList]
-                    newProductsList.splice(newProductsList.findIndex(p => p.productDto.id === product.id), 1)
-                    setProductsList(newProductsList)
+                    const deleteds = newProductsList.splice(newProductsList.findIndex(p => p.productDto.id === product.id), 1)
+                    Promise.resolve().then(() => {
+                        setDeletedOrdersDetailsList(deleteds)
+                        setProductsList(newProductsList)
+                    })
                 }
                 else {
                     handleCancelStateNoConfirm({
@@ -251,7 +265,7 @@ const OrdersForm = ({
                     <ul className="orders">
                         {
                             productsList.map(ordersDetail => {
-                                return (<li key={ordersDetail.id} className={`item${isReadonlyForm ? '' : ' padding-top'}`} style={{ backgroundColor: ordersDetail.productDto.labelColor }}>
+                                return (<li key={ordersDetail.id} className={`item`} style={{ backgroundColor: ordersDetail.productDto.labelColor, paddingRight: isReadonlyForm ? 0 : 32, paddingLeft: isReadonlyForm ? 0 : 8 }}>
                                     <div className="item-content">
                                         <div className="col col-1">
                                             <div className="quantity-edition">
@@ -268,7 +282,7 @@ const OrdersForm = ({
                                                 >
                                                     -
                                                 </Button>
-                                                <span className="quantity">{ordersDetail.amount}</span>
+                                                <span className="quantity" style={isReadonlyForm ? { marginRight: 4, marginLeft: 0 } : {}}>{ordersDetail.amount}</span>
                                                 <Button
                                                 className={`plus${isReadonlyForm ? ' display-none' : ''}`}
                                                 onClick={() => handleChangeAmountItem(ordersDetail.productDto, 1)}
@@ -277,14 +291,14 @@ const OrdersForm = ({
                                                 </Button>
                                             </div>
                                             <p className="title">
-                                                {" x " + ordersDetail.productDto.productName}
+                                                { isReadonlyForm ? " x " : "" }{ordersDetail.productDto.productName}
                                             </p>
                                         </div>
                                         <div className="col col-2">
                                             <p className="price">
                                                 {Utils.formatMoney( ordersDetail.price * ordersDetail.amount)}
                                             </p>
-                                            <CloseCircleOutlined
+                                            <DeleteOutlined
                                             className={`delete-btn${isReadonlyForm ? ' display-none' : ''}`}
                                             onClick={() => handleRemoveSelectingItem(ordersDetail.productDto, productsList.length === 1)}
                                             />

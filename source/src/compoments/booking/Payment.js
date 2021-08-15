@@ -170,7 +170,7 @@ const Payment = ({
                     <ul className="orders">
                         {
                             selectedItems.sort((a, b) => a.order - b.order).map(product => {
-                                return (<li key={product.id} className="item">
+                                return (<li key={product.id} className="item" style={{ backgroundColor: product.labelColor }}>
                                     <div className="item-content">
                                         <div className="col col-1">
                                             <p className="title">

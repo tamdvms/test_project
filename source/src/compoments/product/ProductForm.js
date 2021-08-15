@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Col, Row } from "antd";
+import { Form, Col, Row, Button } from "antd";
 import { SketchPicker } from 'react-color';
 
 import BasicForm from "../common/entryForm/BasicForm";
@@ -21,14 +21,21 @@ import RichTextField from "../common/entryForm/RichTextField";
 class ProductForm extends BasicForm {
     constructor(props) {
         super(props);
+        this.defaultColor = '#ffffff00'
         this.state = {
         avatar: props.dataDetail.productImage
             ? `${AppConstants.contentRootUrl}/${props.dataDetail.productImage}`
             : "",
         uploading: false,
-        color: props.dataDetail.labelColor ? props.dataDetail.labelColor : Utils.getRandomColor(),
+        color: props.dataDetail.labelColor ? props.dataDetail.labelColor : this.defaultColor,
 		displayColorPicker: false,
         }
+    }
+
+    handleResetColor = () => {
+        this.setState({
+            color: this.defaultColor
+        })
     }
 
     handleSubmit(formValues) {
@@ -37,7 +44,7 @@ class ProductForm extends BasicForm {
 		onSubmit({
 			...formValues,
 			...this.otherData,
-			labelColor: color
+			labelColor: color === this.defaultColor ? 'none' : color
 		});
 	}
 
@@ -163,24 +170,36 @@ class ProductForm extends BasicForm {
 					<Form.Item
 					label="Chọn nhãn màu"
 					>
-						<div
-						style={{
-							padding: '5px',
-							background: '#fff',
-							borderRadius: '1px',
-							boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-							display: 'inline-block',
-							cursor: 'pointer',
-						}}
-						onClick={ this.handleClick }
-						>
-							<div style={{
-								width: '36px',
-								height: '14px',
-								borderRadius: '2px',
-								background: color,
-							}} />
-						</div>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'start',
+                        }}>
+                            <div
+                            style={{
+                                marginTop: '1px',
+                                padding: '5px',
+                                background: '#fff',
+                                borderRadius: '1px',
+                                boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+                                display: 'inline-block',
+                                cursor: 'pointer',
+                            }}
+                            onClick={ this.handleClick }
+                            >
+                                <div style={{
+                                    width: '64px',
+                                    height: '20px',
+                                    borderRadius: '2px',
+                                    background: color,
+                                }} />
+                            </div>
+                            <Button type="ghost"
+                            onClick={this.handleResetColor}
+                            style={{
+                                boxShadow: 'none'
+                            }}
+                            >Reset</Button>
+                        </div>
 						{
 						displayColorPicker
 						? (

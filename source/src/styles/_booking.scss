@@ -260,11 +260,11 @@
                             overflow-x: hidden;
                             padding-right: 8px;
                             .item {
-                                border-bottom: 1px solid #f0f0f0;
-                                margin: 8px 0;
-                                padding: 12px 0;
+                                padding: 8px;
+                                padding-left: 8px;
                                 padding-right: 16px;
                                 position: relative;
+                                border-bottom: 1px solid #f0f0f0;
                                 &:first-child {
                                     margin-top: 4px;
                                 }
@@ -286,13 +286,14 @@
                                                 font-size: 0.7rem;
                                                 padding: 0 8px;
                                                 height: 25px;
+                                                background-color: #fff;
                                             }
                                             .delete-btn {
                                                 cursor: pointer;
                                                 color: red;
                                                 position: absolute;
-                                                top: 0px;
-                                                right: 0px;
+                                                top: 11px;
+                                                right: 8px;
                                             }
                                         }
                                     }
@@ -300,7 +301,7 @@
                                         width: fit-content;
                                         flex-shrink: 0;
                                         margin-left: 16px;
-                                        margin-right: 8px;
+                                        margin-right: 16px;
                                         display: flex;
                                         flex-direction: column;
                                         align-items: flex-end;
@@ -382,7 +383,12 @@
                         .calculate-total {
                             display: flex;
                             justify-content: space-between;
-                            padding: 0px 16px;
+                            
+                        }
+                        .calculate-total {
+                            display: flex;
+                            justify-content: space-between;
+                            padding: 0px 24px;
                         }
                         .calculate-total.product {
                             padding-top: 8px;
@@ -394,10 +400,10 @@
                             }
                         }
                         .calculate-total.vat {
-                            padding-bottom: 8px;
+                            padding-bottom: 8px !important;
                         }
                         .calculate-total.product-vat {
-                            padding: 8px 16px;
+                            padding: 8px 24px;
                             border-top: 1px solid #f0f0f0;
                             .title, .total {
                                 font-weight: bold;
@@ -454,7 +460,7 @@
                                     margin: 0 !important;
                                     padding-right: 0;
                                     .col-2 {
-                                        margin-right: 0 !important;
+                                        margin-right: 8px !important;
                                     }
                                     .title {
                                         margin: 0 !important;
@@ -472,6 +478,15 @@
                     }
                     .bottom {
                         height: 185px !important;
+                        .calculate-total {
+                            display: flex;
+                            justify-content: space-between;
+                            padding: 0px 24px !important;
+                        }
+                        .calculate-total.product-vat {
+                            padding-top: 8px !important;
+                            padding-bottom: 8px !important;
+                        }
                     }
                 }
             }

@@ -42,7 +42,7 @@ class ProductListPage extends ListBasePage {
                 render: (id, dataRow) => {
                     return {
                         props: {
-                            style: { background: dataRow.labelColor },
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
                         },
                         children: (
                             <div>{id}</div>
@@ -58,7 +58,7 @@ class ProductListPage extends ListBasePage {
                 render: (avatarPath, dataRow) => {
                     return {
                         props: {
-                            style: { background: dataRow.labelColor },
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
                         },
                         children: (
                             <Avatar
@@ -76,7 +76,7 @@ class ProductListPage extends ListBasePage {
                 render: (dataRow) => {
                     return {
                         props: {
-                            style: { background: dataRow.labelColor },
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
                         },
                         children: (
                             <span>
@@ -93,7 +93,7 @@ class ProductListPage extends ListBasePage {
                 render: (productPrice, dataRow) => {
                     return {
                         props: {
-                            style: { background: dataRow.labelColor },
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
                         },
                         children: (
                             <span className="tb-al-r">{Utils.formatMoney(productPrice)}</span>
@@ -108,7 +108,7 @@ class ProductListPage extends ListBasePage {
                 render: (status, dataRow) => {
                     return {
                         props: {
-                            style: { background: dataRow.labelColor },
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
                         },
                         children: (
                             <StatusTag status={status}/>
@@ -133,7 +133,7 @@ class ProductListPage extends ListBasePage {
             render: (dataRow) => {
                 return {
                     props: {
-                        style: { background: dataRow.labelColor },
+                        style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
                     },
                     children: this.getActionColumn(dataRow)
                 }

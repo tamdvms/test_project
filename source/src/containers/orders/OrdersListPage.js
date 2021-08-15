@@ -38,6 +38,13 @@ class OrdersListPage extends ListBasePage {
         this.columns = [
             this.renderIdColumn(),
             {
+                title: <div style={{ paddingRight: 20 }}>Ngày tạo</div>,
+                dataIndex: "createdDate",
+                align: "right",
+                width: 150,
+                render: (createdDate) => <div style={{ paddingRight: 20 }}>{convertUtcToTimezone(createdDate, "DD/MM/YYYY HH:mm")}</div>,
+            },
+            {
                 title: 'Khách hàng',
                 dataIndex: ['customerDto', 'customerFullName'],
                 render: (customerFullName, dataRow) => {
@@ -55,7 +62,10 @@ class OrdersListPage extends ListBasePage {
                     return (
                         employeeDto.labelColor
                             ? (<div>
-                            <Tag color={employeeDto.labelColor}>{employeeDto.fullName}</Tag>
+                            <Tag color={employeeDto.labelColor} style={{
+                                padding: '2px 7px',
+                                fontSize: '14px',
+                            }}>{employeeDto.fullName}</Tag>
                             </div>)
                             : employeeDto.fullName
                     )
@@ -72,13 +82,6 @@ class OrdersListPage extends ListBasePage {
                         </div>
                     )
                 }
-            },
-            {
-                title: <div style={{ paddingRight: 20 }}>Ngày tạo</div>,
-                dataIndex: "createdDate",
-                align: "right",
-                width: 120,
-                render: (createdDate) => <div style={{ paddingRight: 20 }}>{convertUtcToTimezone(createdDate, "DD/MM/YYYY")}</div>,
             },
             {
                 title: 'Tình trạng',
