@@ -40,6 +40,9 @@ class OrdersListPage extends ListBasePage {
                 title: "Mã đơn hàng",
                 dataIndex: "ordersCode",
                 width: 130,
+                render: (ordersCode) => {
+                    return <div>#{ordersCode}</div>
+                }
             },
             {
                 title: <div style={{ paddingRight: 20 }}>Ngày tạo</div>,
@@ -71,7 +74,9 @@ class OrdersListPage extends ListBasePage {
                                 fontSize: '14px',
                             }}>{employeeDto.fullName}</Tag>
                             </div>)
-                            : employeeDto.fullName
+                            : <div style={{
+                                padding: '2px 7px',
+                            }}>{employeeDto.fullName}</div>
                     )
                 }
             },
@@ -95,11 +100,13 @@ class OrdersListPage extends ListBasePage {
                     const state = OrdersStates.find(state => state.value === ordersState);
                     return (
                         <div>
-                            <Tag color={state?.color} style={
-                                state.value === OrdersStates[4].value ? {
-                                    background: 'red',
+                            <Tag style={
+                                {
+                                    background: state?.color,
                                     color: 'white',
-                                } : {}
+                                    padding: '2px 7px',
+                                    fontSize: '14px',
+                                }
                             }>{state?.label}</Tag>
                         </div>
                     )
