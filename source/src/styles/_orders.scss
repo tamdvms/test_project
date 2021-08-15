@@ -110,9 +110,6 @@
                 overflow-y: auto;
                 overflow-x: hidden;
                 padding-right:  0;
-                .item.padding-top {
-                    padding-top: 20px;
-                }
                 .item {
                     border-bottom: 1px solid #f0f0f0;
                     padding: 12px 8px;
@@ -128,6 +125,7 @@
                     }
                     .item-content {
                         display: flex;
+                        align-items: center;
                         .col-1 {
                             flex: 1;
                             display: flex;
@@ -135,6 +133,7 @@
                             .title {
                                 font-weight: 400;
                                 margin: 0;
+                                line-height: 1.7;
                             }
                             .action {
                                 display: flex;
@@ -154,6 +153,7 @@
                             }
                             .quantity-edition {
                                 display: flex;
+                                line-height: 1.7;
                                 .minus, .plus {
                                     margin-top: auto;
                                     width: 25px;
@@ -190,8 +190,9 @@
                                 cursor: pointer;
                                 color: red;
                                 position: absolute;
-                                top: 3px;
-                                right: 3px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                right: 7px;
                             }
                         }
                     }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Input, Empty, Button, Avatar, Form, Modal, Spin } from 'antd'
-import { EditOutlined, SearchOutlined, CloseCircleOutlined, ShoppingFilled, PlusOutlined } from '@ant-design/icons'
+import { EditOutlined, SearchOutlined, ShoppingFilled, PlusOutlined, DeleteOutlined } from '@ant-design/icons'
 import Utils from '../../utils'
 import ElementWithPermission from '../common/elements/ElementWithPermission'
 import { sitePathConfig } from '../../constants/sitePathConfig'
@@ -36,7 +36,7 @@ const Cart = ({
                     {
                         selectedItems.length > 0
                         ? selectedItems.sort((a, b) => a.order - b.order).map(product => {
-                            return (<li key={product.id} className="item">
+                            return (<li key={product.id} className="item" style={{ backgroundColor: product.labelColor }}>
                                 <div className="item-content">
                                     <div className="col col-1">
                                         <p className="title">
@@ -55,7 +55,7 @@ const Cart = ({
                                                     </Button>
                                                 ) : null
                                             }
-                                            <CloseCircleOutlined
+                                            <DeleteOutlined
                                             className="delete-btn"
                                             onClick={() => handleRemoveSelectingItem(product)}
                                             />
