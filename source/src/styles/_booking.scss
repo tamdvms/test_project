@@ -292,8 +292,9 @@
                                                 cursor: pointer;
                                                 color: red;
                                                 position: absolute;
-                                                top: 11px;
+                                                top: 50%;
                                                 right: 8px;
+                                                transform: translateY(-50%);
                                             }
                                         }
                                     }

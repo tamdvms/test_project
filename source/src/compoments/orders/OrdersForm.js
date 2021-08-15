@@ -32,7 +32,7 @@ const OrdersForm = ({
     } = dataDetail
 
     const [isReadonlyForm, setIsReadonlyForm] = useState(true)
-    const [productsList, setProductsList] = useState(ordersDetailDtos)
+    const [productsList, setProductsList] = useState(ordersDetailDtos || [])
     const [totalPrice, setTotalPrice] = useState(0)
     const [saleOff, setSaleOff] = useState(ordersSaleOff)
     const [deletedOrdersDetailsList , setDeletedOrdersDetailsList] = useState([])

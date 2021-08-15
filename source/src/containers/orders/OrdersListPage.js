@@ -41,8 +41,8 @@ class OrdersListPage extends ListBasePage {
                 title: <div style={{ paddingRight: 20 }}>Ngày tạo</div>,
                 dataIndex: "createdDate",
                 align: "right",
-                width: 150,
-                render: (createdDate) => <div style={{ paddingRight: 20 }}>{convertUtcToTimezone(createdDate, "DD/MM/YYYY HH:mm")}</div>,
+                width: 100,
+                render: (createdDate) => <div style={{ paddingRight: 20, whiteSpace: 'nowrap' }}>{convertUtcToTimezone(createdDate, Utils.getSettingsDateFormat("date-format-product"))}</div>,
             },
             {
                 title: 'Khách hàng',

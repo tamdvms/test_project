@@ -156,6 +156,9 @@ const Utils = {
         value = value.replace(/\$\s?|(\.*)/g, '')
         return value
     },
+    getSettingsDateFormat(key) {
+        return actions.getUserData()?.settings?.["DateFormat"]?.[key];
+    },
     getRandomColor() {
         const letters = 'ABCDEF';
         let color = '#';
