@@ -24,7 +24,7 @@ const { confirm } = Modal
 
 class OrdersListPage extends ListBasePage {
     initialSearch() {
-        return { employeeFullName: "", state: null };
+        return { employeeFullName: "", code: "", state: null };
     }
 
     constructor(props) {
@@ -36,7 +36,11 @@ class OrdersListPage extends ListBasePage {
             { name: "Đơn hàng" }
         ];
         this.columns = [
-            this.renderIdColumn(),
+            {
+                title: "Mã đơn hàng",
+                dataIndex: "ordersCode",
+                width: 130,
+            },
             {
                 title: <div style={{ paddingRight: 20 }}>Ngày tạo</div>,
                 dataIndex: "createdDate",
@@ -139,6 +143,11 @@ class OrdersListPage extends ListBasePage {
                 key: "employeeFullName",
                 seachPlaceholder: 'Tên nhân viên',
                 initialValue: this.search.employeeFullName,
+            },
+            {
+                key: "code",
+                seachPlaceholder: 'Mã đơn hàng',
+                initialValue: this.search.code,
             },
             {
                 key: "state",

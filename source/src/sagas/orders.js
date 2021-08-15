@@ -28,6 +28,9 @@ function* getOrdersList({ payload: { params, onCompleted } }) {
         if(params.search.state) {
             searchParams.state = params.search.state
         }
+        if(params.search.code) {
+            searchParams.code = params.search.code
+        }
     }
     try {
         const result = yield call(sendRequest, apiParams, searchParams);
