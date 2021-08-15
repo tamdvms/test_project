@@ -1,6 +1,6 @@
 import React from 'react'
 import { Input, Empty, Button, Avatar, Form, Modal, Spin } from 'antd'
-import { EditOutlined, SearchOutlined, ShoppingFilled, PlusOutlined, DeleteOutlined } from '@ant-design/icons'
+import { EditOutlined, SearchOutlined, ShoppingFilled, PlusOutlined, DeleteFilled } from '@ant-design/icons'
 import Utils from '../../utils'
 import ElementWithPermission from '../common/elements/ElementWithPermission'
 import { sitePathConfig } from '../../constants/sitePathConfig'
@@ -55,7 +55,7 @@ const Cart = ({
                                                     </Button>
                                                 ) : null
                                             }
-                                            <DeleteOutlined
+                                            <DeleteFilled 
                                             className="delete-btn"
                                             onClick={() => handleRemoveSelectingItem(product)}
                                             />

@@ -68,8 +68,8 @@ const CategoryKinds = {
 const OrdersStates = [
     {
         value: 0,
-        label: 'Đã tạo',
-        color: 'yellow',
+        label: 'Mới tạo',
+        color: '#171717',
         icon: <HourglassOutlined />,
     },
     {
