@@ -15,7 +15,7 @@ class BasicModal extends Component {
     }
 
     render() {
-        const { visible, onOk, onCancel, loading, children, objectName, width, top, formId, bodyStyle, maskClosable, noFooter, additionalButton, className, closable = true } = this.props;
+        const { visible, onOk, onCancel, loading, children, objectName, width, top, formId, bodyStyle, maskClosable, noFooter, additionalButton, className, closable = true, centered } = this.props;
         const formSubmitId = formId || `form-${objectName}`;
         let footerComponent = [<Button className="modal-btn-close" key="back" onClick={onCancel}>Đóng</Button>];
         if(onOk) {
@@ -44,6 +44,7 @@ class BasicModal extends Component {
                 onOk={onOk}
                 onCancel={onCancel}
                 footer={noFooter || footerComponent}
+                centered={centered}
                 >
                     {React.cloneElement(children, {
                         formId: formSubmitId,

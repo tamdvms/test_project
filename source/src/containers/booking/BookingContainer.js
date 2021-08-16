@@ -212,15 +212,13 @@ const BookingContainer = ({
     }
 
     const fetchProductChildList = ({ params }) => {
-        setTbProductChildLoading(true)
-        dispatch(actions.getProductAutoComplete({
-            params,
-            onCompleted: (data) => {
-                setIsShowModal(true)
-                setProductChildListData(data)
-                setTbProductChildLoading(false)
-            }
-        }))
+        const { parentId } = params
+        const childData = itemList.find(item => item.id === parentId)?.productChilds
+        console.log(childData)
+        Promise.resolve().then(() => {
+            setIsShowModal(true)
+            setProductChildListData(childData)
+        })
     }
 
     const handleOpenModal = (parentProduct) => {
@@ -257,7 +255,7 @@ const BookingContainer = ({
         phoneInput ? fetchCustomerList() : setCustomersList([])
     }, [phoneInput])
 
-    console.log(selectedItems)
+    console.log(itemList)
     return (
         <div className="booking-container">
             <BookingPage

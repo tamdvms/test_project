@@ -21,6 +21,8 @@ import RichTextField from "../common/entryForm/RichTextField";
 class ProductChildForm extends BasicForm {
     constructor(props) {
         super(props);
+        this.colorPickerRef = React.createRef();
+        this.toggleColorPickerRef = React.createRef();
         this.state = {
         avatar: props.dataDetail.productImage
             ? `${AppConstants.contentRootUrl}/${props.dataDetail.productImage}`
@@ -128,6 +130,7 @@ class ProductChildForm extends BasicForm {
             layout="vertical"
             onFinish={this.handleSubmit}
             initialValues={this.getInitialValue()}
+            onClick={this.handleCloseColorPicker}
         >
             <Row gutter={16}>
                 <Col span={12}>
