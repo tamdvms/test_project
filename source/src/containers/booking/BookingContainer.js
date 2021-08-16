@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import Fuse from 'fuse.js'
+
 import BookingPage from '../../compoments/booking/BookingPage'
 import { actions } from '../../actions'
 import { showErrorMessage, showSucsessMessage } from '../../services/notifyService'
@@ -37,6 +39,15 @@ const BookingContainer = ({
     const [productChildListData, setProductChildListData] = useState([])
     const [currentProductParentProduct, setCurrentProductParentProduct] = useState()
     const [tbProductChildLoading, setTbProductChildLoading] = useState(false)
+    const [fuse, setFuse] = useState()
+
+    const buildIndex = (data) => {
+        setFuse(new Fuse(data, {
+            includeScore: true,
+            threshold: 0.2,
+            keys: ["productName"]
+        }))
+    };
 
     const findMaxOrder = (arr) => {
         let max = arr[0].order;
@@ -143,6 +154,7 @@ const BookingContainer = ({
                 size: size || pagination.size,
             },
             onCompleted: (data = [], newPagination) => {
+                buildIndex(data)
                 size ? setLoadmoreLoading(false) : setListLoading(false)
                 setItemList(data)
                 setPagination(newPagination)
@@ -236,10 +248,20 @@ const BookingContainer = ({
         if(breadcrumbs.length > 0) {
             changeBreadcrumb(breadcrumbs);
         }
+        fetchProductsList()
     }, [])
 
     useEffect(() => {
-        fetchProductsList()
+        // fetchProductsList()
+        const res = fuse && fuse.search(searchInput);
+        if(!searchInput) {
+            setItemList(fuse?._docs)
+        }
+        else {
+            setItemList(res.map(e => {
+                return e.item
+            }))
+        }
     }, [searchInput])
 
     useEffect(() => {
@@ -255,7 +277,6 @@ const BookingContainer = ({
         phoneInput ? fetchCustomerList() : setCustomersList([])
     }, [phoneInput])
 
-    console.log(itemList)
     return (
         <div className="booking-container">
             <BookingPage
