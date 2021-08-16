@@ -18,12 +18,9 @@ import { showErrorMessage } from "../../services/notifyService";
 import NumericField from "../common/entryForm/NumericField";
 import RichTextField from "../common/entryForm/RichTextField";
 
-class ProductForm extends BasicForm {
+class ProductChildForm extends BasicForm {
     constructor(props) {
         super(props);
-        this.colorPickerRef = React.createRef();
-        this.toggleColorPickerRef = React.createRef();
-        this.defaultColor = '#ffffff00'
         this.state = {
         avatar: props.dataDetail.productImage
             ? `${AppConstants.contentRootUrl}/${props.dataDetail.productImage}`
@@ -95,11 +92,11 @@ class ProductForm extends BasicForm {
     getInitialValue = () => {
         const { dataDetail, isEditing } = this.props;
         if(!isEditing) {
-        return {
-            ...dataDetail,
-            status: STATUS_ACTIVE,
-            saleoff: 0,
-        }
+            return {
+                ...dataDetail,
+                status: STATUS_ACTIVE,
+                saleoff: 0,
+            }
         }
         return {
             ...dataDetail,
@@ -122,7 +119,7 @@ class ProductForm extends BasicForm {
 			uploading,
 			avatar,
 			color,
-			displayColorPicker,
+            displayColorPicker,
 		} = this.state;
         return (
         <Form
@@ -131,7 +128,6 @@ class ProductForm extends BasicForm {
             layout="vertical"
             onFinish={this.handleSubmit}
             initialValues={this.getInitialValue()}
-            onClick={this.handleCloseColorPicker}
         >
             <Row gutter={16}>
                 <Col span={12}>
@@ -253,4 +249,4 @@ class ProductForm extends BasicForm {
     }
 }
 
-export default ProductForm;
+export default ProductChildForm;

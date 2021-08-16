@@ -1,11 +1,13 @@
 import React from 'react'
 import { Input, Empty, Avatar, Spin, Modal, Button } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
+import BasicModal from '../common/modal/BasicModal'
 
 import Utils from '../../utils'
 import { AppConstants } from '../../constants'
 import Cart from './Cart'
 import Payment from './Payment'
+import ProductChildList from './ProductChildList'
 
 const { confirm } = Modal
 
@@ -29,22 +31,15 @@ const BookingPage = ({
     customersList,
     listCustomerLoading,
     phoneInput,
+    productChildListData,
+    getProductChildList,
+    isShowModal,
+    onCancelModal,
+    currentProductParentProduct,
+    tbProductChildLoading,
+    handleOpenModal,
 }) => {
 
-    const handleRemoveSelectingItem = (product) => {
-        confirm({
-            title: `Bạn có chắc muốn xóa sản phẩm này?`,
-            content: '',
-            okText: 'Có',
-            okType: 'danger',
-            cancelText: 'Không',
-            onOk: () => {
-                handleDeselectingItem(product)
-            },
-            onCancel() {
-            },
-          });
-    }
     const loadMore = numLoadMore > 0 && !listLoading
         ? (
             <div className="load-more">
@@ -66,6 +61,26 @@ const BookingPage = ({
 			</div>
         ) : null;
 
+    const handleRemoveSelectingItem = (product) => {
+        confirm({
+            title: `Bạn có chắc muốn xóa sản phẩm này?`,
+            content: '',
+            okText: 'Có',
+            okType: 'danger',
+            cancelText: 'Không',
+            onOk: () => {
+                handleDeselectingItem(product)
+            },
+            onCancel() {
+            },
+          });
+    }
+
+    const handleSelectingChildItem = (product) => {
+        handleSelectingItem(product)
+        onCancelModal()
+    }
+
     return (
         <div className="booking-page">
             <div className={`content${isPaymenting ? ' disabled' : ''}`}>
@@ -82,6 +97,7 @@ const BookingPage = ({
                         {
                             !listLoading && itemList.length > 0 ? (
                                 itemList.map(product => {
+                                    const saleoffPrice = product.productPrice - (product.productPrice * (product.saleoff / 100))
                                     return (
                                         <li
                                         key={product.id}
@@ -90,13 +106,24 @@ const BookingPage = ({
                                         >
                                             <div
                                             className="overlay"
-                                            onClick={() => handleSelectingItem(product)}></div>
+                                            onClick={() => product.hasChild ? handleOpenModal(product) : handleSelectingItem(product)}></div>
                                             <Avatar
                                                 className="avatar"
                                                 src={AppConstants.contentRootUrl + product.productImage}
                                             />
                                             <div className="name">{product.productName}</div>
-                                            <div className="price">{Utils.formatMoney(product.productPrice)}</div>
+                                            <div className="price">
+                                                {
+                                                    product.saleoff > 0 && !product.hasChild ? (
+                                                        <div className="saleoff-price">
+                                                            {Utils.formatMoney(saleoffPrice)}
+                                                        </div>
+                                                    ) : null
+                                                }
+                                                <div className={`original-price${product.saleoff && !product.hasChild > 0 ? ' line-through' : ''}`}>
+                                                    {Utils.formatMoney(product.productPrice)}
+                                                </div>
+                                            </div>
                                         </li>
                                     )
                                 })
@@ -132,6 +159,24 @@ const BookingPage = ({
                 setIsPaymenting={setIsPaymenting}
                 />
             </div>
+            <BasicModal
+                maskClosable={true}
+                className="product-child-list-modal"
+                noFooter={true}
+                closable={false}
+                title="Danh sách phân loại"
+				visible={isShowModal}
+				onCancel={onCancelModal}
+                width={600}
+			>
+                <ProductChildList
+                    dataList={productChildListData}
+                    getDataList={getProductChildList}
+                    loading={tbProductChildLoading}
+                    handleSelectItem={handleSelectingChildItem}
+                    parentProduct={currentProductParentProduct}
+                />
+            </BasicModal>
         </div>
     )
 }

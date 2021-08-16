@@ -33,6 +33,10 @@ const BookingContainer = ({
     const [phoneInput, setPhoneInput] = useState("")
     const [customersList, setCustomersList] = useState([])
     const [listCustomerLoading, setListCustomerLoading] = useState(false)
+    const [isShowModal, setIsShowModal] = useState(false)
+    const [productChildListData, setProductChildListData] = useState([])
+    const [currentProductParentProduct, setCurrentProductParentProduct] = useState()
+    const [tbProductChildLoading, setTbProductChildLoading] = useState(false)
 
     const findMaxOrder = (arr) => {
         let max = arr[0].order;
@@ -106,7 +110,9 @@ const BookingContainer = ({
 
     const handleDeselectingItem = (product) => {
         const newSelectedItems = JSON.parse(JSON.stringify(selectedItems))
-        const index = newSelectedItems.findIndex(item => item.id === product.id)
+        const index = newSelectedItems.findIndex(item => {
+            return item.id === product.id
+        })
         newSelectedItems.splice(index, 1)
         setSelectedItems(newSelectedItems)
     }
@@ -115,7 +121,7 @@ const BookingContainer = ({
         const { events } = decideDataWillSend(product, eventName)
         const newSelectedItems = JSON.parse(JSON.stringify(selectedItems))
         for(let i = 0; i < newSelectedItems.length; i++) {
-            if(newSelectedItems[i].id === product.id) {
+            if(product.id === newSelectedItems[i].id) {
                 events.forEach(event => {
                     newSelectedItems[i][event.label] = event.value
                 });
@@ -152,6 +158,7 @@ const BookingContainer = ({
     const handleSubmitPayment = (values, cb) => {
         setLoadingSave(true)
         const ordersDetailDtos = selectedItems.map(item => ({
+            name: item.productName,
             productId: item.id,
             note: item.note,
             amount: item.quantity,
@@ -204,6 +211,29 @@ const BookingContainer = ({
         }))
     }
 
+    const fetchProductChildList = ({ params }) => {
+        setTbProductChildLoading(true)
+        dispatch(actions.getProductAutoComplete({
+            params,
+            onCompleted: (data) => {
+                setIsShowModal(true)
+                setProductChildListData(data)
+                setTbProductChildLoading(false)
+            }
+        }))
+    }
+
+    const handleOpenModal = (parentProduct) => {
+        Promise.resolve().then(() => {
+            setIsShowModal(true)
+            setCurrentProductParentProduct(parentProduct)
+        })
+    }
+
+    const onCancelModal = () => {
+        setIsShowModal(false)
+    }
+
     useEffect(() => {
         if(breadcrumbs.length > 0) {
             changeBreadcrumb(breadcrumbs);
@@ -217,7 +247,8 @@ const BookingContainer = ({
     useEffect(() => {
         let total = 0
         selectedItems.forEach(item => {
-            total += item.productPrice * item.quantity
+            const saleoffPrice = item.productPrice - (item.productPrice * (item.saleoff / 100))
+            total += saleoffPrice * item.quantity
         })
         setTotalPrice(total)
     }, [selectedItems])
@@ -226,6 +257,7 @@ const BookingContainer = ({
         phoneInput ? fetchCustomerList() : setCustomersList([])
     }, [phoneInput])
 
+    console.log(selectedItems)
     return (
         <div className="booking-container">
             <BookingPage
@@ -240,6 +272,10 @@ const BookingContainer = ({
                 customersList={customersList}
                 listCustomerLoading={listCustomerLoading}
                 phoneInput={phoneInput}
+                isShowModal={isShowModal}
+                productChildListData={productChildListData}
+                currentProductParentProduct={currentProductParentProduct}
+                tbProductChildLoading={tbProductChildLoading}
                 handleEventOnItem={handleEventOnItem}
                 setIsPaymenting={setIsPaymenting}
                 handleChangeSearchInput={handleChangeSearchInput}
@@ -248,6 +284,9 @@ const BookingContainer = ({
                 handleChangeLoadMore={handleChangeLoadMore}
                 handleSubmitPayment={handleSubmitPayment}
                 handleChangePhoneCustomer={handleChangePhoneCustomer}
+                getProductChildList={fetchProductChildList}
+                onCancelModal={onCancelModal}
+                handleOpenModal={handleOpenModal}
             />
         </div>
     )

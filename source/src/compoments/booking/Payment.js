@@ -170,6 +170,7 @@ const Payment = ({
                     <ul className="orders">
                         {
                             selectedItems.sort((a, b) => a.order - b.order).map(product => {
+                                const saleoffPrice = product.productPrice - (product.productPrice * (product.saleoff / 100))
                                 return (<li key={product.id} className="item" style={{ backgroundColor: product.labelColor }}>
                                     <div className="item-content">
                                         <div className="col col-1">
@@ -179,7 +180,7 @@ const Payment = ({
                                         </div>
                                         <div className="col col-2">
                                             <p className="price">
-                                                {Utils.formatMoney(product.productPrice * product.quantity)}
+                                                {Utils.formatMoney(saleoffPrice * product.quantity)}
                                             </p>
                                         </div>
                                     </div>

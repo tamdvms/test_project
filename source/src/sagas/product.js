@@ -26,6 +26,10 @@ function* getProductList({ payload: { params } }) {
         searchParams.categoryId = params.categoryId
     }
 
+    if(params.parentId) {
+        searchParams.parentId = params.parentId
+    }
+
     if(params.search) {
         if(params.search.name) {
             searchParams.name = params.search.name
@@ -106,6 +110,9 @@ function* getCategoryAutoComplete({ payload: { params, onCompleted, onError } })
     const searchParams = {};
     if(params.kind) {
         searchParams.kind = params.kind;
+    }
+    if(params.parentId) {
+        searchParams.parentId = params.parentId;
     }
     try {
         const { success, responseData } = yield call(sendRequest, apiParams, searchParams);

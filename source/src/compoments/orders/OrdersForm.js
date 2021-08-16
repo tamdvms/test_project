@@ -265,7 +265,9 @@ const OrdersForm = ({
                     <ul className="orders">
                         {
                             productsList.map(ordersDetail => {
-                                return (<li key={ordersDetail.id} className={`item`} style={{ backgroundColor: ordersDetail.productDto.labelColor, paddingRight: isReadonlyForm ? 0 : 32, paddingLeft: isReadonlyForm ? 0 : 8 }}>
+                                const parentName = ordersDetail.productDto.parentName
+                                const productName = parentName ? parentName + " (" + ordersDetail.productDto.productName + ")" : ordersDetail.productDto.productName
+                                return (<li key={ordersDetail.id} className={`item`} style={{ backgroundColor: ordersDetail.productDto.labelColor, paddingRight: isReadonlyForm ? 8 : 32 }}>
                                     <div className="item-content">
                                         <div className="col col-1">
                                             <div className="quantity-edition">
@@ -291,7 +293,7 @@ const OrdersForm = ({
                                                 </Button>
                                             </div>
                                             <p className="title">
-                                                { isReadonlyForm ? " x " : "" }{ordersDetail.productDto.productName}
+                                                { isReadonlyForm ? " x " : "" }{productName}
                                             </p>
                                         </div>
                                         <div className="col col-2">
