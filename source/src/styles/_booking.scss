@@ -516,7 +516,6 @@
 }
 
 .product-child-list-modal {
-    
     .product-child-list {
         .list {
             flex: 1;
@@ -561,9 +560,9 @@
                         }
                     }
                     .avatar {
-                        padding: 8px;
-                        width: 54px;
-                        height: 54px;
+                        margin: 8px;
+                        width: 45px;
+                        height: 45px;
                         flex-shrink: 0;
                         img {
                             border-radius: 50%;

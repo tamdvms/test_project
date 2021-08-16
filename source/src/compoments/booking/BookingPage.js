@@ -109,20 +109,27 @@ const BookingPage = ({
                                             onClick={() => product.hasChild ? handleOpenModal(product) : handleSelectingItem(product)}></div>
                                             <Avatar
                                                 className="avatar"
-                                                src={AppConstants.contentRootUrl + product.productImage}
+                                                src={product.productImage ? AppConstants.contentRootUrl + product.productImage : ''}
                                             />
                                             <div className="name">{product.productName}</div>
                                             <div className="price">
                                                 {
-                                                    product.saleoff > 0 && !product.hasChild ? (
-                                                        <div className="saleoff-price">
-                                                            {Utils.formatMoney(saleoffPrice)}
+                                                    product.hasChild ? (
+                                                        "Chọn phân loại"
+                                                    ) : (<>
+                                                        {
+                                                            product.saleoff > 0 ? (
+                                                                <div className="saleoff-price">
+                                                                    {Utils.formatMoney(saleoffPrice)}
+                                                                </div>
+                                                            ) : null
+                                                        }
+                                                        <div className={`original-price${product.saleoff ? ' line-through' : ''}`}>
+                                                            {Utils.formatMoney(product.productPrice)}
                                                         </div>
-                                                    ) : null
+                                                        </>
+                                                    )
                                                 }
-                                                <div className={`original-price${product.saleoff && !product.hasChild > 0 ? ' line-through' : ''}`}>
-                                                    {Utils.formatMoney(product.productPrice)}
-                                                </div>
                                             </div>
                                         </li>
                                     )
@@ -168,6 +175,7 @@ const BookingPage = ({
 				visible={isShowModal}
 				onCancel={onCancelModal}
                 width={600}
+                centered={true}
 			>
                 <ProductChildList
                     dataList={productChildListData}

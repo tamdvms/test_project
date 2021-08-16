@@ -47,7 +47,7 @@ const ProductChildList = ({
                                         })}></div>
                                         <Avatar
                                             className="avatar"
-                                            src={AppConstants.contentRootUrl + product.productImage}
+                                            src={product.productImage ? AppConstants.contentRootUrl + product.productImage : ''}
                                         />
                                         <div className="name">{product.productName}</div>
                                         <div className="price">
