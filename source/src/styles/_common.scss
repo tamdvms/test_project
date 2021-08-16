@@ -489,3 +489,11 @@ body {
 .text-red {
     color: red;
 }
+
+.force-one-line {
+    white-space: nowrap !important;
+}
+
+.selectable {
+    cursor: pointer;
+}

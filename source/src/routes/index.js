@@ -31,6 +31,7 @@ import ExportManagementListPage from "../containers/exportManagement/ExportManag
 import EmployeeListPage from "../containers/employee/EmployeeListPage";
 import BookingContainer from "../containers/booking/BookingContainer";
 import OrdersListPage from "../containers/orders/OrdersListPage";
+import ProductListPageChild from "../containers/product/ProductListPageChild";
 
 const RootRoute = () => {
     const {
@@ -77,6 +78,7 @@ const RootRoute = () => {
                 <PrivateRoute exact path={categoryProduct.path} component={CategoryProductListPage}/>
                 <PrivateRoute exact path={categoryProduct.childrenKeys[0]} component={CategoryProductListPageChild}/>
                 <PrivateRoute exact path={product.path + "/:id"} component={ProductListPage}/>
+                <PrivateRoute exact path={product.childrenKeys[0]} component={ProductListPageChild}/>
                 <PrivateRoute exact path={importManagement.path} component={ImportManagementListPage}/>
                 <PrivateRoute exact path={exportManagement.path} component={ExportManagementListPage}/>
                 <PrivateRoute exact path={employee.path} component={EmployeeListPage}/>

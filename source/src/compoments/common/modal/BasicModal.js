@@ -15,7 +15,7 @@ class BasicModal extends Component {
     }
 
     render() {
-        const { visible, onOk, onCancel, loading, children, objectName, width, top, formId, bodyStyle, maskClosable, noFooter, additionalButton, className } = this.props;
+        const { visible, onOk, onCancel, loading, children, objectName, width, top, formId, bodyStyle, maskClosable, noFooter, additionalButton, className, closable = true } = this.props;
         const formSubmitId = formId || `form-${objectName}`;
         let footerComponent = [<Button className="modal-btn-close" key="back" onClick={onCancel}>Đóng</Button>];
         if(onOk) {
@@ -32,6 +32,7 @@ class BasicModal extends Component {
         }
         return (
             <Modal
+                closable={closable}
                 className={className}
                 maskClosable={!!maskClosable}
                 bodyStyle={bodyStyle || { maxHeight: '84vh', overflow: 'auto'}}
