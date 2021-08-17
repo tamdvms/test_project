@@ -19,6 +19,7 @@ class DatePickerField extends BaseField {
             disabled,
             disabledDate,
             onChange,
+            placeholder,
         } = this.props;
         const dateFormat = format || DATE_FORMAT_DISPLAY;
         return (
@@ -34,6 +35,7 @@ class DatePickerField extends BaseField {
                     format={dateFormat}
                     disabled={disabled}
                     onChange={onChange}
+                    placeholder={placeholder}
                 />
             </Form.Item>
         )

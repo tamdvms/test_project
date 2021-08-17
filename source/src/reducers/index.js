@@ -11,6 +11,7 @@ import importManagement from './importManagement';
 import exportManagement from './exportManagement';
 import employee from './employee';
 import orders from './orders';
+import collaborator from './collaborator';
 
 const rootReducer = combineReducers({
     appCommon: appCommon.reducer,
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
     exportManagement: exportManagement.reducer,
     employee: employee.reducer,
     orders: orders.reducer,
+    collaborator: collaborator.reducer,
 });
 
 export default rootReducer;
