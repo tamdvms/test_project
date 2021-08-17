@@ -1,7 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Avatar } from "antd";
-import { PlusOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Avatar, Divider } from "antd";
+import qs from 'query-string'
+import {
+  EditOutlined,
+  DeleteOutlined,
+  LockOutlined,
+  PictureOutlined,
+  PlusOutlined,
+  UserOutlined,
+  TeamOutlined,
+  CheckOutlined } from '@ant-design/icons';
 
 import ListBasePage from "../ListBasePage";
 import AdminForm from "../../compoments/user/AdminForm";
@@ -12,7 +21,8 @@ import { actions } from "../../actions";
 import { FieldTypes } from "../../constants/formConfig";
 import { commonStatus } from "../../constants/masterData";
 import { convertUtcToTimezone } from "../../utils/datetimeHelper";
-import { AppConstants, UserTypes, GroupPermissonTypes } from "../../constants";
+import { AppConstants, UserTypes, GroupPermissonTypes, STATUS_ACTIVE } from "../../constants";
+import { sitePathConfig } from "../../constants/sitePathConfig";
 
 class EmployeeListPage extends ListBasePage {
   initialSearch() {
@@ -52,9 +62,68 @@ class EmployeeListPage extends ListBasePage {
     this.actionColumns = {
       isEdit: true,
       isDelete: true,
-      isChangeStatus: false,
+      isShowCollaborator: actions.getUserData()?.settings?.Collaborator?.["enable-collaborator"]
     };
+  }
 
+  renderActionColumn() {
+    return {
+        title: 'Hành động',
+        width: '100px',
+        align: 'center',
+        render: (dataRow) => {
+            const actionColumns = [];
+            if(this.actionColumns.isShowCollaborator) {
+              actionColumns.push(this.renderButton((
+                <Button type="link" onClick={() => this.handleRouting(dataRow.id, dataRow.fullName)} className="no-padding">
+                  { this.actionColumns.isShowCollaborator.icon || <TeamOutlined /> }
+                </Button>
+              ), [5]
+              ))
+            }
+            if(this.actionColumns.isEdit) {
+                actionColumns.push(this.renderEditButton((
+                    <Button type="link" onClick={() => this.getDetail(dataRow.id)} className="no-padding">
+                        { this.actionColumns.isEdit.icon || <EditOutlined/> }
+                    </Button>
+                )))
+            }
+            if(this.actionColumns.isDelete) {
+                actionColumns.push(
+                    this.renderDeleteButton((
+                        <Button type="link" onClick={() => this.showDeleteConfirm(dataRow.id) } className="no-padding">
+                            { this.actionColumns.isDelete.icon || <DeleteOutlined/> }
+                        </Button>
+                    ))
+                )
+            }
+            const actionColumnsWithDivider = [];
+            actionColumns.forEach((action, index) => {
+                actionColumnsWithDivider.push(action);
+                if(index !== (actionColumns.length -1))
+                {
+                    actionColumnsWithDivider.push(<Divider type="vertical" />);
+                }
+            })
+            return (
+                <span>
+                    {
+                        actionColumnsWithDivider.map((action, index) => <span key={index}>{action}</span>)
+                    }
+                </span>
+            )
+        }
+    }
+  }
+
+  handleRouting(parentId, parentName) {
+    const { location: { search }, history } = this.props;
+    const queryString = qs.parse(search);
+    const result = {};
+    Object.keys(queryString).map(q => {
+        result[`parentSearch${q}`] = queryString[q];
+    })
+    history.push(`${sitePathConfig.collaborator.path}?${qs.stringify({...result, parentId, parentName})}`);
   }
 
   getSearchFields() {

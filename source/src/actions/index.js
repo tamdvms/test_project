@@ -11,6 +11,7 @@ import {actions as exportManagementActions, actionTypes as exportManagementActio
 import {actions as employeeActions, actionTypes as employeeActionsTypes} from "./employee";
 import {actions as bookingActions, actionTypes as bookingActionsTypes} from "./booking";
 import {actions as ordersActions, actionTypes as ordersActionsTypes} from "./orders";
+import {actions as collaboratorActions, actionTypes as collaboratorActionsTypes} from "./collaborator";
 
 export const actions = {
     ...appCommonActions,
@@ -26,6 +27,7 @@ export const actions = {
     ...employeeActions,
     ...bookingActions,
     ...ordersActions,
+    ...collaboratorActions,
 }
 
 export const types = {
@@ -42,4 +44,5 @@ export const types = {
     ...employeeActionsTypes,
     ...bookingActionsTypes,
     ...ordersActionsTypes,
+    ...collaboratorActionsTypes,
 }
