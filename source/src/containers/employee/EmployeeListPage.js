@@ -62,7 +62,7 @@ class EmployeeListPage extends ListBasePage {
     this.actionColumns = {
       isEdit: true,
       isDelete: true,
-      isShowCollaborator: actions.getUserData()?.settings?.Collaborator?.["enable-collaborator"]
+      isShowCollaborator: Number(actions.getUserData()?.settings?.Collaborator?.["enable-collaborator"])
     };
   }
 
