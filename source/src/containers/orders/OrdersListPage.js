@@ -274,7 +274,6 @@ class OrdersListPage extends ListBasePage {
                 showErrorMessage(error.message || "Cập nhật thất bại. Vui lòng thử lại!")
                 this.setState({
                     isShowModifiedLoading: false,
-                    isShowModifiedModal: false,
                 })
             }
         })

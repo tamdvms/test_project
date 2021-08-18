@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Form, Col, Row, Steps, Button, Modal } from "antd";
 import { CloseCircleOutlined, DeleteOutlined } from '@ant-design/icons'
 
@@ -11,6 +11,9 @@ import Utils from "../../utils";
 import FieldSet from "../common/elements/FieldSet";
 import { sitePathConfig } from "../../constants/sitePathConfig";
 import NumericField from "../common/entryForm/NumericField";
+import AutoCompleteField from "../common/entryForm/AutoCompleteField";
+import { actions } from "../../actions";
+import { useDispatch } from "react-redux";
 
 const { Step } = Steps
 const { confirm } = Modal
@@ -22,6 +25,16 @@ const OrdersForm = ({
     handleCancelStateNoConfirm,
     loadingSave,
 }) => {
+
+    const dispatch = useDispatch()
+    const formRef = useRef()
+
+    const resetFormObject = {
+        customerEmail: null,
+        customerFullName: null,
+        customerPhone: null,
+        ordersAddress: null,
+    }
 
     const {
         ordersDetailDtos,
@@ -36,6 +49,9 @@ const OrdersForm = ({
     const [totalPrice, setTotalPrice] = useState(0)
     const [saleOff, setSaleOff] = useState(ordersSaleOff)
     const [deletedOrdersDetailsList , setDeletedOrdersDetailsList] = useState([])
+    const [customersList, setCustomersList] = useState([])
+    const [listCustomerLoading, setListCustomerLoading] = useState(false)
+    const [disabledFields, setDisabledFields] = useState(true)
 
     const discountPrice = totalPrice * (saleOff / 100)
     const totalPriceAfterDiscount = totalPrice - discountPrice
@@ -55,11 +71,10 @@ const OrdersForm = ({
     const prepareDataSubmit = (values) => {
         handleSubmit({
             id: dataDetail.id,
-            customerEmail: values.customerDto?.customerEmail,
-            customerFullName: values.customerDto?.customerFullName,
-            customerPhone: values.customerDto?.customerPhone,
+            customerEmail: values.customerEmail,
+            customerFullName: values.customerFullName,
+            customerPhone: values.customerPhone,
             ordersAddress: values.ordersAddress,
-            ordersCustomerId: values.customerDto?.id,
             ordersSaleOff: values.ordersSaleOff,
             ordersDetailDtos: productsList.map(p => ({
                 amount: p.amount,
@@ -121,6 +136,47 @@ const OrdersForm = ({
         setSaleOff(value)
     }
 
+    const setFormValues = (value) => {
+        const selectedCustomer = customersList.find(customer => customer.customerPhone === value)
+        formRef.current.setFieldsValue(selectedCustomer || {
+            ...resetFormObject,
+            customerPhone: value,
+        })
+    }
+
+    const handleSelectPhone = (value) => {
+        setDisabledFields(true)
+        setFormValues(value)
+    }
+
+    const handleSearchPhone = (value) => {
+        if(value) {
+            formRef.current.setFieldsValue({
+                ...resetFormObject,
+                customerPhone: value,
+            })
+            setDisabledFields(false)
+            setListCustomerLoading(true)
+            dispatch(actions.getCustomerAutoComplete({
+                params: {
+                    phone: value,
+                    size: 10
+                },
+                onCompleted: (data) => {
+                    setListCustomerLoading(false)
+                    setCustomersList(data)
+                },
+                onDone: () => {
+                    setListCustomerLoading(false)
+                }
+            }))
+        }
+        else {
+            setCustomersList([])
+            setDisabledFields(false)
+        }
+    }
+
     useEffect(() => {
         let total = 0
         productsList.forEach(p => {
@@ -131,6 +187,12 @@ const OrdersForm = ({
 
     useEffect(() => {
         setIsReadonlyForm(!Utils.checkPermission([sitePathConfig.orders.permissions[5]]) || ordersState > OrdersStates[0].value)
+        formRef.current.setFieldsValue({
+            customerPhone: dataDetail.customerDto?.customerPhone,
+            customerFullName: dataDetail.customerDto?.customerFullName,
+            customerEmail: dataDetail.customerDto?.customerEmail,
+            id: dataDetail.customerDto?.id,
+        })
     }, [])
 
     return (
@@ -206,6 +268,7 @@ const OrdersForm = ({
             <div className="form">
                 <FieldSet title="Thông tin khách hàng">
                     <Form
+                        ref={formRef}
                         id="customer-info-form"
                         layout="vertical"
                         initialValues={dataDetail}
@@ -215,32 +278,37 @@ const OrdersForm = ({
                         <Row gutter={16}>
                             <Col span={12}>
                                 <TextField
-                                fieldName={["customerDto", "customerFullName"]}
+                                fieldName={"customerFullName"}
                                 label="Họ và tên"
-                                disabled={isReadonlyForm || loadingSave}
+                                disabled={isReadonlyForm || loadingSave || disabledFields}
                                 className="form-item-fullname"
                                 />
                             </Col>
                             <Col span={12}>
-                                <TextField
-                                fieldName={["customerDto", "customerPhone"]}
-                                label="Số điện thoại"
-                                disabled={isReadonlyForm || loadingSave}
-                                className="form-item-fullname"
-                                />
-                            </Col>
-                            <Col hidden>
-                                <TextField
-                                fieldName={["customerDto", "id"]}
+                                <AutoCompleteField
+                                    fieldName="customerPhone"
+                                    label="Số điện thoại"
+                                    className="form-item-phone"
+                                    required
+                                    minLength={10}
+                                    disabled={isReadonlyForm || loadingSave}
+                                    optionValue="customerPhone"
+                                    optionLabel="customerPhone"
+                                    onSelect={handleSelectPhone}
+                                    onSearch={handleSearchPhone}
+                                    autoComplete="none"
+                                    options={customersList}
+                                    loading={listCustomerLoading}
+                                    allowClear={true}
                                 />
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
                                 <TextField
-                                fieldName={["customerDto", "customerEmail"]}
+                                fieldName={"customerEmail"}
                                 label="E-mail"
-                                disabled={isReadonlyForm || loadingSave}
+                                disabled={isReadonlyForm || loadingSave || disabledFields}
                                 className="form-item-email"
                                 />
                                 <NumericField

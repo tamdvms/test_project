@@ -28,9 +28,18 @@ const Payment = ({
     listCustomerLoading,
     phoneInput,
 }) => {
+
+    const resetFormObject = {
+        customerEmail: null,
+        customerFullName: null,
+        customerPhone: null,
+        ordersAddress: null,
+    }
+
     const formRef = useRef()
     const [discount, setDiscount] = useState(0)
     const [selectedPhone, setSelectedPhone] = useState("")
+    const [disabledFields, setDisabledFields] = useState(false)
     const settings = actions.getUserData()?.settings
     const VAT =  settings && settings.Booking.vat
 
@@ -41,14 +50,15 @@ const Payment = ({
 
     const handleSelectPhone = (value) => {
         setSelectedPhone(value)
+        setDisabledFields(true)
     }
 
     const handleSearchPhone = (value) => {
         if(value) {
-            const selectedCustomer = customersList.find(customer => customer.customerPhone === value)
-            formRef.current.setFieldsValue(selectedCustomer || {
+            setDisabledFields(false)
+            formRef.current.setFieldsValue({
+                ...resetFormObject,
                 customerPhone: value,
-                id: null
             })
             handleChangePhoneCustomer(value)
         }
@@ -122,7 +132,7 @@ const Payment = ({
                                 fieldName="customerFullName"
                                 label="Họ và tên"
                                 required
-                                disabled={loadingSave}
+                                disabled={loadingSave || disabledFields}
                                 className="form-item-fullname"
                                 />
                             </Col>
@@ -133,7 +143,7 @@ const Payment = ({
                                 fieldName="customerEmail"
                                 label="E-mail"
                                 type="email"
-                                disabled={loadingSave}
+                                disabled={loadingSave || disabledFields}
                                 className="form-item-email"
                                 />
                                 <NumericField
@@ -155,11 +165,6 @@ const Payment = ({
                                     disabled={loadingSave}
                                     type="textarea"
                                     style={{ height: 102 }}
-                                />
-                            </Col>
-                            <Col hidden>
-                                <TextField
-                                    fieldName="id"
                                 />
                             </Col>
                         </Row>

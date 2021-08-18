@@ -181,7 +181,6 @@ const BookingContainer = ({
                 customerFullName: values.customerFullName,
                 customerPhone: values.customerPhone,
                 ordersAddress: values.customerAddress,
-                ordersCustomerId: values.id,
                 ordersDocument: values.ordersDocument,
                 ordersSaleOff: values.customerDiscount,
                 ordersDetailDtos,
