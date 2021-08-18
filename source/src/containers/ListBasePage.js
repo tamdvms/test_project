@@ -165,7 +165,11 @@ class ListBasePage extends Component {
     }
 
     prepareCreateData(data) {
-        return data;
+        // Filter null or undefinded properties
+        return Object.entries(data).reduce((accumulate, [key, value]) => (
+            value === null || value === undefined || value === "" ? accumulate : (accumulate[key] = value, accumulate)),
+            {}
+        );
     }
 
     prepareUpdateData(data) {

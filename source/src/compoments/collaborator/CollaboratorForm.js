@@ -15,7 +15,7 @@ import {
 import { showErrorMessage } from "../../services/notifyService";
 import FieldSet from "../common/elements/FieldSet"
 import DatePickerField from "../common/entryForm/DatePickerField";
-import { convertTimezoneToUtc } from "../../utils/datetimeHelper";
+import { convertStringToDateTime, convertDateTimeToString } from "../../utils/datetimeHelper";
 
 class CollaboratorForm extends BasicForm {
     constructor(props) {
@@ -60,13 +60,17 @@ class CollaboratorForm extends BasicForm {
     }
 
     getInitialFormValues = () => {
-        const { isEditing, dataDetail,} = this.props;
+        const { isEditing, dataDetail } = this.props;
         if (!isEditing) {
-        return {
-            status: STATUS_ACTIVE,
-        };
+            return {
+                status: STATUS_ACTIVE,
+            };
         }
-        return dataDetail;
+        return {
+            ...dataDetail,
+            dateOfIssue: convertStringToDateTime(dataDetail.dateOfIssue, 'DD/MM/YYYY HH:mm:ss', 'DD/MM/YYYY'),
+            birthday: convertStringToDateTime(dataDetail.birthday, 'DD/MM/YYYY HH:mm:ss', 'DD/MM/YYYY')
+        };
     };
 
     validateToConfirmPassword = (rule, value) => {
@@ -101,232 +105,240 @@ class CollaboratorForm extends BasicForm {
         }
     }
 
-    handleSubmit(formValues) { 
+    handleSubmit(formValues) {
         const { onSubmit } = this.props;
+        if(formValues.dateOfIssue) {
+            formValues.dateOfIssue = formValues.dateOfIssue
+        }
+        if(formValues.birthday) {
+            formValues.birthday = formValues.birthday
+        }
         onSubmit({
             ...formValues,
             ...this.otherData,
-            birthday: convertTimezoneToUtc(formValues.birthday, 'DD/MM/YYYY'),
-            dateOfIssue: convertTimezoneToUtc(formValues.dateOfIssue, 'DD/MM/YYYY')
+            dateOfIssue: convertDateTimeToString(formValues.dateOfIssue, 'DD/MM/YYYY HH:mm:ss'),
+            birthday: convertDateTimeToString(formValues.birthday, 'DD/MM/YYYY HH:mm:ss')
         });
     }
 
-  render() {
-    const {
-      isEditing,
-      formId,
-      loadingSave,
-    } = this.props;
-    const { avatar, uploading } = this.state;
+    render() {
+        const {
+        isEditing,
+        formId,
+        loadingSave,
+        } = this.props;
+        const { avatar, uploading } = this.state;
 
-    return (
-      <Form
-        id={formId}
-        ref={this.formRef}
-        layout="vertical"
-        onFinish={this.handleSubmit}
-        initialValues={this.getInitialFormValues()}
-      >
-        <FieldSet
-          title="Thông tin CTV"
+        return (
+        <Form
+            id={formId}
+            ref={this.formRef}
+            layout="vertical"
+            onFinish={this.handleSubmit}
+            initialValues={this.getInitialFormValues()}
         >
-        <Row gutter={16}>
-            <Col span={12}>
-                <CropImageFiled
-                    fieldName="avatarPath"
-                    loading={uploading}
-                    label="Ảnh đại diện"
-                    imageUrl={avatar}
-                    onChange={this.handleChangeAvatar}
-                    uploadFile={this.uploadFileAvatar}
-                    disabled={loadingSave}
-                />
-            </Col>
-        </Row>
-        <Row gutter={16}>
-            <Col span={12}>
-                <TextField
-                fieldName="username"
-                label="Tài khoản đăng nhập"
-                required
-                disabled={loadingSave || isEditing}
-                />
-            </Col>
-            <Col span={12}>
-                <TextField
-                fieldName="fullName"
-                label="Họ và tên"
-                required
-                disabled={loadingSave}
-                />
-            </Col>
-        </Row>
-        <Row gutter={16}>
-            <Col span={12}>
-                <TextField
-                    type="password"
-                    fieldName="password"
-                    label={isEditing ? "Mật khẩu mới" : "Mật khẩu"}
-                    required={!isEditing}
-                    validators={[this.validateToConfirmPassword]}
-                    minLength={6}
-                    disabled={loadingSave}
-                />
-            </Col>
-            <Col span={12}>
-                <TextField
-                    fieldName="confirmPassword"
-                    type="password"
-                    label={isEditing ? "Nhập lại mật khẩu mới" : "Nhập lại mật khẩu"}
-                    required={!isEditing || this.getFieldValue("password")}
-                    validators={[this.compareToPassword]}
-                    disabled={loadingSave}
-                />
-            </Col>
-        </Row>
-        <Row gutter={16}>
-            <Col span={12}>
-                <DatePickerField
-                fieldName="birthday"
-                label="Ngày sinh"
-                width="60%"
-                onChange={this.onChangeDateBDate}
-                format={"DD/MM/YYYY"}
-                disabled={loadingSave}
-                placeholder="Chọn ngày sinh"
-                />
-            </Col>
-            <Col span={12}>
-                <TextField
-                fieldName="phone"
-                label="Số điện thoại"
-                type="number"
-                minLength={10}
-                maxLength={11}
-                required
-                disabled={loadingSave}
-                />
-            </Col>
-        </Row>
-        <Row gutter={16}>
-            <Col span={12}>
-                <TextField
-                fieldName="email"
-                label="E-mail"
-                type="email"
-                disabled={loadingSave}
-                placeholder="Nhập email"
-                />
-            </Col>
-            <Col span={12}>
-                <TextField
-                fieldName="address"
-                label="Địa chỉ"
-                disabled={loadingSave}
-                placeholder="Nhập địa chỉ"
-                />
-            </Col>
-        </Row>
-        </FieldSet>
-        <FieldSet
-          title="CMND"
-        >
-        <Row gutter={16}>
-            <Col span={12}>
-                <TextField
-                fieldName="identityNumber"
-                label="CMND"
-                minLength={12}
-                maxLength={12}
-                disabled={loadingSave}
-                placeholder="Nhập số CMND"
-                />
-            </Col>
-            <Col span={12}>
-                <TextField
-                fieldName="placeOfIssue"
-                label="Nơi đăng ký"
-                disabled={loadingSave}
-                placeholder="Nhập nơi đăng ký"
-                />
-            </Col>
-        </Row>
-        <Row gutter={16}>
-            <Col span={12}>
-                <DatePickerField
-                fieldName="dateOfIssue"
-                label="Ngày đăng ký"
-                width="60%"
-                format={"DD/MM/YYYY"}
-                onChange={this.onChangeDateIssue}
-                disabled={loadingSave}
-                placeholder="Chọn ngày đăng ký"
-                />
-            </Col>
-        </Row>
-        </FieldSet>
-        <FieldSet
-          title="Ngân hàng"
-        >
-        <Row gutter={16}>
-            <Col span={12}>
-                <TextField
-                fieldName="bankName"
-                label="Tên ngân hàng"
-                disabled={loadingSave}
-                placeholder="Nhập tên ngân hàng"
-                />
-            </Col>
-            <Col span={12} >
-                <TextField
-                fieldName="bankNo"
-                label="Số tài khoản"
-                type="number"
-                minLength={8}
-                maxLength={15}
-                disabled={loadingSave}
-                placeholder="Nhập STK"
-                />
-            </Col>
-        </Row>
-        <Row gutter={16}>
-            <Col span={12}>
-                <TextField
-                fieldName="branchName"
-                label="Chi nhánh"
-                disabled={loadingSave}
-                placeholder="Nhập chi nhánh"
-                />
-            </Col>
-        </Row>
-        </FieldSet>
-        <FieldSet
-          title="Trạng thái"
-        >
+            <FieldSet
+            title="Thông tin CTV"
+            >
             <Row gutter={16}>
                 <Col span={12}>
-                <DropdownField
-                    fieldName="status"
-                    label="Trạng thái"
-                    required
-                    options={commonStatus}
-                    disabled={loadingSave}
-                />
-                </Col>
-                <Col span={12}>
-                <TextField 
-                    fieldName="note"
-                    label="Ghi chú"
-                    type="textarea"
-                    style={{height: '120px'}}
-                    disabled={loadingSave}
-                />
+                    <CropImageFiled
+                        fieldName="avatarPath"
+                        loading={uploading}
+                        label="Ảnh đại diện"
+                        imageUrl={avatar}
+                        onChange={this.handleChangeAvatar}
+                        uploadFile={this.uploadFileAvatar}
+                        disabled={loadingSave}
+                    />
                 </Col>
             </Row>
-          </FieldSet>
-      </Form>
-    );
-  }
+            <Row gutter={16}>
+                <Col span={12}>
+                    <TextField
+                    fieldName="username"
+                    label="Tài khoản đăng nhập"
+                    required
+                    disabled={loadingSave || isEditing}
+                    />
+                </Col>
+                <Col span={12}>
+                    <TextField
+                    fieldName="fullName"
+                    label="Họ và tên"
+                    required
+                    disabled={loadingSave}
+                    />
+                </Col>
+            </Row>
+            <Row gutter={16}>
+                <Col span={12}>
+                    <TextField
+                        type="password"
+                        fieldName="password"
+                        label={isEditing ? "Mật khẩu mới" : "Mật khẩu"}
+                        required={!isEditing}
+                        validators={[this.validateToConfirmPassword]}
+                        minLength={6}
+                        disabled={loadingSave}
+                    />
+                </Col>
+                <Col span={12}>
+                    <TextField
+                        fieldName="confirmPassword"
+                        type="password"
+                        label={isEditing ? "Nhập lại mật khẩu mới" : "Nhập lại mật khẩu"}
+                        required={!isEditing || this.getFieldValue("password")}
+                        validators={[this.compareToPassword]}
+                        disabled={loadingSave}
+                    />
+                </Col>
+            </Row>
+            <Row gutter={16}>
+                <Col span={12}>
+                    <DatePickerField
+                    fieldName="birthday"
+                    label="Ngày sinh"
+                    width="60%"
+                    onChange={this.onChangeDateBDate}
+                    format={"DD/MM/YYYY"}
+                    disabled={loadingSave}
+                    placeholder="Chọn ngày sinh"
+                    />
+                </Col>
+                <Col span={12}>
+                    <TextField
+                    fieldName="phone"
+                    label="Số điện thoại"
+                    type="number"
+                    minLength={10}
+                    maxLength={11}
+                    required
+                    disabled={loadingSave}
+                    />
+                </Col>
+            </Row>
+            <Row gutter={16}>
+                <Col span={12}>
+                    <TextField
+                    fieldName="email"
+                    label="E-mail"
+                    type="email"
+                    disabled={loadingSave}
+                    placeholder="Nhập email"
+                    />
+                </Col>
+                <Col span={12}>
+                    <TextField
+                    type="textarea"
+                    fieldName="address"
+                    label="Địa chỉ"
+                    disabled={loadingSave}
+                    placeholder="Nhập địa chỉ"
+                    style={{height: 120}}
+                    />
+                </Col>
+            </Row>
+            </FieldSet>
+            <FieldSet
+            title="CMND"
+            >
+            <Row gutter={16}>
+                <Col span={12}>
+                    <TextField
+                    fieldName="identityNumber"
+                    label="CMND"
+                    minLength={12}
+                    maxLength={12}
+                    disabled={loadingSave}
+                    placeholder="Nhập số CMND"
+                    />
+                </Col>
+                <Col span={12}>
+                    <TextField
+                    fieldName="placeOfIssue"
+                    label="Nơi đăng ký"
+                    disabled={loadingSave}
+                    placeholder="Nhập nơi đăng ký"
+                    />
+                </Col>
+            </Row>
+            <Row gutter={16}>
+                <Col span={12}>
+                    <DatePickerField
+                    fieldName="dateOfIssue"
+                    label="Ngày đăng ký"
+                    width="60%"
+                    format={"DD/MM/YYYY"}
+                    onChange={this.onChangeDateIssue}
+                    disabled={loadingSave}
+                    placeholder="Chọn ngày đăng ký"
+                    />
+                </Col>
+            </Row>
+            </FieldSet>
+            <FieldSet
+            title="Ngân hàng"
+            >
+            <Row gutter={16}>
+                <Col span={12}>
+                    <TextField
+                    fieldName="bankName"
+                    label="Tên ngân hàng"
+                    disabled={loadingSave}
+                    placeholder="Nhập tên ngân hàng"
+                    />
+                </Col>
+                <Col span={12} >
+                    <TextField
+                    fieldName="bankNo"
+                    label="Số tài khoản"
+                    type="number"
+                    minLength={8}
+                    maxLength={15}
+                    disabled={loadingSave}
+                    placeholder="Nhập STK"
+                    />
+                </Col>
+            </Row>
+            <Row gutter={16}>
+                <Col span={12}>
+                    <TextField
+                    fieldName="branchName"
+                    label="Chi nhánh"
+                    disabled={loadingSave}
+                    placeholder="Nhập chi nhánh"
+                    />
+                </Col>
+            </Row>
+            </FieldSet>
+            <FieldSet
+            title="Trạng thái"
+            >
+                <Row gutter={16}>
+                    <Col span={12}>
+                    <DropdownField
+                        fieldName="status"
+                        label="Trạng thái"
+                        required
+                        options={commonStatus}
+                        disabled={loadingSave}
+                    />
+                    </Col>
+                    <Col span={12}>
+                    <TextField 
+                        fieldName="note"
+                        label="Ghi chú"
+                        type="textarea"
+                        style={{height: '120px'}}
+                        disabled={loadingSave}
+                    />
+                    </Col>
+                </Row>
+            </FieldSet>
+        </Form>
+        );
+    }
 }
 
 export default CollaboratorForm;
