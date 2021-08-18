@@ -74,8 +74,13 @@ class CollaboratorListPage extends ListBasePage {
   }
 
   prepareCreateData(data) {
+    // Filter null or undefinded properties
+    const filteredData = Object.entries(data).reduce((accumulate, [key, value]) => (
+      value === null || value === undefined || value === "" ? accumulate : (accumulate[key] = value, accumulate)),
+      {}
+    );
 		return {
-			...data,
+			...filteredData,
       employeeId: this.parentId,
 		}
 	}
