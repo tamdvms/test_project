@@ -70,7 +70,15 @@ const OrdersForm = ({
                 productId: p.productDto.id,
                 note: p.note,
             })),
-            deletingOrdersDetails: deletedOrdersDetailsList,
+            deletingOrdersDetails: deletedOrdersDetailsList.map(p => ({
+                amount: p.amount,
+                employeeCommission: p.employeeCommission,
+                id: p.id,
+                ordersId: p.ordersId,
+                price: p.price,
+                productId: p.productDto.id,
+                note: p.note,
+            })),
 
         })
     }
@@ -87,7 +95,7 @@ const OrdersForm = ({
                     const newProductsList = [...productsList]
                     const deleteds = newProductsList.splice(newProductsList.findIndex(p => p.productDto.id === product.id), 1)
                     Promise.resolve().then(() => {
-                        setDeletedOrdersDetailsList(deleteds)
+                        setDeletedOrdersDetailsList([...deletedOrdersDetailsList, ...deleteds])
                         setProductsList(newProductsList)
                     })
                 }
