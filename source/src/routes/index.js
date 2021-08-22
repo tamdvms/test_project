@@ -33,6 +33,7 @@ import BookingContainer from "../containers/booking/BookingContainer";
 import OrdersListPage from "../containers/orders/OrdersListPage";
 import ProductListPageChild from "../containers/product/ProductListPageChild";
 import CollaboratorListPage from "../containers/collaborator/CollaboratorListPage";
+import CollaboratorProductListPage from "../containers/collaborator/CollaboratorProductListPage";
 
 const RootRoute = () => {
     const {
@@ -53,6 +54,7 @@ const RootRoute = () => {
         booking,
         orders,
         collaborator,
+        collaboratorProduct,
     } = sitePathConfig;
 
     return (
@@ -87,6 +89,7 @@ const RootRoute = () => {
                 <PrivateRoute exact path={collaborator.path} component={CollaboratorListPage}/>
                 <PrivateRoute exact path={booking.path} component={BookingContainer}/>
                 <PrivateRoute exact path={orders.path} component={OrdersListPage}/>
+                <PrivateRoute exact path={collaboratorProduct.path} component={CollaboratorProductListPage}/>
                 {/* Error Page */}
                 <PrivateRoute exact path={forbidden.path} component={Forbidden}/>
                 {/* <Route exact path="/error" component={ErrorServer} /> */}

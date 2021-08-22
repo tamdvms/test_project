@@ -19,10 +19,7 @@ function* getProductAutoComplete({ payload: { params, onCompleted, defaultItemSi
         const { responseData, success } = yield call(sendRequest, apiConfig.booking.getProductAutoComplete, params);
         if(success && responseData.result) {
             const totalElements = responseData.data?.totalElements;
-            onCompleted && onCompleted(responseData.data?.data || [], {
-                numLoadMore: totalElements - params.size > defaultItemSize ? defaultItemSize : totalElements - params.size,
-                size: params.size
-            })
+            onCompleted && onCompleted(responseData.data?.data || [])
         }
     }
     catch(error) {

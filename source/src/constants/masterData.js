@@ -82,3 +82,6 @@ export const categoryKinds = {
 
 export const IMPORT_EXPORT_KIND_IMPORT = 1;
 export const IMPORT_EXPORT_KIND_EXPORT = 2;
+
+export const COLLABORATOR_PRODUCT_KIND_MONEY = 1;
+export const COLLABORATOR_PRODUCT_KIND_PERCENT = 2;

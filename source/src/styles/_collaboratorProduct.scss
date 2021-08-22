@@ -1,0 +1,36 @@
+.collaborator-site {
+    height: calc(100vh - 170px);
+    .list-page, .create-page {
+        display: none;
+    }
+    .list-page.active, .create-page.active {
+        display: block;
+    }
+
+    .create-page {
+        height: 100%;
+        .container {
+            height: inherit;
+            .ant-transfer {
+                height: inherit;
+                .ant-transfer-list-body {
+                    display: flex;
+                    flex-direction: column;
+                    .ant-transfer-list-body-search-wrapper {
+                        flex-shrink: 0;
+                    }
+                    .ant-transfer-list-body-customize-wrapper {
+                        flex: 1;
+                        overflow-y: auto;
+                        .ant-table-tbody {
+                            .ant-avatar {
+                                width: 40px;
+                                height: 40px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -159,6 +159,20 @@ export const sitePathConfig = {
             apiConfig.collaborator.create.path,
             apiConfig.collaborator.update.path,
             apiConfig.collaborator.delete.path,
+            apiConfig.collaboratorProduct.getList.path,
         ]
+    },
+    collaboratorProduct: {
+        path: '/collaborator-product',
+        permissions: [
+            apiConfig.collaboratorProduct.getList.path,
+            apiConfig.collaboratorProduct.getById.path,
+            apiConfig.collaboratorProduct.create.path,
+            apiConfig.collaboratorProduct.update.path,
+            apiConfig.collaboratorProduct.delete.path,
+        ],
+        siteConfig: {
+            contentClass: 'collaborator-site',
+        }
     },
 }
