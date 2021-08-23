@@ -12,6 +12,7 @@ import {actions as employeeActions, actionTypes as employeeActionsTypes} from ".
 import {actions as bookingActions, actionTypes as bookingActionsTypes} from "./booking";
 import {actions as ordersActions, actionTypes as ordersActionsTypes} from "./orders";
 import {actions as collaboratorActions, actionTypes as collaboratorActionsTypes} from "./collaborator";
+import {actions as collaboratorProductActions, actionTypes as collaboratorProductActionsTypes} from "./collaboratorProduct";
 
 export const actions = {
     ...appCommonActions,
@@ -28,6 +29,7 @@ export const actions = {
     ...bookingActions,
     ...ordersActions,
     ...collaboratorActions,
+    ...collaboratorProductActions,
 }
 
 export const types = {
@@ -45,4 +47,5 @@ export const types = {
     ...bookingActionsTypes,
     ...ordersActionsTypes,
     ...collaboratorActionsTypes,
+    ...collaboratorProductActionsTypes,
 }

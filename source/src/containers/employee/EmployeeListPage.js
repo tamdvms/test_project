@@ -36,8 +36,9 @@ class EmployeeListPage extends ListBasePage {
     this.columns = [
       this.renderIdColumn(),
       {
-        title: "Ảnh đại diện",
+        title: "#",
         dataIndex: "avatar",
+        align: 'center',
         render: (avatar) => (
           <Avatar
             size="large"

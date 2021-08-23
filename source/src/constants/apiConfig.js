@@ -333,6 +333,33 @@ const apiConfig = {
             method: 'DELETE',
             headers: baseHeader,
         },
-    }
+    },
+    collaboratorProduct: {
+        getList: {
+            path:  '/v1/collaborator-product/list',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getById: {
+            path:  '/v1/collaborator-product/get',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        create: {
+            path:  '/v1/collaborator-product/create',
+            method: 'POST',
+            headers: baseHeader,
+        },
+        update: {
+            path:  '/v1/collaborator-product/update',
+            method: 'PUT',
+            headers: baseHeader,
+        },
+        delete: {
+            path:  '/v1/collaborator-product/delete',
+            method: 'DELETE',
+            headers: baseHeader,
+        },
+    },
 }
 export default apiConfig;

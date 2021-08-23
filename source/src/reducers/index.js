@@ -12,6 +12,7 @@ import exportManagement from './exportManagement';
 import employee from './employee';
 import orders from './orders';
 import collaborator from './collaborator';
+import collaboratorProduct from './collaboratorProduct';
 
 const rootReducer = combineReducers({
     appCommon: appCommon.reducer,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
     employee: employee.reducer,
     orders: orders.reducer,
     collaborator: collaborator.reducer,
+    collaboratorProduct: collaboratorProduct.reducer,
 });
 
 export default rootReducer;

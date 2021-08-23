@@ -1,0 +1,54 @@
+.collaborator-site {
+    height: calc(100vh - 170px);
+    .list-page, .create-page {
+        display: none;
+    }
+    .list-page.active, .create-page.active {
+        display: block;
+    }
+
+    .create-page {
+        height: 100%;
+        .container {
+            height: inherit;
+            display: flex;
+            flex-direction: column;
+            .action {
+                flex-shrink: 0;
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 16px;
+            }
+            .ant-transfer {
+                flex: 1;
+                overflow-y: hidden;
+                .ant-transfer-list {
+                    .ant-transfer-list-body {
+                        display: flex;
+                        flex-direction: column;
+                        .ant-transfer-list-body-search-wrapper {
+                            flex-shrink: 0;
+                        }
+                        .ant-transfer-list-body-customize-wrapper {
+                            flex: 1;
+                            overflow-y: auto;
+                            .ant-table-tbody {
+                                .ant-table-row {
+                                    cursor: pointer;
+                                }
+                                .ant-avatar {
+                                    width: 40px;
+                                    height: 40px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.collaborator-product-edit-form {
+
+}
