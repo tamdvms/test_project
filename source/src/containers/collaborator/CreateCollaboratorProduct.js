@@ -45,8 +45,8 @@ const CreateCollaboratorProduct = ({
             params: {
                 collaboratorId,
             },
-            onCompleted: (responseData) => {
-                setCollaboratorProducts(responseData.data?.data || [])
+            onCompleted: (data) => {
+                setCollaboratorProducts(data || [])
             }
         }))
     }
@@ -62,7 +62,7 @@ const CreateCollaboratorProduct = ({
                     params: {
                         collaboratorId,
                     },
-                    onCompleted: (data) => {
+                    onCompleted: (data = []) => {
                         setCollaboratorProducts(data)
                         setListLoading(false)
                     }
