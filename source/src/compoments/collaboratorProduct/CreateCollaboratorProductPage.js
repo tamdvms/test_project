@@ -1,19 +1,25 @@
 import React from 'react'
 import TableTransfer from './TableTransfer'
-import { AppConstants } from '../../constants'
-import { Avatar } from 'antd'
+import { AppConstants, STATUS_LOCK } from '../../constants'
+import { Avatar, Button } from 'antd'
+import { ArrowLeftOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons'
+
 import { COLLABORATOR_PRODUCT_KIND_MONEY } from '../../constants/masterData'
 import Utils from '../../utils'
-
-const DEFAULT_ITEM_SIZE = 20
+import StatusTag from '../common/elements/StatusTag'
 
 function CreateCollaboratorProductPage({
     products = [],
     targetKeys = [],
     matchingSearchProducts = [],
+    selectedKeysInTargets = [],
+    isEditing,
+    transferRef,
     handleBack,
     handleMoveProduct,
     handleSearchProduct,
+    handleShowEditForm,
+    handleChangeSelectedKeysInTargets,
 }) {
 
     const renderItem = (item) => {
@@ -30,14 +36,16 @@ function CreateCollaboratorProductPage({
 
     const rightTableColumns = [
         {
-            title: "Hình",
+            title: "#",
             dataIndex: "productImage",
-            width: 80,
+            width: 55,
             align: 'center',
             render: (productImage, dataRow) => {
                 return {
                     props: {
-                        style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        style: {
+                            background: dataRow.labelColor === 'none' ? '#fff' : dataRow.labelColor,
+                        }
                     },
                     children: (
                         <Avatar
@@ -54,7 +62,10 @@ function CreateCollaboratorProductPage({
             render: (productName, dataRow) => {
                 return {
                     props: {
-                        style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        style: {
+                            background: dataRow.labelColor === 'none' ? '#fff' : dataRow.labelColor,
+                            textDecoration: dataRow.status === STATUS_LOCK ? 'line-through' : 'none'
+                        }
                     },
                     children: (
                         <div>{productName}</div>
@@ -76,7 +87,7 @@ function CreateCollaboratorProductPage({
                         style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
                     },
                     children: (
-                        <div className="tb-al-r">
+                        <div className="tb-al-r force-one-line">
                             {_value}
                         </div>
                     ),
@@ -92,19 +103,38 @@ function CreateCollaboratorProductPage({
 
     return (
         <div className="container">
+            <div className="action">
+                <Button
+                className="btn-back"
+                onClick={handleBack}
+                type="primary"
+                >
+                    <ArrowLeftOutlined /> Trở về
+                </Button>
+                <Button
+                className="btn-edit"
+                onClick={handleShowEditForm}
+                disabled={selectedKeysInTargets.length <= 0}
+                type="primary"
+                >
+                    {
+                        isEditing
+                        ? <><EditOutlined /> Sửa thông tin </>
+                        : <><PlusOutlined /> Thêm thông tin </>
+                    }
+                </Button>
+            </div>
             <TableTransfer
+                transferRef={transferRef}
                 titles={['Danh sách sản phẩm', 'Đã chọn']}
                 dataSource={products.map(e => ({...e, key: e.id}))}
                 targetKeys={targetKeys}
                 showSearch
-                filterOption={(inputValue, item) => handleFilterOption(inputValue, item)}
-                onSearch={(direction, value) => handleSearchProduct(direction, value)}
-                onChange={handleMoveProduct}
                 leftColumns={leftTableColumns}
                 rightColumns={rightTableColumns}
                 listStyle={{
                     flex: 1,
-                    height: 'unset',
+                    height: '100%',
                 }}
                 locale={{
                     searchPlaceholder: 'Tìm tại đây',
@@ -117,10 +147,13 @@ function CreateCollaboratorProductPage({
                     removeAll: 'Xóa tất cả',
                     removeCurrent: 'Xóa hiện tại',
                 }}
-                pagination={{
-                    pageSize: DEFAULT_ITEM_SIZE,
-                }}
                 showHeader={false}
+                pagination={false}
+                selectionWidth={46}
+                filterOption={(inputValue, item) => handleFilterOption(inputValue, item)}
+                onSearch={(direction, value) => handleSearchProduct(direction, value)}
+                onChange={handleMoveProduct}
+                onSelectChange={handleChangeSelectedKeysInTargets}
             />
         </div>
     )

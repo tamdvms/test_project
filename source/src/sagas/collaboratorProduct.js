@@ -17,13 +17,19 @@ const {
 } = actionTypes;
 
 
-function* getCollaboratorProductList({ payload: { params } }) {
+function* getCollaboratorProductList({ payload: { params, onCompleted } }) {
 
     const apiParams = apiConfig.collaboratorProduct.getList;
-    const searchParams = { page: params.page, size: params.size };
+    const searchParams = { };
 
     if(params.collaboratorId) {
         searchParams.collaboratorId = params.collaboratorId;
+    }
+    if(params.page) {
+        searchParams.page = params.page;
+    }
+    if(params.size) {
+        searchParams.size = params.size;
     }
     if(params.search) {
         if(params.search.status)
@@ -34,6 +40,7 @@ function* getCollaboratorProductList({ payload: { params } }) {
     }
     try {
         const result = yield call(sendRequest, apiParams, searchParams);
+        onCompleted && onCompleted(result.responseData?.data?.data)
         yield put({
             type: defineActionSuccess(GET_COLLABORATOR_PRODUCT_LIST),
             collaboratorProductData: result.responseData && result.responseData.data

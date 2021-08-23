@@ -7,6 +7,7 @@ import qs from 'query-string';
 import ListBasePage from "../ListBasePage";
 import BaseTable from "../../compoments/common/table/BaseTable";
 import BasicModal from "../../compoments/common/modal/BasicModal";
+import StatusTag from "../../compoments/common/elements/StatusTag";
 
 import { actions } from "../../actions";
 import { FieldTypes } from "../../constants/formConfig";
@@ -50,16 +51,40 @@ class CollaboratorProductListPage extends ListBasePage {
         },
         ];
         this.columns = [
-            this.renderIdColumn(),
             {
-                title: "Hình sản phẩm",
+                title: 'ID',
+                dataIndex: 'id',
+                width: '50px',
+                align: 'center',
+                render: (id, dataRow) => {
+                    return {
+                        props: {
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <div>{id}</div>
+                        ),
+                    }
+                }
+            },
+            {
+                title: "#",
                 dataIndex: "productImage",
-                render: (productImage) => (
-                    <Avatar
-                        size="large"
-                        src={productImage ? `${AppConstants.contentRootUrl}${productImage}` : null}
-                    />
-                ),
+                align: 'center',
+                width: 86,
+                render: (productImage, dataRow) => {
+                    return {
+                        props: {
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <Avatar
+                                size="large"
+                                src={productImage ? `${AppConstants.contentRootUrl}${productImage}` : null}
+                            />
+                        ),
+                    }
+                }
             },
             { title: "Tên sản phẩm", dataIndex: ["productDto", "productName"] },
             {
@@ -69,19 +94,34 @@ class CollaboratorProductListPage extends ListBasePage {
                 align: 'right',
                 render: (value, dataRow) => {
                     const _value = dataRow.kind === COLLABORATOR_PRODUCT_KIND_MONEY ? Utils.formatMoney(value) : value + '%'
-                    return <div className="tb-al-r">
-                        {_value}
-                    </div>
+                    return {
+                        props: {
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <div className="tb-al-r">
+                                {_value}
+                            </div>
+                        ),
+                    }
                 }
             },
-            this.renderStatusColumn(),
-            this.renderActionColumn(),
+            {
+                title: 'Trạng thái',
+                dataIndex: 'status',
+                width: '100px',
+                render: (status, dataRow) => {
+                    return {
+                        props: {
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <StatusTag status={status}/>
+                        ),
+                    }
+                }
+            },
         ];
-        this.actionColumns = {
-            isEdit: true,
-            isDelete: true,
-            isChangeStatus: false,
-        };
     }
 
     loadDataTable(currentProps) {
@@ -135,7 +175,7 @@ class CollaboratorProductListPage extends ListBasePage {
     handleShowCreatePage = (isEditing) => {
         const { location: { pathname, search }, history} = this.props;
         this.isEditing = false
-        history.push(`${pathname}?${search}&createPage=1`)
+        history.push(`${pathname}${search}&createPage=1`)
     }
 
     onCancelModal() {
@@ -179,6 +219,9 @@ class CollaboratorProductListPage extends ListBasePage {
         <div className={`create-page${isShowModifiedModal ? ' active' : ''}`}>
             <CreateCollaboratorProduct
                 handleBack={this.onCancelModal}
+                isEditing={this.isEditing}
+                collaboratorId={this.parentId}
+                collaboratorProducts={collaboratorProducts}
             />
         </div>
         </>

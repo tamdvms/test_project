@@ -54,8 +54,9 @@ class CollaboratorListPage extends ListBasePage {
 		this.columns = [
 		this.renderIdColumn(),
 		{
-			title: "Ảnh đại diện",
+			title: "#",
 			dataIndex: "avatarPath",
+			align: 'center',
 			render: (avatarPath) => (
 			<Avatar
 				size="large"

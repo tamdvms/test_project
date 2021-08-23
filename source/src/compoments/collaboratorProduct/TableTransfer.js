@@ -2,8 +2,9 @@ import React from 'react';
 import { Transfer, Table, Checkbox } from 'antd';
 import difference from 'lodash/difference';
 
-const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
-    <Transfer {...restProps}>
+const TableTransfer = ({ leftColumns, rightColumns, transferRef, ...restProps }) => {
+    return (
+    <Transfer {...restProps} ref={transferRef}>
         {({
             direction,
             filteredItems,
@@ -28,6 +29,7 @@ const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
                     onItemSelect(key, selected);
                 },
                 selectedRowKeys: listSelectedKeys,
+                columnWidth: restProps.selectionWidth || 60,
                 renderCell: (value, dataRow, index, originNode) => {
                     return {
                         props: {
@@ -41,6 +43,7 @@ const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
             }
             return (
             <Table
+                pagination={restProps.pagination}
                 showHeader={restProps.showHeader}
                 rowSelection={rowSelection}
                 columns={columns}
@@ -48,15 +51,15 @@ const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
                 size="small"
                 style={{ pointerEvents: listDisabled ? 'none' : null }}
                 onRow={({ key, disabled: itemDisabled }) => ({
-                onClick: () => {
-                    if (itemDisabled || listDisabled) return;
-                    onItemSelect(key, !listSelectedKeys.includes(key));
-                },
+                    onClick: () => {
+                        if (itemDisabled || listDisabled) return;
+                        onItemSelect(key, !listSelectedKeys.includes(key));
+                    },
                 })}
             />
             );
         }}
     </Transfer>
-);
+)}
 
 export default TableTransfer
