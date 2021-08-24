@@ -21,6 +21,7 @@ function CreateCollaboratorProductPage({
     handleSearchProduct,
     handleShowEditForm,
     handleChangeSelectedKeysInTargets,
+    collaboratorName,
 }) {
 
     const renderItem = (item) => {
@@ -102,6 +103,17 @@ function CreateCollaboratorProductPage({
         { ...rightTableColumns[1] }
     ];
 
+    const EditButton = (<Button
+        className="btn-edit"
+        onClick={handleShowEditForm}
+        disabled={selectedKeysInTargets.length <= 0}
+        type="text"
+        >
+            {
+                <><EditOutlined /> Sửa thông tin </>
+            }
+        </Button>)
+
     return (
         <div className="container">
             <div className="action">
@@ -112,22 +124,13 @@ function CreateCollaboratorProductPage({
                 >
                     <ArrowLeftOutlined /> Trở về
                 </Button>
-                <Button
-                className="btn-edit"
-                onClick={handleShowEditForm}
-                disabled={selectedKeysInTargets.length <= 0}
-                type="primary"
-                >
-                    {
-                        isEditing
-                        ? <><EditOutlined /> Sửa thông tin </>
-                        : <><PlusOutlined /> Thêm thông tin </>
-                    }
-                </Button>
+                <h2>
+                    CTV: {collaboratorName}
+                </h2>
             </div>
             <TableTransfer
                 transferRef={transferRef}
-                titles={['Danh sách sản phẩm', 'Đã chọn']}
+                titles={['Danh sách sản phẩm', EditButton]}
                 dataSource={products.map(e => ({...e, key: e.id}))}
                 targetKeys={targetKeys}
                 showSearch

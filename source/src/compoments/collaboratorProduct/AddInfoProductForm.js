@@ -92,20 +92,6 @@ class AddInfoProductForm extends BasicForm {
                     />
                 </Col>
             </Row>
-            <Row gutter={16}>
-                {
-                    isEditing ? (
-                        <Col span={12}>
-                            <DropdownField
-                                fieldName="status"
-                                label="Trạng thái"
-                                required
-                                options={commonStatus}
-                            />
-                        </Col>
-                    ) : null
-                }
-            </Row>
         </Form>
         );
     }

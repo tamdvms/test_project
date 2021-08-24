@@ -20,7 +20,7 @@ import CreateCollaboratorProduct from "./CreateCollaboratorProduct";
 
 class CollaboratorProductListPage extends ListBasePage {
     initialSearch() {
-        return { productName: "", status: "" };
+        return { productName: "" };
     }
 
     constructor(props) {
@@ -35,20 +35,17 @@ class CollaboratorProductListPage extends ListBasePage {
         this.parentId = parentId;
         this.parentName = parentName;
         this.breadcrumbs = [
-        {
-            name: "Nhân viên"
-        },
-        {
-            name: parentSearchparentName,
-            path: `${sitePathConfig.employee.path}${this.handleRoutingParent('parentSearchparentSearch')}`
-        },
-        {
-            name: "Cộng tác viên"
-        },
-        {
-            name: parentName,
-            path: `${sitePathConfig.collaborator.path}${this.handleRoutingParent('parentSearch')}`
-        },
+            {
+                name: "Nhân viên",
+                path: `${sitePathConfig.employee.path}${this.handleRoutingParent('parentSearchparentSearch')}`
+            },
+            {
+                name: parentSearchparentName,
+            },
+            {
+                name: "Cộng tác viên",
+                path: `${sitePathConfig.collaborator.path}${this.handleRoutingParent('parentSearch')}`
+            },
         ];
         this.columns = [
             {
@@ -130,16 +127,21 @@ class CollaboratorProductListPage extends ListBasePage {
         if(!isNaN(queryString.page))
             this.pagination.current = parseInt(queryString.page);
         Object.keys(this.search).forEach(key => this.search[key] = queryString[key]);
-        this.getList();
+        this.getList(queryString.createPage === '1' && 1000);
         this.setState({
             isShowModifiedModal: queryString.createPage === '1'
         })
     }
 
-    getList() {
+    getList(size) {
         const { getDataList } = this.props;
         const page = this.pagination.current ? this.pagination.current - 1 : 0;
-        const params = { page, size: this.pagination.pageSize, search: this.search, collaboratorId: this.parentId};
+        const params = {
+            page,
+            size: size || this.pagination.pageSize,
+            search: this.search,
+            collaboratorId: this.parentId,
+        };
         getDataList({ params });
     }
 
@@ -161,13 +163,6 @@ class CollaboratorProductListPage extends ListBasePage {
                 key: "productName",
                 seachPlaceholder: "Tên đăng nhập",
                 initialValue: this.search.username,
-            },
-            {
-                key: "status",
-                seachPlaceholder: "Chọn trạng thái",
-                fieldType: FieldTypes.SELECT,
-                options: commonStatus,
-                initialValue: this.search.status,
             },
         ];
     }
@@ -192,7 +187,7 @@ class CollaboratorProductListPage extends ListBasePage {
             uploadFile,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading, active } = this.state;
-        const collaboratorProducts = dataList.data;
+        const collaboratorProducts = dataList.data || [];
         this.pagination.total = dataList.totalElements || 0;
         return (<>
         <div className={`list-page${!isShowModifiedModal ? ' active' : ''}`}>
@@ -203,7 +198,7 @@ class CollaboratorProductListPage extends ListBasePage {
                 type="primary"
                 onClick={() => this.handleShowCreatePage(false)}
             >
-                Thêm sản phẩm <ArrowRightOutlined />
+                Chỉnh sửa sản phẩm <ArrowRightOutlined />
             </Button>
             ))}
             </div>
@@ -211,7 +206,7 @@ class CollaboratorProductListPage extends ListBasePage {
             loading={loading}
             columns={this.columns}
             rowKey={(record) => record.id}
-            dataSource={collaboratorProducts || []}
+            dataSource={collaboratorProducts}
             pagination={this.pagination}
             onChange={this.handleTableChange}
             />
@@ -225,6 +220,7 @@ class CollaboratorProductListPage extends ListBasePage {
                         collaboratorId={this.parentId}
                         collaboratorProducts={collaboratorProducts}
                         fetchCollaboratorsProductList={this.getList}
+                        collaboratorName={this.parentName}
                     />
                 </div>
             ) : null

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import Fuse from 'fuse.js'
+import { Modal } from 'antd'
 
 import CreateCollaboratorProductPage from '../../compoments/collaboratorProduct/CreateCollaboratorProductPage'
 import { actions } from '../../actions'
@@ -8,18 +9,33 @@ import AddInfoProductForm from '../../compoments/collaboratorProduct/AddInfoProd
 import BasicModal from '../../compoments/common/modal/BasicModal'
 import { showErrorMessage, showSucsessMessage } from '../../services/notifyService'
 
+const { confirm } = Modal
+
 const CreateCollaboratorProduct = ({
     isEditing,
     handleBack,
     collaboratorId,
     collaboratorProducts,
     fetchCollaboratorsProductList,
+    collaboratorName,
 }) => {
 
-    // TODO Fix how implement interface obj 
-    // TODO -> change array to obj with some static value and dynamic mapping property name if can
-    const createFormFields = ['kind', 'value']
-    const updateFormFields = ['id', 'kind', 'value', 'status'] // TODO fix this
+    // TODO chuyển hướng qua làm bắn lỗi khi ko matching
+    const IformValues = {
+        kind: null,
+        value: null,
+    }
+    const ICreateFormFields = {
+        collaboratorId, // Default
+        productId: null,
+        kind: null,
+        value: null,
+    }
+    const IUpdateFormFields = {
+        id: null,
+        kind: null,
+        value: null,
+    }
     const transferRef = useRef()
     const dispatch = useDispatch()
     const [search, setSearch] = useState('')
@@ -31,6 +47,7 @@ const CreateCollaboratorProduct = ({
     const [isShowEditForm, setIsShowEditForm]=  useState(false)
     const [dataDetail, setDataDetail] = useState({})
     const [selectedKeysInTargets, setSelectedKeysInTargets] = useState([])
+    const [selectedKeysInLeft, setSelectedKeysInLeft] = useState([])
     const [editingMode, setEditingMode] = useState(isEditing)
     const [formLoading, setFormLoading] = useState(false)
 
@@ -43,25 +60,47 @@ const CreateCollaboratorProduct = ({
     }
 
     const handleMoveProduct = (targetKeys, direction, moveKeys) => {
-        setTargetKeys(targetKeys)
+        if(direction === 'left') {
+            setSelectedKeysInTargets(moveKeys)
+            transferRef.current.setStateKeys('right', [...moveKeys])
+            confirm({
+                title: `Bạn có chắc muốn xóa?`,
+                content: '',
+                okText: 'Có',
+                okType: 'danger',
+                cancelText: 'Không',
+                onOk: () => {
+                    handleDelete()
+                },
+                onCancel() {
+                    // console.log('Cancel');
+                },
+            });
+        }
+        else {
+            setEditingMode(false)
+            setIsShowEditForm(true)
+            setSelectedKeysInLeft(moveKeys)
+            transferRef.current.setStateKeys('left', [...moveKeys])
+        }
     }
 
     const fetchAutoCompleteProducts = () => {
         setListLoading(true)
         dispatch(actions.getProductAutoComplete({
-            onCompleted: (data = []) => {
-                const products = data.map(d => ({...d, key: d.id}))
-                setProducts(products)
+            onCompleted: (products = []) => {
+                setProducts(products.map(product => ({
+                    ...product,
+                    key: product.id,
+                    productId: product.id,
+                })))
                 setListLoading(false)
             },
         }))
     }
 
-    /**
-     * TODO Fix bug search
-     * @param {*} direction 
-     * @param {*} value 
-     */
+
+    // TODO Fix bug search
     const handleSearchProduct = (direction, value) => {
         console.log({direction, value})
         const res = fuse && fuse.search(value)
@@ -75,38 +114,37 @@ const CreateCollaboratorProduct = ({
         }
     }
 
-    const filterObjByObjInterface = (obj = {}, objInterface = []) => {
-        return objInterface
-                .reduce((acc, cur) => ({
+
+    const filterObjByObjInterface = (obj = {}, objInterface = {}) => {
+        return Object.keys(objInterface)
+                .reduce((acc, curKey) => ({
                     ...acc,
-                    [cur]: obj[cur]
+                    [curKey]: obj[curKey] || objInterface[curKey] // (Default value)
                 }), {})
     }
 
-    // TODO Test
-    const prepareCreateData = (formValues) => {
+    const prepareCreateData = (formValues, products) => {
         return products
-        .filter(product => selectedKeysInTargets.includes(product.id))
+        .filter(product => selectedKeysInLeft.includes(product.id))
         .map(product => ({
-            collaboratorId,
-            productId: product.id,
-            ...filterObjByObjInterface({ ...product, ...formValues }, createFormFields),
+            ...filterObjByObjInterface({ ...product, ...formValues }, ICreateFormFields),
         }))
     }
 
-    // TODO Test
-    const sendCreatingRequest = (formValues) => {
+    const sendCreatingRequest = (formValues, products = []) => {
         setFormLoading(true)
-        dispatch(actions.createCollaboratorProduct({
+        products.length > 0
+        && dispatch(actions.createCollaboratorProduct({
             params: {
-                collaboratorProducts: prepareCreateData(formValues)
+                collaboratorProducts: prepareCreateData(formValues, products)
             },
             onCompleted: () => {
                 setFormLoading(false)
-                fetchCollaboratorsProductList()
+                fetchCollaboratorsProductList(1000)
                 setIsShowEditForm(false)
-                setSelectedKeysInTargets([])
-                transferRef.current.setStateKeys('right', [])
+                setEditingMode(true)
+                setSelectedKeysInLeft([])
+                transferRef.current.setStateKeys('left', [])
                 showSucsessMessage('Thêm sản phẩm thành công!')
             },
             onError: (err) => {
@@ -116,25 +154,25 @@ const CreateCollaboratorProduct = ({
         }))
     }
 
-    // TODO Fix
-    const prepareUpdateData = (formValues) => {
+    const prepareUpdateData = (formValues, products) => {
         return products
         .filter(product => selectedKeysInTargets.includes(product.id))
         .map(product => ({
-            ...filterObjByObjInterface({ ...product, ...formValues }, updateFormFields),
+            ...filterObjByObjInterface(formValues, IUpdateFormFields),
+            id: product.collaboratorProductId
         }))
     }
 
-    // TODO Fix update function in saga
-    const sendUpdatingRequest = (formValues) => {
+    const sendUpdatingRequest = (formValues, products = []) => {
         setFormLoading(true)
-        dispatch(actions.updateCollaboratorProduct({
+        products.length > 0
+        && dispatch(actions.updateCollaboratorProduct({
             params: {
-                collaboratorProducts: prepareUpdateData(formValues)
+                collaboratorProducts: prepareUpdateData(formValues, products)
             },
             onCompleted: () => {
                 setFormLoading(false)
-                fetchCollaboratorsProductList()
+                fetchCollaboratorsProductList(1000)
                 setIsShowEditForm(false)
                 setSelectedKeysInTargets([])
                 transferRef.current.setStateKeys('right', [])
@@ -147,16 +185,12 @@ const CreateCollaboratorProduct = ({
         }))
     }
 
-    // TODO Continue
     const handleOkeEditForm = (formValues) => {
         if(editingMode) {
-            // ** Mode updating even could create new data if any,
-            // ** so need to classify data
-            sendUpdatingRequest(formValues)
-            // sendCreatingRequest(formValues)
+            sendUpdatingRequest(formValues, products)
         }
         else {
-            sendCreatingRequest(formValues)
+            sendCreatingRequest(formValues, products)
         }
     }
 
@@ -173,26 +207,24 @@ const CreateCollaboratorProduct = ({
     const mergeAutoCompleteWithDataList = (products) => {
         return products.map(product => {
             const cllProduct = collaboratorProducts.find(cllProduct => cllProduct.productDto.id === product.id)
-            return {
+            const mappedProduct = {
                 ...product,
-                ...filterObjByObjInterface(cllProduct),
+                ...filterObjByObjInterface(cllProduct, IformValues),
             }
+            if(cllProduct) {
+                mappedProduct.collaboratorProductId = cllProduct.id
+            }
+            return mappedProduct
         })
-    }
-
-    const mergeTargetKeysWithNewOne = (targetKeysDataList) => {
-        return [...new Set([...targetKeys ,...targetKeysDataList])]
     }
 
     const handleMergeCurrentDataWithDataList = () => {
         const newProducts = mergeAutoCompleteWithDataList(products)
         setProducts(newProducts)
         setTargetKeys(
-            mergeTargetKeysWithNewOne(
-                newProducts
-                .filter(product => product.kind && product.value)
-                .map(product => product.id)
-            )
+            newProducts
+            .filter(product => product.kind && product.value && product.collaboratorProductId)
+            .map(product => product.id)
         )
     }
 
@@ -205,7 +237,7 @@ const CreateCollaboratorProduct = ({
         if(editingMode) {
             const selectedProducts = products.filter(product => selectedKeysInTargets.includes(product.id))
             .map(product => ({
-                ...filterObjByObjInterface(product)
+                ...filterObjByObjInterface(product, IformValues)
             }))
             setDataDetail(
                 selectedProducts.reduce((acc, cur) => {
@@ -219,6 +251,28 @@ const CreateCollaboratorProduct = ({
         setIsShowEditForm(true)
     }
 
+    const prepareDeleteData = (products) => {
+        return products
+        .filter(product => selectedKeysInTargets.includes(product.id))
+        .map(product => product.collaboratorProductId)
+    }
+
+    const handleDelete = () => {
+        dispatch(actions.deleteCollaboratorProduct({
+            params: prepareDeleteData(products),
+            onCompleted: () => {
+                fetchCollaboratorsProductList(1000)
+                setIsShowEditForm(false)
+                setSelectedKeysInTargets([])
+                transferRef.current.setStateKeys('right', [])
+                showSucsessMessage('Xóa thành công!')
+            },
+            onError: (err) => {
+                showErrorMessage(err ? err.message : 'Đã xảy ra lỗi!')
+            }
+        }))
+    }
+
     useEffect(() => {
         fetchAutoCompleteProducts()
     }, [])
@@ -227,22 +281,18 @@ const CreateCollaboratorProduct = ({
         buildIndex(products)
     }, [products])
 
-    /**
-     * Decision edit or create mode
-     */
     useEffect(() => {
-        setEditingMode(selectedKeysInTargets.length > 0
-            && !products.filter(product => selectedKeysInTargets.includes(product.id))
-                        .some(product => !product.kind))
+        if(!isShowEditForm)
+            setEditingMode(true)
     }, [selectedKeysInTargets])
 
     useEffect(() => {
         products.length > 0
         && collaboratorProducts
-        && collaboratorProducts.length > 0
         && handleMergeCurrentDataWithDataList()
     }, [collaboratorProducts, JSON.stringify(products)])
 
+    console.log(products)
     return (<>
         <CreateCollaboratorProductPage
         products={products}
@@ -252,6 +302,7 @@ const CreateCollaboratorProduct = ({
         isEditing={editingMode}
         transferRef={transferRef}
         listLoading={listLoading}
+        collaboratorName={collaboratorName}
         handleBack={handleBack}
         handleChangeSelectedKeysInTargets={handleChangeSelectedKeysInTargets}
         handleMoveProduct={handleMoveProduct}
@@ -260,10 +311,13 @@ const CreateCollaboratorProduct = ({
         />
         <BasicModal
             className="collaborator-product-edit-form"
-            title={editingMode ? "CHỈNH SỬA THÔNG TIN" : "THÊM THÔNG TIN"}
+            title={editingMode ? "CHỈNH SỬA THÔNG TIN" : "THÊM SẢN PHẨM"}
 			visible={isShowEditForm}
 			onOk={handleOkeEditForm}
-			onCancel={() => setIsShowEditForm(false)}
+			onCancel={() => {
+                setIsShowEditForm(false)
+                setEditingMode(true)
+            }}
             loading={formLoading}
 			>
 			<AddInfoProductForm

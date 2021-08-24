@@ -24,9 +24,9 @@ class CategoryImportListPage extends ListBasePage {
     constructor(props) {
         super(props);
         const { t } = props;
-        this.objectName =  "Danh mục chi";
+        this.objectName =  "Danh mục thu";
         this.breadcrumbs = [
-            { name: "Danh mục chi" },
+            { name: "Danh mục thu" },
         ];
         this.columns = [
         this.renderIdColumn(),
