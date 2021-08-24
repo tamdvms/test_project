@@ -15,6 +15,7 @@ function CreateCollaboratorProductPage({
     selectedKeysInTargets = [],
     isEditing,
     transferRef,
+    listLoading,
     handleBack,
     handleMoveProduct,
     handleSearchProduct,
@@ -44,7 +45,7 @@ function CreateCollaboratorProductPage({
                 return {
                     props: {
                         style: {
-                            background: dataRow.labelColor === 'none' ? '#fff' : dataRow.labelColor,
+                            background: dataRow.labelColor === 'none' ? '' : dataRow.labelColor,
                         }
                     },
                     children: (
@@ -63,7 +64,7 @@ function CreateCollaboratorProductPage({
                 return {
                     props: {
                         style: {
-                            background: dataRow.labelColor === 'none' ? '#fff' : dataRow.labelColor,
+                            background: dataRow.labelColor === 'none' ? '' : dataRow.labelColor,
                             textDecoration: dataRow.status === STATUS_LOCK ? 'line-through' : 'none'
                         }
                     },
@@ -132,6 +133,7 @@ function CreateCollaboratorProductPage({
                 showSearch
                 leftColumns={leftTableColumns}
                 rightColumns={rightTableColumns}
+                loading={listLoading}
                 listStyle={{
                     flex: 1,
                     height: '100%',

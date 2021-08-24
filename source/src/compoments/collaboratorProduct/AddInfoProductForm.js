@@ -31,6 +31,7 @@ class AddInfoProductForm extends BasicForm {
 
     getInitialValue = () => {
         const { dataDetail, isEditing } = this.props
+        console.log(dataDetail)
         if(!isEditing) {
             return {
                 kind: COLLABORATOR_PRODUCT_KIND_MONEY

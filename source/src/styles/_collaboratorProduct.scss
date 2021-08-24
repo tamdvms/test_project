@@ -1,16 +1,15 @@
 .collaborator-site {
-    height: calc(100vh - 170px);
-    .list-page, .create-page {
+    .list-page {
         display: none;
     }
-    .list-page.active, .create-page.active {
+    .list-page.active {
         display: block;
     }
 
     .create-page {
-        height: 100%;
+        height: calc(100vh - 218px);
         .container {
-            height: inherit;
+            height: 100%;
             display: flex;
             flex-direction: column;
             .action {

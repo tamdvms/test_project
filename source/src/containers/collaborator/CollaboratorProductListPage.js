@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Button, Avatar } from "antd";
-import { PlusOutlined, UserOutlined } from "@ant-design/icons";
+import { PlusOutlined, UserOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import qs from 'query-string';
 
 import ListBasePage from "../ListBasePage";
@@ -139,7 +139,7 @@ class CollaboratorProductListPage extends ListBasePage {
     getList() {
         const { getDataList } = this.props;
         const page = this.pagination.current ? this.pagination.current - 1 : 0;
-        const params = { page, size: this.pagination.pageSize, search: this.search, collaboratorId: this.collaboratorId};
+        const params = { page, size: this.pagination.pageSize, search: this.search, collaboratorId: this.parentId};
         getDataList({ params });
     }
 
@@ -192,18 +192,18 @@ class CollaboratorProductListPage extends ListBasePage {
             uploadFile,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading, active } = this.state;
-        const collaboratorProducts = dataList.data || [];
+        const collaboratorProducts = dataList.data;
         this.pagination.total = dataList.totalElements || 0;
         return (<>
         <div className={`list-page${!isShowModifiedModal ? ' active' : ''}`}>
             {this.renderSearchForm()}
             <div className="action-bar">
             {this.renderCreateNewButton((
-                <Button
+            <Button
                 type="primary"
                 onClick={() => this.handleShowCreatePage(false)}
             >
-                <PlusOutlined /> Thêm sản phẩm
+                Thêm sản phẩm <ArrowRightOutlined />
             </Button>
             ))}
             </div>
@@ -211,19 +211,24 @@ class CollaboratorProductListPage extends ListBasePage {
             loading={loading}
             columns={this.columns}
             rowKey={(record) => record.id}
-            dataSource={collaboratorProducts}
+            dataSource={collaboratorProducts || []}
             pagination={this.pagination}
             onChange={this.handleTableChange}
             />
         </div>
-        <div className={`create-page${isShowModifiedModal ? ' active' : ''}`}>
-            <CreateCollaboratorProduct
-                handleBack={this.onCancelModal}
-                isEditing={this.isEditing}
-                collaboratorId={this.parentId}
-                collaboratorProducts={collaboratorProducts}
-            />
-        </div>
+        {
+            isShowModifiedModal ? (
+                <div className="create-page">
+                    <CreateCollaboratorProduct
+                        handleBack={this.onCancelModal}
+                        isEditing={this.isEditing}
+                        collaboratorId={this.parentId}
+                        collaboratorProducts={collaboratorProducts}
+                        fetchCollaboratorsProductList={this.getList}
+                    />
+                </div>
+            ) : null
+        }
         </>
         );
     }
