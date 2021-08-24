@@ -88,11 +88,7 @@ function* updateCollaboratorProduct({ payload: { params, onCompleted, onError } 
 
 function* deleteCollaboratorProduct({ payload: { params, onCompleted, onError } }) {
     try {
-        const apiParams = {
-            ...apiConfig.collaboratorProduct.delete,
-            path: `${apiConfig.collaboratorProduct.delete.path}/${params.id}`
-        }
-        const result = yield call(sendRequest, apiParams);
+        const result = yield call(sendRequest, apiConfig.collaboratorProduct.delete, params);
         handleApiResponse(result, onCompleted, onError);
 
         const { success, responseData } = result;

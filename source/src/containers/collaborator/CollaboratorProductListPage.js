@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { Button, Avatar } from "antd";
-import { PlusOutlined, UserOutlined } from "@ant-design/icons";
+import { PlusOutlined, UserOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import qs from 'query-string';
 
 import ListBasePage from "../ListBasePage";
@@ -20,7 +20,7 @@ import CreateCollaboratorProduct from "./CreateCollaboratorProduct";
 
 class CollaboratorProductListPage extends ListBasePage {
     initialSearch() {
-        return { productName: "", status: "" };
+        return { productName: "" };
     }
 
     constructor(props) {
@@ -35,20 +35,17 @@ class CollaboratorProductListPage extends ListBasePage {
         this.parentId = parentId;
         this.parentName = parentName;
         this.breadcrumbs = [
-        {
-            name: "Nhân viên"
-        },
-        {
-            name: parentSearchparentName,
-            path: `${sitePathConfig.employee.path}${this.handleRoutingParent('parentSearchparentSearch')}`
-        },
-        {
-            name: "Cộng tác viên"
-        },
-        {
-            name: parentName,
-            path: `${sitePathConfig.collaborator.path}${this.handleRoutingParent('parentSearch')}`
-        },
+            {
+                name: "Nhân viên",
+                path: `${sitePathConfig.employee.path}${this.handleRoutingParent('parentSearchparentSearch')}`
+            },
+            {
+                name: parentSearchparentName,
+            },
+            {
+                name: "Cộng tác viên",
+                path: `${sitePathConfig.collaborator.path}${this.handleRoutingParent('parentSearch')}`
+            },
         ];
         this.columns = [
             {
@@ -130,16 +127,21 @@ class CollaboratorProductListPage extends ListBasePage {
         if(!isNaN(queryString.page))
             this.pagination.current = parseInt(queryString.page);
         Object.keys(this.search).forEach(key => this.search[key] = queryString[key]);
-        this.getList();
+        this.getList(queryString.createPage === '1' && 1000);
         this.setState({
             isShowModifiedModal: queryString.createPage === '1'
         })
     }
 
-    getList() {
+    getList(size) {
         const { getDataList } = this.props;
         const page = this.pagination.current ? this.pagination.current - 1 : 0;
-        const params = { page, size: this.pagination.pageSize, search: this.search, collaboratorId: this.collaboratorId};
+        const params = {
+            page,
+            size: size || this.pagination.pageSize,
+            search: this.search,
+            collaboratorId: this.parentId,
+        };
         getDataList({ params });
     }
 
@@ -161,13 +163,6 @@ class CollaboratorProductListPage extends ListBasePage {
                 key: "productName",
                 seachPlaceholder: "Tên đăng nhập",
                 initialValue: this.search.username,
-            },
-            {
-                key: "status",
-                seachPlaceholder: "Chọn trạng thái",
-                fieldType: FieldTypes.SELECT,
-                options: commonStatus,
-                initialValue: this.search.status,
             },
         ];
     }
@@ -199,11 +194,11 @@ class CollaboratorProductListPage extends ListBasePage {
             {this.renderSearchForm()}
             <div className="action-bar">
             {this.renderCreateNewButton((
-                <Button
+            <Button
                 type="primary"
                 onClick={() => this.handleShowCreatePage(false)}
             >
-                <PlusOutlined /> Thêm sản phẩm
+                Chỉnh sửa sản phẩm <ArrowRightOutlined />
             </Button>
             ))}
             </div>
@@ -216,14 +211,20 @@ class CollaboratorProductListPage extends ListBasePage {
             onChange={this.handleTableChange}
             />
         </div>
-        <div className={`create-page${isShowModifiedModal ? ' active' : ''}`}>
-            <CreateCollaboratorProduct
-                handleBack={this.onCancelModal}
-                isEditing={this.isEditing}
-                collaboratorId={this.parentId}
-                collaboratorProducts={collaboratorProducts}
-            />
-        </div>
+        {
+            isShowModifiedModal ? (
+                <div className="create-page">
+                    <CreateCollaboratorProduct
+                        handleBack={this.onCancelModal}
+                        isEditing={this.isEditing}
+                        collaboratorId={this.parentId}
+                        collaboratorProducts={collaboratorProducts}
+                        fetchCollaboratorsProductList={this.getList}
+                        collaboratorName={this.parentName}
+                    />
+                </div>
+            ) : null
+        }
         </>
         );
     }

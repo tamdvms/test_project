@@ -31,6 +31,7 @@ class AddInfoProductForm extends BasicForm {
 
     getInitialValue = () => {
         const { dataDetail, isEditing } = this.props
+        console.log(dataDetail)
         if(!isEditing) {
             return {
                 kind: COLLABORATOR_PRODUCT_KIND_MONEY
@@ -90,20 +91,6 @@ class AddInfoProductForm extends BasicForm {
                     parser={(value) => Utils.formatIntegerNumber(value)}
                     />
                 </Col>
-            </Row>
-            <Row gutter={16}>
-                {
-                    isEditing ? (
-                        <Col span={12}>
-                            <DropdownField
-                                fieldName="status"
-                                label="Trạng thái"
-                                required
-                                options={commonStatus}
-                            />
-                        </Col>
-                    ) : null
-                }
             </Row>
         </Form>
         );

@@ -157,7 +157,7 @@ const BookingContainer = ({
                 buildIndex(data)
                 size ? setLoadmoreLoading(false) : setListLoading(false)
                 setItemList(data)
-                setPagination(newPagination)
+                // setPagination(newPagination)
             },
             defaultItemSize: DEFAULT_ITEM_SIZE,
         }))
@@ -284,7 +284,7 @@ const BookingContainer = ({
                 selectedItems={selectedItems}
                 isPaymenting={isPaymenting}
                 totalPrice={totalPrice}
-                numLoadMore={pagination.numLoadMore}
+                // numLoadMore={pagination.numLoadMore}
                 loadmoreLoading={loadmoreLoading}
                 loadingSave={loadingSave}
                 customersList={customersList}

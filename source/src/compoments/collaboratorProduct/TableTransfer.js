@@ -43,6 +43,7 @@ const TableTransfer = ({ leftColumns, rightColumns, transferRef, ...restProps })
             }
             return (
             <Table
+                loading={restProps.loading}
                 pagination={restProps.pagination}
                 showHeader={restProps.showHeader}
                 rowSelection={rowSelection}
