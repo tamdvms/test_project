@@ -56,7 +56,7 @@ class CollaboratorProductListPage extends ListBasePage {
                 render: (id, dataRow) => {
                     return {
                         props: {
-                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                            style: dataRow.productDto.labelColor === 'none' ? {} : { background: dataRow.productDto.labelColor },
                         },
                         children: (
                             <div>{id}</div>
@@ -72,7 +72,7 @@ class CollaboratorProductListPage extends ListBasePage {
                 render: (productImage, dataRow) => {
                     return {
                         props: {
-                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                            style: dataRow.productDto.labelColor === 'none' ? {} : { background: dataRow.productDto.labelColor },
                         },
                         children: (
                             <Avatar
@@ -83,9 +83,24 @@ class CollaboratorProductListPage extends ListBasePage {
                     }
                 }
             },
-            { title: "Tên sản phẩm", dataIndex: ["productDto", "productName"] },
             {
-                title: "Hoa hồng",
+                title: "Tên sản phẩm",
+                dataIndex: ["productDto", "productName"],
+                render: (productName, dataRow) => {
+                    return {
+                        props: {
+                            style: dataRow.productDto.labelColor === 'none' ? {} : { background: dataRow.productDto.labelColor },
+                        },
+                        children: (
+                            <div>
+                                {productName}
+                            </div>
+                        ),
+                    }
+                }
+            },
+            {
+                title: <div className="tb-al-r">Hoa hồng</div>,
                 dataIndex: "value",
                 width: "200px",
                 align: 'right',
@@ -93,27 +108,12 @@ class CollaboratorProductListPage extends ListBasePage {
                     const _value = dataRow.kind === COLLABORATOR_PRODUCT_KIND_MONEY ? Utils.formatMoney(value) : value + '%'
                     return {
                         props: {
-                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                            style: dataRow.productDto.labelColor === 'none' ? {} : { background: dataRow.productDto.labelColor },
                         },
                         children: (
                             <div className="tb-al-r">
                                 {_value}
                             </div>
-                        ),
-                    }
-                }
-            },
-            {
-                title: 'Trạng thái',
-                dataIndex: 'status',
-                width: '100px',
-                render: (status, dataRow) => {
-                    return {
-                        props: {
-                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
-                        },
-                        children: (
-                            <StatusTag status={status}/>
                         ),
                     }
                 }

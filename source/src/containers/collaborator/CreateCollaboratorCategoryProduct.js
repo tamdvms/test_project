@@ -255,9 +255,11 @@ const CreateCollaboratorProduct = ({
     }
 
     const handleDelete = () => {
+        setListLoading(true)
         dispatch(actions.deleteCollaboratorCategoryProduct({
             params: prepareDeleteData(products),
             onCompleted: () => {
+                setListLoading(false)
                 fetchCollaboratorCategoryProductList(1000)
                 setIsShowEditForm(false)
                 setSelectedKeysInTargets([])
@@ -265,6 +267,7 @@ const CreateCollaboratorProduct = ({
                 showSucsessMessage('Xóa thành công!')
             },
             onError: (err) => {
+                setListLoading(false)
                 showErrorMessage(err ? err.message : 'Đã xảy ra lỗi!')
             }
         }))
