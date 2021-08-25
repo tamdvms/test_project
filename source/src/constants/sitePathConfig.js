@@ -1,4 +1,5 @@
 import apiConfig from './apiConfig';
+import { actions } from '../actions';
 
 export const sitePathConfig = {
     login: {
@@ -185,6 +186,12 @@ export const sitePathConfig = {
             apiConfig.category.update.path,
             apiConfig.category.delete.path,
         ],
+        // TODO Handle show menu, permission depend on settings
+        // settingConfig: {
+        //     enableShow() {
+        //         actions
+        //     }
+        // }
     },
     collaboratorCategoryProduct: {
         path: '/collaborator-category-product',

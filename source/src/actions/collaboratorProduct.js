@@ -10,6 +10,8 @@ export const actionTypes = {
     CREATE_COLLABORATOR_PRODUCT: defineAction('CREATE_COLLABORATOR_PRODUCT'),
     UPDATE_COLLABORATOR_PRODUCT: defineAction('UPDATE_COLLABORATOR_PRODUCT'),
     DELETE_COLLABORATOR_PRODUCT: defineAction('DELETE_COLLABORATOR_PRODUCT'),
+    GET_COLLABORATOR_CATEGORY_LIST: defineAction('GET_COLLABORATOR_CATEGORY_LIST'),
+    GET_COLLABORATOR_CATEGORY_PRODUCT: defineAction('GET_COLLABORATOR_CATEGORY_PRODUCT'),
 }
 
 export const actions = {
@@ -18,4 +20,6 @@ export const actions = {
     createCollaboratorProduct: createAction(actionTypes.CREATE_COLLABORATOR_PRODUCT),
     updateCollaboratorProduct: createAction(actionTypes.UPDATE_COLLABORATOR_PRODUCT),
     deleteCollaboratorProduct: createActionWithLoading(actionTypes.DELETE_COLLABORATOR_PRODUCT),
+    getCollaboratorCategoryList: createAction(actionTypes.GET_COLLABORATOR_CATEGORY_LIST),
+    getCollaboratorCategoryProduct: createAction(actionTypes.GET_COLLABORATOR_CATEGORY_PRODUCT),
 }

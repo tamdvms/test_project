@@ -7,6 +7,7 @@ import { ArrowLeftOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons
 import { COLLABORATOR_PRODUCT_KIND_MONEY } from '../../constants/masterData'
 import Utils from '../../utils'
 import StatusTag from '../common/elements/StatusTag'
+import DropdownField from '../common/entryForm/DropdownField'
 
 function CreateCollaboratorProductPage({
     products = [],
@@ -22,6 +23,9 @@ function CreateCollaboratorProductPage({
     handleShowEditForm,
     handleChangeSelectedKeysInTargets,
     collaboratorName,
+    collaboratorCategoryList,
+    handleSelectCollaborateCategory,
+    collaboratorCategoryProductListLoading,
 }) {
 
     const renderItem = (item) => {
@@ -114,6 +118,17 @@ function CreateCollaboratorProductPage({
             }
         </Button>)
 
+    const SelectQuick = (
+        <DropdownField
+            placeholder="Chọn nhanh"
+            noStyle={true}
+            allowClear={true}
+            options={collaboratorCategoryList}
+            dropdownClassName={"collaborator-category-dropdown"}
+            onSelect={handleSelectCollaborateCategory}
+        />
+    )
+
     return (
         <div className="container">
             <div className="action">
@@ -130,13 +145,13 @@ function CreateCollaboratorProductPage({
             </div>
             <TableTransfer
                 transferRef={transferRef}
-                titles={['Danh sách sản phẩm', EditButton]}
+                titles={[SelectQuick, EditButton]}
                 dataSource={products.map(e => ({...e, key: e.id}))}
                 targetKeys={targetKeys}
                 showSearch
                 leftColumns={leftTableColumns}
                 rightColumns={rightTableColumns}
-                loading={listLoading}
+                loading={listLoading || collaboratorCategoryProductListLoading}
                 listStyle={{
                     flex: 1,
                     height: '100%',
