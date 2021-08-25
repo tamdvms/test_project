@@ -16,35 +16,30 @@ import { convertUtcToTimezone } from "../../utils/datetimeHelper";
 import { AppConstants, UserTypes, GroupPermissonTypes } from "../../constants";
 import { sitePathConfig } from "../../constants/sitePathConfig";
 import Utils from "../../utils";
-import CreateCollaboratorProduct from "./CreateCollaboratorProduct";
+import CreateCollaboratorCategoryProduct from "./CreateCollaboratorCategoryProduct";
 
-class CollaboratorProductListPage extends ListBasePage {
+class CollaboratorCategoryProductListPage extends ListBasePage {
     initialSearch() {
         return { productName: "" };
     }
 
     constructor(props) {
         super(props);
-        this.objectName = "sản phẩm";
+        this.objectName = "Danh mục CTV sản phẩm";
         const { location: { search } } = props;
         const {
             parentName,
             parentId,
-            parentSearchparentName,
         } = qs.parse(search);
         this.parentId = parentId;
         this.parentName = parentName;
         this.breadcrumbs = [
             {
-                name: "Nhân viên",
-                path: `${sitePathConfig.employee.path}${this.handleRoutingParent('parentSearchparentSearch')}`
+                name: "Danh mục CTV",
+                path: `${sitePathConfig.collaboratorCategory.path}${this.handleRoutingParent('parentSearch')}`
             },
             {
-                name: parentSearchparentName,
-            },
-            {
-                name: "Cộng tác viên",
-                path: `${sitePathConfig.collaborator.path}${this.handleRoutingParent('parentSearch')}`
+                name: parentName,
             },
         ];
         this.columns = [
@@ -140,7 +135,7 @@ class CollaboratorProductListPage extends ListBasePage {
             page,
             size: size || this.pagination.pageSize,
             search: this.search,
-            collaboratorId: this.parentId,
+            collaboratorCategoryId: this.parentId,
         };
         getDataList({ params });
     }
@@ -187,7 +182,7 @@ class CollaboratorProductListPage extends ListBasePage {
             uploadFile,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading, active } = this.state;
-        const collaboratorProducts = dataList.data || [];
+        const collaboratorCategoryProducts = dataList.data || [];
         this.pagination.total = dataList.totalElements || 0;
         return (<>
         <div className={`list-page${!isShowModifiedModal ? ' active' : ''}`}>
@@ -206,7 +201,7 @@ class CollaboratorProductListPage extends ListBasePage {
             loading={loading}
             columns={this.columns}
             rowKey={(record) => record.id}
-            dataSource={collaboratorProducts}
+            dataSource={collaboratorCategoryProducts}
             pagination={this.pagination}
             onChange={this.handleTableChange}
             />
@@ -214,13 +209,13 @@ class CollaboratorProductListPage extends ListBasePage {
         {
             isShowModifiedModal ? (
                 <div className="create-page">
-                    <CreateCollaboratorProduct
+                    <CreateCollaboratorCategoryProduct
                         handleBack={this.onCancelModal}
                         isEditing={this.isEditing}
-                        collaboratorId={this.parentId}
-                        collaboratorProducts={collaboratorProducts}
-                        fetchCollaboratorsProductList={this.getList}
-                        collaboratorName={this.parentName}
+                        collaboratorCategoryId={this.parentId}
+                        collaboratorCategoryProducts={collaboratorCategoryProducts}
+                        fetchCollaboratorCategoryProductList={this.getList}
+                        collaboratorCategoryName={this.parentName}
                     />
                 </div>
             ) : null
@@ -231,16 +226,16 @@ class CollaboratorProductListPage extends ListBasePage {
 }
 
 const mapStateToProps = (state) => ({
-    loading: state.collaboratorProduct.tbCollaboratorProductLoading,
-    dataList: state.collaboratorProduct.collaboratorProductData || {},
+    loading: state.collaboratorCategoryProduct.tbCollaboratorCategoryProductLoading,
+    dataList: state.collaboratorCategoryProduct.collaboratorCategoryProductData || {},
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    getDataList: (payload) => dispatch(actions.getCollaboratorProductList(payload)),
-    getDataById: (payload) => dispatch(actions.getCollaboratorProductById(payload)),
-    createData: (payload) => dispatch(actions.createCollaboratorProduct(payload)),
-    updateData: (payload) => dispatch(actions.updateCollaboratorProduct(payload)),
-    deleteData: (payload) => dispatch(actions.deleteCollaboratorProduct(payload)),
+    getDataList: (payload) => dispatch(actions.getCollaboratorCategoryProductList(payload)),
+    getDataById: (payload) => dispatch(actions.getCollaboratorCategoryProductById(payload)),
+    createData: (payload) => dispatch(actions.createCollaboratorCategoryProduct(payload)),
+    updateData: (payload) => dispatch(actions.updateCollaboratorCategoryProduct(payload)),
+    deleteData: (payload) => dispatch(actions.deleteCollaboratorCategoryProduct(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CollaboratorProductListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(CollaboratorCategoryProductListPage);

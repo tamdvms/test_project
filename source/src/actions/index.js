@@ -13,6 +13,7 @@ import {actions as bookingActions, actionTypes as bookingActionsTypes} from "./b
 import {actions as ordersActions, actionTypes as ordersActionsTypes} from "./orders";
 import {actions as collaboratorActions, actionTypes as collaboratorActionsTypes} from "./collaborator";
 import {actions as collaboratorProductActions, actionTypes as collaboratorProductActionsTypes} from "./collaboratorProduct";
+import {actions as collaboratorCategoryProductActions, actionTypes as collaboratorCategoryProductActionsTypes} from "./collaboratorCategoryProduct";
 
 export const actions = {
     ...appCommonActions,
@@ -30,6 +31,7 @@ export const actions = {
     ...ordersActions,
     ...collaboratorActions,
     ...collaboratorProductActions,
+    ...collaboratorCategoryProductActions,
 }
 
 export const types = {
@@ -48,4 +50,5 @@ export const types = {
     ...ordersActionsTypes,
     ...collaboratorActionsTypes,
     ...collaboratorProductActionsTypes,
+    ...collaboratorCategoryProductActionsTypes,
 }

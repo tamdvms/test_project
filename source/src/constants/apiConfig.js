@@ -361,5 +361,32 @@ const apiConfig = {
             headers: baseHeader,
         },
     },
+    collaboratorCategoryProduct: {
+        getList: {
+            path:  '/v1/collaborator-category-product/list',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getById: {
+            path:  '/v1/collaborator-category-product/get',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        create: {
+            path:  '/v1/collaborator-category-product/create',
+            method: 'POST',
+            headers: baseHeader,
+        },
+        update: {
+            path:  '/v1/collaborator-category-product/update',
+            method: 'PUT',
+            headers: baseHeader,
+        },
+        delete: {
+            path:  '/v1/collaborator-category-product/delete',
+            method: 'DELETE',
+            headers: baseHeader,
+        },
+    },
 }
 export default apiConfig;

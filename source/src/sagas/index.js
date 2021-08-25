@@ -14,6 +14,7 @@ import booking from './booking';
 import orders from './orders';
 import collaborator from './collaborator';
 import collaboratorProduct from './collaboratorProduct';
+import collaboratorCategoryProduct from './collaboratorCategoryProduct';
 
 const sagas = [
     ...appCommon,
@@ -31,6 +32,7 @@ const sagas = [
     ...orders,
     ...collaborator,
     ...collaboratorProduct,
+    ...collaboratorCategoryProduct,
 ];
 
 function* rootSaga() {
