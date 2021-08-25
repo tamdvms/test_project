@@ -360,6 +360,16 @@ const apiConfig = {
             method: 'DELETE',
             headers: baseHeader,
         },
+        categoryAutoComplete: {
+            path: '/v1/category/auto-complete',
+            method: 'GET',
+            headers: baseHeader
+        },
+        getCollaboratorCategoryProductList: {
+            path:  '/v1/collaborator-category-product/list',
+            method: 'GET',
+            headers: baseHeader,
+        },
     },
     collaboratorCategoryProduct: {
         getList: {

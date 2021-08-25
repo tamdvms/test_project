@@ -8,7 +8,9 @@ import { actions } from '../../actions'
 import AddInfoProductForm from '../../compoments/collaboratorProduct/AddInfoProductForm'
 import BasicModal from '../../compoments/common/modal/BasicModal'
 import { showErrorMessage, showSucsessMessage } from '../../services/notifyService'
+import { categoryKinds } from '../../constants/masterData'
 
+const { CATEGORY_KIND_COLLABORATOR } = categoryKinds
 const { confirm } = Modal
 
 const CreateCollaboratorProduct = ({
@@ -49,6 +51,8 @@ const CreateCollaboratorProduct = ({
     const [selectedKeysInLeft, setSelectedKeysInLeft] = useState([])
     const [editingMode, setEditingMode] = useState(isEditing)
     const [formLoading, setFormLoading] = useState(false)
+    const [collaboratorCategoryList, setCollaboratorCategoryList] = useState([])
+    const [collaboratorCategoryProductListLoading, setCollaboratorCategoryProductListLoading] = useState(false)
 
     const buildIndex = (data) => {
         setFuse(new Fuse(data, {
@@ -255,9 +259,11 @@ const CreateCollaboratorProduct = ({
     }
 
     const handleDelete = () => {
+        setListLoading(true)
         dispatch(actions.deleteCollaboratorProduct({
             params: prepareDeleteData(products),
             onCompleted: () => {
+                setListLoading(false)
                 fetchCollaboratorsProductList(1000)
                 setIsShowEditForm(false)
                 setSelectedKeysInTargets([])
@@ -265,13 +271,112 @@ const CreateCollaboratorProduct = ({
                 showSucsessMessage('Xóa thành công!')
             },
             onError: (err) => {
+                setListLoading(false)
                 showErrorMessage(err ? err.message : 'Đã xảy ra lỗi!')
             }
         }))
     }
 
+    const fetchCollaboratorCategory = () => {
+        dispatch(actions.getCollaboratorCategoryList({
+            params: {
+                kind: CATEGORY_KIND_COLLABORATOR
+            },
+            onCompleted: (data) => {
+                setCollaboratorCategoryList(data.map(d => ({
+                    value: d.id,
+                    label: d.categoryName
+                })))
+            }
+        }))
+    }
+
+    const sendCreatingRequestWithMultipleFormValues = (collaboratorCategoryProducts = []) => {
+        setCollaboratorCategoryProductListLoading(true)
+        collaboratorCategoryProducts.length > 0
+        && dispatch(actions.createCollaboratorProduct({
+            params: {
+                collaboratorProducts: collaboratorCategoryProducts,
+            },
+            onCompleted: () => {
+                setCollaboratorCategoryProductListLoading(false)
+                fetchCollaboratorsProductList(1000)
+                setIsShowEditForm(false)
+                setEditingMode(true)
+                setSelectedKeysInLeft([])
+                transferRef.current.setStateKeys('left', [])
+                showSucsessMessage('Thêm sản phẩm thành công!')
+            },
+            onError: (err) => {
+                setCollaboratorCategoryProductListLoading(false)
+                showErrorMessage(err ? err.message : 'Đã xảy ra lỗi!')
+            }
+        }))
+    }
+
+    const confirmCreatingCollaboratorProducts = (collaboratorCategoryProducts) => {
+        confirm({
+            title: `Bạn có muốn thêm ${collaboratorCategoryProducts.length} sản phẩm?`,
+            content: '',
+            okText: 'Có',
+            okType: 'danger',
+            cancelText: 'Không',
+            onOk: () => {
+                const prepareCreateData = collaboratorCategoryProducts.map(collaboratorCategoryProduct => ({
+                    //* No need formValues because in collaboratorCategoryProduct obj has contained formValues
+                        ...filterObjByObjInterface({ ...collaboratorCategoryProduct, productId: collaboratorCategoryProduct.productDto.id }, ICreateFormFields),
+                    }))
+                sendCreatingRequestWithMultipleFormValues(prepareCreateData)
+            },
+            onCancel() {
+                // console.log('Cancel');
+            },
+        });
+    }
+
+    /**
+     ** Find matching elements of collaborator category products array in products array
+     * @param {Array} first
+     * @param {Array} second
+     * @returns Array of matching elements
+     */
+     const matchingCollaboratorCategoryProducts = (collaboratorCategoryProducts, products) => {
+        return collaboratorCategoryProducts.filter(
+            cllCateProduct => products.find(
+                product => cllCateProduct.productDto.id === product.id
+            )
+        )
+    }
+
+    const getProductsInLeft = () => products.filter(product => !targetKeys.includes(product.id))
+
+    const fetchCollaboratorCategoryProductList = (collaboratorCategoryId) => {
+        setCollaboratorCategoryProductListLoading(true)
+        dispatch(actions.getCollaboratorCategoryProduct({
+            params: {
+                collaboratorCategoryId,
+            },
+            onCompleted: (data) => {
+                setCollaboratorCategoryProductListLoading(false)
+                const needAddeds = matchingCollaboratorCategoryProducts(data, getProductsInLeft())
+                if(needAddeds.length > 0) {
+                    confirmCreatingCollaboratorProducts(needAddeds)
+                }
+            },
+            onError: (err) => {
+                setCollaboratorCategoryProductListLoading(false)
+                showErrorMessage(err ? err.message : 'Đã xảy ra lỗi!')
+            }
+        }))
+    }
+
+    const handleSelectCollaborateCategory = (value) => {
+        fetchCollaboratorCategoryProductList(value)
+    }
+
     useEffect(() => {
         fetchAutoCompleteProducts()
+        fetchCollaboratorCategory()
     }, [])
 
     useEffect(() => {
@@ -299,11 +404,14 @@ const CreateCollaboratorProduct = ({
         transferRef={transferRef}
         listLoading={listLoading}
         collaboratorName={collaboratorName}
+        collaboratorCategoryList={collaboratorCategoryList}
+        collaboratorCategoryProductListLoading={collaboratorCategoryProductListLoading}
         handleBack={handleBack}
         handleChangeSelectedKeysInTargets={handleChangeSelectedKeysInTargets}
         handleMoveProduct={handleMoveProduct}
         handleSearchProduct={handleSearchProduct}
         handleShowEditForm={handleShowEditForm}
+        handleSelectCollaborateCategory={handleSelectCollaborateCategory}
         />
         <BasicModal
             className="collaborator-product-edit-form"

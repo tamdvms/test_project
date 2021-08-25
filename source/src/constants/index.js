@@ -59,12 +59,6 @@ const CurrentcyPositions = {
     BACK: 1,
 }
 
-const CategoryKinds = {
-    CATEGORY_KIND_NEWS: 1,
-    CATEGORY_KIND_UNIVERSITY: 2,
-    CATEGORY_KIND_JOB: 3,
-}
-
 const OrdersStates = [
     {
         value: 0,
@@ -121,7 +115,6 @@ export {
     GroupPermissonTypes,
     UploadFileTypes,
     ProvinceKinds,
-    CategoryKinds,
     CurrentcyPositions,
     OrdersStates,
 };

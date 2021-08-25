@@ -22,8 +22,8 @@ function* getCollaboratorCategoryProductList({ payload: { params, onCompleted } 
     const apiParams = apiConfig.collaboratorCategoryProduct.getList;
     const searchParams = { };
 
-    if(params.collaboratorProductId) {
-        searchParams.collaboratorProductId = params.collaboratorProductId;
+    if(params.collaboratorCategoryId) {
+        searchParams.collaboratorCategoryId = params.collaboratorCategoryId;
     }
     if(params.page) {
         searchParams.page = params.page;

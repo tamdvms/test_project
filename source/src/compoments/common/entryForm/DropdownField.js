@@ -24,7 +24,10 @@ class DropdownField extends BaseField {
             optionOther,
             labelInValue,
             onSelect,
-            onChange
+            onChange,
+            noStyle,
+            dropdownClassName,
+            allowClear,
         } = this.props;
 
         let optionValueKey = optionValue || 'value';
@@ -36,6 +39,7 @@ class DropdownField extends BaseField {
                 name={fieldName}
                 rules={this.getRules()}
                 shouldUpdate={false}
+                noStyle={noStyle}
             >
                 <Select
                     loading={loading}
@@ -45,6 +49,8 @@ class DropdownField extends BaseField {
                     onSelect={onSelect}
                     onChange={onChange}
                     tagRender={tagRender}
+                    dropdownClassName={dropdownClassName}
+                    allowClear={allowClear}
                 >
                     {
                         options
