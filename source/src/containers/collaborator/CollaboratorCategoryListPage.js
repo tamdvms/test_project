@@ -67,6 +67,7 @@ class CollaboratorCategoryListPage extends ListBasePage {
         return {
             ...data,
             categoryKind: CATEGORY_KIND_COLLABORATOR,
+            categoryOrdering: 0,
         };
     }
 
