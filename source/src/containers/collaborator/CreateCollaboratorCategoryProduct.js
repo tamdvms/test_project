@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import Fuse from 'fuse.js'
 import { Modal } from 'antd'
 
-import CreateCollaboratorProductPage from '../../compoments/collaboratorProduct/CreateCollaboratorProductPage'
+import CreateCollaboratorCategoryProductPage from '../../compoments/collaboratorCategoryProduct/CreateCollaboratorCategoryProductPage'
 import { actions } from '../../actions'
 import AddInfoProductForm from '../../compoments/collaboratorProduct/AddInfoProductForm'
 import BasicModal from '../../compoments/common/modal/BasicModal'
@@ -14,10 +14,10 @@ const { confirm } = Modal
 const CreateCollaboratorProduct = ({
     isEditing,
     handleBack,
-    collaboratorId,
-    collaboratorProducts,
-    fetchCollaboratorsProductList,
-    collaboratorName,
+    collaboratorCategoryId,
+    collaboratorCategoryProducts,
+    fetchCollaboratorCategoryProductList,
+    collaboratorCategoryName,
 }) => {
 
     const IformValues = {
@@ -25,7 +25,7 @@ const CreateCollaboratorProduct = ({
         value: null,
     }
     const ICreateFormFields = {
-        collaboratorId, // Default
+        collaboratorCategoryId, // Default
         productId: null,
         kind: null,
         value: null,
@@ -131,13 +131,13 @@ const CreateCollaboratorProduct = ({
     const sendCreatingRequest = (formValues, products = []) => {
         setFormLoading(true)
         products.length > 0
-        && dispatch(actions.createCollaboratorProduct({
+        && dispatch(actions.createCollaboratorCategoryProduct({
             params: {
-                collaboratorProducts: prepareCreateData(formValues, products)
+                collaboratorCategoryProducts: prepareCreateData(formValues, products)
             },
             onCompleted: () => {
                 setFormLoading(false)
-                fetchCollaboratorsProductList(1000)
+                fetchCollaboratorCategoryProductList(1000)
                 setIsShowEditForm(false)
                 setEditingMode(true)
                 setSelectedKeysInLeft([])
@@ -156,20 +156,20 @@ const CreateCollaboratorProduct = ({
         .filter(product => selectedKeysInTargets.includes(product.id))
         .map(product => ({
             ...filterObjByObjInterface(formValues, IUpdateFormFields),
-            id: product.collaboratorProductId
+            id: product.collaboratorCategoryProductId
         }))
     }
 
     const sendUpdatingRequest = (formValues, products = []) => {
         setFormLoading(true)
         products.length > 0
-        && dispatch(actions.updateCollaboratorProduct({
+        && dispatch(actions.updateCollaboratorCategoryProduct({
             params: {
-                collaboratorProducts: prepareUpdateData(formValues, products)
+                collaboratorCategoryProducts: prepareUpdateData(formValues, products)
             },
             onCompleted: () => {
                 setFormLoading(false)
-                fetchCollaboratorsProductList(1000)
+                fetchCollaboratorCategoryProductList(1000)
                 setIsShowEditForm(false)
                 setSelectedKeysInTargets([])
                 transferRef.current.setStateKeys('right', [])
@@ -203,13 +203,13 @@ const CreateCollaboratorProduct = ({
      */
     const mergeAutoCompleteWithDataList = (products) => {
         return products.map(product => {
-            const cllProduct = collaboratorProducts.find(cllProduct => cllProduct.productDto.id === product.id)
+            const cllProduct = collaboratorCategoryProducts.find(cllProduct => cllProduct.productDto.id === product.id)
             const mappedProduct = {
                 ...product,
                 ...filterObjByObjInterface(cllProduct, IformValues),
             }
             if(cllProduct) {
-                mappedProduct.collaboratorProductId = cllProduct.id
+                mappedProduct.collaboratorCategoryProductId = cllProduct.id
             }
             return mappedProduct
         })
@@ -220,7 +220,7 @@ const CreateCollaboratorProduct = ({
         setProducts(newProducts)
         setTargetKeys(
             newProducts
-            .filter(product => product.kind && product.value && product.collaboratorProductId)
+            .filter(product => product.kind && product.value && product.collaboratorCategoryProductId)
             .map(product => product.id)
         )
     }
@@ -251,14 +251,14 @@ const CreateCollaboratorProduct = ({
     const prepareDeleteData = (products) => {
         return products
         .filter(product => selectedKeysInTargets.includes(product.id))
-        .map(product => product.collaboratorProductId)
+        .map(product => product.collaboratorCategoryProductId)
     }
 
     const handleDelete = () => {
-        dispatch(actions.deleteCollaboratorProduct({
+        dispatch(actions.deleteCollaboratorCategoryProduct({
             params: prepareDeleteData(products),
             onCompleted: () => {
-                fetchCollaboratorsProductList(1000)
+                fetchCollaboratorCategoryProductList(1000)
                 setIsShowEditForm(false)
                 setSelectedKeysInTargets([])
                 transferRef.current.setStateKeys('right', [])
@@ -285,12 +285,12 @@ const CreateCollaboratorProduct = ({
 
     useEffect(() => {
         products.length > 0
-        && collaboratorProducts
+        && collaboratorCategoryProducts
         && handleMergeCurrentDataWithDataList()
-    }, [collaboratorProducts, JSON.stringify(products)])
+    }, [collaboratorCategoryProducts, JSON.stringify(products)])
 
     return (<>
-        <CreateCollaboratorProductPage
+        <CreateCollaboratorCategoryProductPage
         products={products}
         targetKeys={targetKeys}
         matchingSearchProducts={matchingSearchProducts}
@@ -298,7 +298,7 @@ const CreateCollaboratorProduct = ({
         isEditing={editingMode}
         transferRef={transferRef}
         listLoading={listLoading}
-        collaboratorName={collaboratorName}
+        collaboratorName={collaboratorCategoryName}
         handleBack={handleBack}
         handleChangeSelectedKeysInTargets={handleChangeSelectedKeysInTargets}
         handleMoveProduct={handleMoveProduct}

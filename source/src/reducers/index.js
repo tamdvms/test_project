@@ -13,6 +13,7 @@ import employee from './employee';
 import orders from './orders';
 import collaborator from './collaborator';
 import collaboratorProduct from './collaboratorProduct';
+import collaboratorCategoryProduct from './collaboratorCategoryProduct';
 
 const rootReducer = combineReducers({
     appCommon: appCommon.reducer,
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
     orders: orders.reducer,
     collaborator: collaborator.reducer,
     collaboratorProduct: collaboratorProduct.reducer,
+    collaboratorCategoryProduct: collaboratorCategoryProduct.reducer,
 });
 
 export default rootReducer;

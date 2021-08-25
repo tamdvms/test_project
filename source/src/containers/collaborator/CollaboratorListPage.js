@@ -41,11 +41,11 @@ class CollaboratorListPage extends ListBasePage {
 		this.parentName = parentName;
 		this.breadcrumbs = [
 		{
-			name: "Nhân viên"
+			name: "Nhân viên",
+			path: `${sitePathConfig.employee.path}${this.handleRoutingParent()}`
 		},
 		{
 			name: parentName,
-			path: `${sitePathConfig.employee.path}${this.handleRoutingParent()}`
 		},
 		{
 			name: "Cộng tác viên"

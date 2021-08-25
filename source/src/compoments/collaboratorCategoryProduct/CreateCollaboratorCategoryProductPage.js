@@ -1,5 +1,5 @@
 import React from 'react'
-import TableTransfer from './TableTransfer'
+import TableTransfer from '../collaboratorProduct/TableTransfer'
 import { AppConstants, STATUS_LOCK } from '../../constants'
 import { Avatar, Button } from 'antd'
 import { ArrowLeftOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons'
@@ -8,7 +8,7 @@ import { COLLABORATOR_PRODUCT_KIND_MONEY } from '../../constants/masterData'
 import Utils from '../../utils'
 import StatusTag from '../common/elements/StatusTag'
 
-function CreateCollaboratorProductPage({
+function CreateCollaboratorCategoryProductPage({
     products = [],
     targetKeys = [],
     matchingSearchProducts = [],
@@ -125,7 +125,7 @@ function CreateCollaboratorProductPage({
                     <ArrowLeftOutlined /> Trở về
                 </Button>
                 <h2>
-                    CTV: {collaboratorName}
+                    {collaboratorName}
                 </h2>
             </div>
             <TableTransfer
@@ -164,4 +164,4 @@ function CreateCollaboratorProductPage({
     )
 }
 
-export default CreateCollaboratorProductPage
+export default CreateCollaboratorCategoryProductPage

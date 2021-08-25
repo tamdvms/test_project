@@ -8,8 +8,9 @@ import {
     QuestionOutlined,
     UnorderedListOutlined,
     InboxOutlined,
-    CarryOutOutlined,
+    UserAddOutlined,
     ShoppingCartOutlined,
+    CarryOutOutlined,
 } from '@ant-design/icons';
 import { sitePathConfig } from '../constants/sitePathConfig';
 import store from '../store';
@@ -143,6 +144,16 @@ const navMenuConfig = [
             {
                 label: 'Quản lý chi',
                 ...sitePathConfig.exportManagement
+            },
+        ]
+    },
+    {
+        label: 'Quản lý CTV',
+        icon: <UserAddOutlined />,
+        children: [
+            {
+                label: 'Danh mục CTV',
+                ...sitePathConfig.collaboratorCategory
             },
         ]
     },

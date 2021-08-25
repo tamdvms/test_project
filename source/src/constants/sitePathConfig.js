@@ -175,4 +175,28 @@ export const sitePathConfig = {
             contentClass: 'collaborator-site',
         }
     },
+    collaboratorCategory: {
+        path: '/collaborator-category',
+        childrenKeys: ['/collaborator-category-product'],
+        permissions: [
+            apiConfig.category.getList.path,
+            apiConfig.category.getById.path,
+            apiConfig.category.create.path,
+            apiConfig.category.update.path,
+            apiConfig.category.delete.path,
+        ],
+    },
+    collaboratorCategoryProduct: {
+        path: '/collaborator-category-product',
+        permissions: [
+            apiConfig.collaboratorCategoryProduct.getList.path,
+            apiConfig.collaboratorCategoryProduct.getById.path,
+            apiConfig.collaboratorCategoryProduct.create.path,
+            apiConfig.collaboratorCategoryProduct.update.path,
+            apiConfig.collaboratorCategoryProduct.delete.path,
+        ],
+        siteConfig: {
+            contentClass: 'collaborator-site',
+        }
+    },
 }
