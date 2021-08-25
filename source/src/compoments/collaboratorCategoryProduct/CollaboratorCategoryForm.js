@@ -29,7 +29,6 @@ class CollaboratorCategoryForm extends BasicForm {
 
     render() {
         const { formId, dataDetail, loadingSave, isEditing } = this.props;
-        const { avatar, uploading } = this.state;
         return (
         <Form
             id={formId}
