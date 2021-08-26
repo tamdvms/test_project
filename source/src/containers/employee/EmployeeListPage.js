@@ -63,68 +63,7 @@ class EmployeeListPage extends ListBasePage {
     this.actionColumns = {
       isEdit: true,
       isDelete: true,
-      isShowCollaborator: Number(actions.getUserData()?.settings?.Collaborator?.["enable-collaborator"])
     };
-  }
-
-  renderActionColumn() {
-    return {
-        title: 'Hành động',
-        width: '100px',
-        align: 'center',
-        render: (dataRow) => {
-            const actionColumns = [];
-            if(this.actionColumns.isShowCollaborator) {
-              actionColumns.push(this.renderButton((
-                <Button type="link" onClick={() => this.handleRouting(dataRow.id, dataRow.fullName)} className="no-padding">
-                  { this.actionColumns.isShowCollaborator.icon || <TeamOutlined /> }
-                </Button>
-              ), [5]
-              ))
-            }
-            if(this.actionColumns.isEdit) {
-                actionColumns.push(this.renderEditButton((
-                    <Button type="link" onClick={() => this.getDetail(dataRow.id)} className="no-padding">
-                        { this.actionColumns.isEdit.icon || <EditOutlined/> }
-                    </Button>
-                )))
-            }
-            if(this.actionColumns.isDelete) {
-                actionColumns.push(
-                    this.renderDeleteButton((
-                        <Button type="link" onClick={() => this.showDeleteConfirm(dataRow.id) } className="no-padding">
-                            { this.actionColumns.isDelete.icon || <DeleteOutlined/> }
-                        </Button>
-                    ))
-                )
-            }
-            const actionColumnsWithDivider = [];
-            actionColumns.forEach((action, index) => {
-                actionColumnsWithDivider.push(action);
-                if(index !== (actionColumns.length -1))
-                {
-                    actionColumnsWithDivider.push(<Divider type="vertical" />);
-                }
-            })
-            return (
-                <span>
-                    {
-                        actionColumnsWithDivider.map((action, index) => <span key={index}>{action}</span>)
-                    }
-                </span>
-            )
-        }
-    }
-  }
-
-  handleRouting(parentId, parentName) {
-    const { location: { search }, history } = this.props;
-    const queryString = qs.parse(search);
-    const result = {};
-    Object.keys(queryString).map(q => {
-        result[`parentSearch${q}`] = queryString[q];
-    })
-    history.push(`${sitePathConfig.collaborator.path}?${qs.stringify({...result, parentId, parentName})}`);
   }
 
   getSearchFields() {
@@ -165,8 +104,6 @@ class EmployeeListPage extends ListBasePage {
       groupId: data.group && data.group.id,
     };
   }
-
-
 
   render() {
     const {

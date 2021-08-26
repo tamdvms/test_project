@@ -333,6 +333,11 @@ const apiConfig = {
             method: 'DELETE',
             headers: baseHeader,
         },
+        getEmployeeCollaboratorList: {
+            path:  '/v1/collaborator/list-employee-collaborator',
+            method: 'GET',
+            headers: baseHeader,
+        },
     },
     collaboratorProduct: {
         getList: {

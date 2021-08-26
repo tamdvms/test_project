@@ -4,11 +4,14 @@ const { createReducer, defineActionSuccess, defineActionLoading, defineActionFai
 const {
     GET_COLLABORATOR_LIST,
     DELETE_COLLABORATOR,
+    GET_EMPLOYEE_COLLABORATOR_LIST,
 } = actionTypes;
 
 const initialState = { 
     collaboratorData: {},
+    employeeCollaboratorData: {},
     tbCollaboratorLoading: false,
+    tbEmployeeCollaboratorLoading: false,
 };
 
 const reducer = createReducer({
@@ -35,6 +38,19 @@ const reducer = createReducer({
             return {
                 ...state,
                 tbCollaboratorLoading: false,
+            }
+        },
+        [defineActionLoading(GET_EMPLOYEE_COLLABORATOR_LIST)]: (state) => {
+            return {
+                ...state,
+                tbEmployeeCollaboratorLoading: true
+            }
+        },
+        [defineActionSuccess(GET_EMPLOYEE_COLLABORATOR_LIST)]: (state, { employeeCollaboratorData }) => {
+            return {
+                ...state,
+                employeeCollaboratorData,
+                tbEmployeeCollaboratorLoading: false
             }
         },
     },
