@@ -120,14 +120,12 @@ export const sitePathConfig = {
     },
     employee: {
         path: '/employee',
-        childrenKeys: ['/collaborator'],
         permissions: [
             apiConfig.user.getAdminList.path,
             apiConfig.user.getAdminById.path,
             apiConfig.user.createAdmin.path,
             apiConfig.user.updateAdmin.path,
             apiConfig.user.deleteAdmin.path,
-            apiConfig.collaborator.getList.path,
         ]
     },
     booking: {
@@ -160,6 +158,18 @@ export const sitePathConfig = {
             apiConfig.collaborator.create.path,
             apiConfig.collaborator.update.path,
             apiConfig.collaborator.delete.path,
+            apiConfig.collaboratorProduct.getList.path,
+        ]
+    },
+    employeeCollaborator: {
+        path: '/employee-collaborator',
+        childrenKeys: ['/collaborator'],
+        permissions: [
+            apiConfig.collaborator.getEmployeeCollaboratorList.path,
+            apiConfig.user.getAdminById.path,
+            apiConfig.user.createAdmin.path,
+            apiConfig.user.updateAdmin.path,
+            apiConfig.user.deleteAdmin.path,
             apiConfig.collaboratorProduct.getList.path,
         ]
     },

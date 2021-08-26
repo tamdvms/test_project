@@ -155,6 +155,10 @@ const navMenuConfig = [
                 label: 'Danh mục CTV',
                 ...sitePathConfig.collaboratorCategory
             },
+            {
+                label: 'Quản lý CTV',
+                ...sitePathConfig.employeeCollaborator
+            },
         ]
     },
 ]

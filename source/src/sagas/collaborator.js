@@ -14,6 +14,7 @@ const {
     CREATE_COLLABORATOR,
     UPDATE_COLLABORATOR,
     DELETE_COLLABORATOR,
+    GET_EMPLOYEE_COLLABORATOR_LIST,
 } = actionTypes;
 
 
@@ -44,6 +45,23 @@ function* getCollaboratorList({ payload: { params } }) {
     }
     catch(error) {
         yield put({ type: defineActionFailed(GET_COLLABORATOR_LIST) });
+    }
+}
+
+
+function* getEmployeeCollaboratorList({ payload: { params } }) {
+
+    const apiParams = apiConfig.collaborator.getEmployeeCollaboratorList;
+
+    try {
+        const result = yield call(sendRequest, apiParams);
+        yield put({
+            type: defineActionSuccess(GET_EMPLOYEE_COLLABORATOR_LIST),
+            employeeCollaboratorData: result.responseData && result.responseData.data
+        });
+    }
+    catch(error) {
+        yield put({ type: defineActionFailed(GET_EMPLOYEE_COLLABORATOR_LIST) });
     }
 }
 
@@ -103,6 +121,7 @@ function* deleteCollaborator({ payload: { params, onCompleted, onError } }) {
 
 const sagas = [
     takeLatest(defineActionLoading(GET_COLLABORATOR_LIST), getCollaboratorList),
+    takeLatest(defineActionLoading(GET_EMPLOYEE_COLLABORATOR_LIST), getEmployeeCollaboratorList),
     takeLatest(GET_COLLABORATOR_BY_ID, getCollaboratorById),
     takeLatest(CREATE_COLLABORATOR, createCollaborator),
     takeLatest(UPDATE_COLLABORATOR, updateCollaborator),
