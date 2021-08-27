@@ -39,6 +39,7 @@ class EmployeeListPage extends ListBasePage {
         title: "#",
         dataIndex: "avatar",
         align: 'center',
+        width: 100,
         render: (avatar) => (
           <Avatar
             size="large"
