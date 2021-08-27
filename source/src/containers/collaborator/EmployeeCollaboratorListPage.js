@@ -31,6 +31,7 @@ class EmployeeCollaboratorListPage extends ListBasePage {
       {
         title: "#",
         dataIndex: "avatar",
+        width: 100,
         align: 'center',
         render: (avatar) => (
           <Avatar
@@ -40,52 +41,32 @@ class EmployeeCollaboratorListPage extends ListBasePage {
           />
         ),
       },
-      { title: "Tên đăng nhập", dataIndex: "username" },
       { title: "Họ và tên", dataIndex: "fullName" },
-      { title: "Số điện thoại", dataIndex: "phone" },
-      { title: "E-mail", dataIndex: "email", width: "200px" },
-      { title: "Số lượng CTV", dataIndex: "countColl", width: "200px", align: 'right' },
-      this.renderActionColumn(),
+      {
+        title: "Số lượng CTV",
+        dataIndex: "countColl",
+        width: "130px",
+        align: 'center',
+        render: (countColl, dataRow) => {
+          return <div>
+            <span>{countColl}</span>
+            {
+              this.renderButton((
+                <Button style={{ marginLeft: 4 }} type="link" onClick={() => this.handleRouting(dataRow.id, dataRow.fullName)} className="no-padding">
+                  { this.actionColumns.isShowCollaborator.icon || <TeamOutlined /> }
+                </Button>
+              ), [5]
+              )
+            }
+          </div>
+        }
+      },
     ];
     this.actionColumns = {
       isEdit: true,
       isDelete: true,
       isShowCollaborator: Number(actions.getUserData()?.settings?.Collaborator?.["enable-collaborator"])
     };
-  }
-
-  renderActionColumn() {
-    return {
-        title: 'Hành động',
-        width: '100px',
-        align: 'center',
-        render: (dataRow) => {
-            const actionColumns = [];
-            if(this.actionColumns.isShowCollaborator) {
-              actionColumns.push(this.renderButton((
-                <Button type="link" onClick={() => this.handleRouting(dataRow.id, dataRow.fullName)} className="no-padding">
-                  { this.actionColumns.isShowCollaborator.icon || <TeamOutlined /> }
-                </Button>
-              ), [5]
-              ))
-            }
-            const actionColumnsWithDivider = [];
-            actionColumns.forEach((action, index) => {
-                actionColumnsWithDivider.push(action);
-                if(index !== (actionColumns.length -1))
-                {
-                    actionColumnsWithDivider.push(<Divider type="vertical" />);
-                }
-            })
-            return (
-                <span>
-                    {
-                        actionColumnsWithDivider.map((action, index) => <span key={index}>{action}</span>)
-                    }
-                </span>
-            )
-        }
-    }
   }
 
   handleRouting(parentId, parentName) {
