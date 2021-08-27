@@ -67,16 +67,16 @@ class OrdersListPage extends ListBasePage {
                 dataIndex: 'employeeDto',
                 render: (employeeDto) => {
                     return (
-                        employeeDto.labelColor
+                        employeeDto?.labelColor
                             ? (<div>
-                            <Tag color={employeeDto.labelColor} style={{
+                            <Tag color={employeeDto?.labelColor} style={{
                                 padding: '2px 7px',
                                 fontSize: '14px',
-                            }}>{employeeDto.fullName}</Tag>
+                            }}>{employeeDto?.fullName}</Tag>
                             </div>)
                             : <div style={{
                                 padding: '2px 7px',
-                            }}>{employeeDto.fullName}</div>
+                            }}>{employeeDto?.fullName}</div>
                     )
                 }
             },
@@ -121,27 +121,6 @@ class OrdersListPage extends ListBasePage {
             isDelete: false,
             isChangeStatus: false,
         };
-    }
-
-    getList() {
-        const { getDataList } = this.props;
-        const page = this.pagination.current ? this.pagination.current - 1 : 0;
-        const params = { page, size: this.pagination.pageSize, search: this.search};
-        getDataList({
-            params,
-            onCompleted: (data = []) => {
-                const randomColorsArrayByEmployeeId = data.reduce((r, a) => {
-                    r[a.employeeDto.id] = null;
-                    return r;
-                   }, {})
-                Object.keys(randomColorsArrayByEmployeeId).forEach(employeeId => {
-                    randomColorsArrayByEmployeeId[employeeId] = Utils.getRandomColor()
-                })
-                this.setState({
-                    randomColorsArrayByEmployeeId,
-                })
-            },
-        });
     }
 
     getSearchFields() {

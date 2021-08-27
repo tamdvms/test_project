@@ -49,7 +49,7 @@ class EmployeeCollaboratorListPage extends ListBasePage {
         align: 'center',
         render: (countColl, dataRow) => {
           return <div>
-            <span>{countColl}</span>
+            <span>({countColl})</span>
             {
               this.renderButton((
                 <Button style={{ marginLeft: 4 }} type="link" onClick={() => this.handleRouting(dataRow.id, dataRow.fullName)} className="no-padding">
