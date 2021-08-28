@@ -46,7 +46,7 @@ class ProfileForm extends BasicForm {
   compareToPassword = (rule, password) => {
     const newPassword = this.getFieldValue("password");
     if ((password || newPassword) && password !== newPassword) {
-      return Promise.reject("Mật khẩu không khớp!");
+      return Promise.reject(this.props.t('form.validationMessage.passwordNotMatch'));
     } else {
       return Promise.resolve();
     }
@@ -108,7 +108,7 @@ class ProfileForm extends BasicForm {
   };
 
   render() {
-    const { loading, userData } = this.props;
+    const { loading, userData, t } = this.props;
     const { avatar, avatarUploading } = this.state;
 
     return (
@@ -121,35 +121,35 @@ class ProfileForm extends BasicForm {
         <CropImageFiled
           fieldName="avatar"
           loading={avatarUploading}
-          label="Ảnh đại diện"
+          label={t('form.label.avatar')}
           imageUrl={avatar}
           onChange={this.handleChangeAvatar}
           uploadFile={this.uploadFileAvatar}
         />
-        <TextField fieldName="username" label="Tên đăng nhập" disabled required />
+        <TextField fieldName="username" label={t('form.label.username')} disabled required />
         <TextField
           fieldName="fullName"
-          label="Họ và tên"
+          label={t('form.label.fullName')}
           required
-          requiredMsg="Vui lòng nhập họ và tên"
+          requiredMsg={t('form.validationMessage.fullNameRequire')}
         />
         <TextField
           type="password"
           fieldName="oldPassword"
-          label="Mật khẩu cũ"
+          label={t('form.label.oldPassword')}
           required
-          requiredMsg="Vui lòng nhập mật khẩu"
+          requiredMsg={t('form.validationMessage.passwordRequire')}
         />
         <TextField
           type="password"
           fieldName="password"
-          label="Mật khẩu mới"
+          label={t('form.label.newPassword')}
           validators={[this.validateToConfirmPassword]}
         />
         <TextField
           type="password"
           fieldName="confirmPassword"
-          label="Xác nhận mật khẩu mới"
+          label={t('form.label.confirmNewPassword')}
           validators={[this.compareToPassword]}
         />
         <Form.Item
@@ -164,7 +164,7 @@ class ProfileForm extends BasicForm {
             type="primary"
             htmlType="submit"
           >
-            Cập nhật
+            {t('button.update')}
           </Button>
         </Form.Item>
       </Form>

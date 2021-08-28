@@ -8,6 +8,7 @@ import {
     PictureOutlined,
     CheckOutlined } from '@ant-design/icons';
 import qs from 'query-string';
+import { withTranslation } from "react-i18next";
 
 import SearchForm from '../compoments/common/entryForm/SearchForm';
 import StatusTag from '../compoments/common/elements/StatusTag';
@@ -180,45 +181,122 @@ class ListBasePage extends Component {
     }
 
     getActionName() {
-        return this.isEditing ? 'Cập nhật' : 'Tạo mới';
+        const { t } = this.props;
+        if(t) return this.isEditing ? t('listBasePage:update') : t('listBasePage:create');
+        return this.isEditing ? 'Update' : 'Create';
     }
 
     onModifyCompleted(responseData) {
+        const { t } = this.props;
+        const defaultSuccessMessage = 'Successful!';
+        const defaultFailedMessage = 'Failed!';
         if(responseData) {
             this.onCancelModal();
             this.getList();
-            showSucsessMessage(`${this.getActionName()} ${this.objectName} thành công!`);
+            showSucsessMessage(
+                t ? t(
+                    'listBasePage:showSuccessMessage',
+                    {
+                        actionName: this.getActionName(),
+                        objectName: this.objectName,
+                        defaultValue: defaultSuccessMessage
+                    },
+                )
+                : defaultSuccessMessage,
+                t ? { t, ns: 'listBasePage' } : null,
+            );
         }
         else {
             this.setState({ isShowModifiedLoading: false });
-            showErrorMessage(`${this.getActionName()} ${this.objectName} thất bại. Vui lòng thử lại!`);
+            showErrorMessage(
+                t ? t(
+                    'listBasePage:showErrorMessage',
+                    {
+                        actionName: this.getActionName(),
+                        objectName: this.objectName,
+                        defaultValue: defaultFailedMessage
+                    }
+                    )
+                : defaultFailedMessage,
+                { t, ns: 'listBasePage' }
+            );
         }
     }
 
     onModifyError(err) {
+        const { t } = this.props;
+        const defaultFailedMessage = 'Failed!';
         this.setState({ isShowModifiedLoading: false });
         if(err && err.message)
-            showErrorMessage(err.message);
+            showErrorMessage(err.message, t ? { t, ns: 'listBasePage' } : null);
         else
-            showErrorMessage(`${this.getActionName()} ${this.objectName} thất bại. Vui lòng thử lại!`);
+            showErrorMessage(
+                t ? t(
+                    'listBasePage:showErrorMessage',
+                    {
+                        actionName: this.getActionName(),
+                        objectName: this.objectName,
+                        defaultValue: defaultFailedMessage
+                    }
+                    )
+                : defaultFailedMessage,
+                t ? { t, ns: 'listBasePage' } : null
+            );
     }
 
     onChangeStatusCompleted(status) {
-        const  action = status === STATUS_ACTIVE ? 'Hoạt động' : 'Khóa';
-        this.getList();
-        showSucsessMessage(`${action} ${this.objectName} thành công!`);
+        const { t } = this.props;
+        let action = status === STATUS_ACTIVE ? 'Active' : 'Lock';
+        const defaultSuccessMessage = 'Successful!';
+        if(t) {
+            action = status === STATUS_ACTIVE ? t('listBasePage:active') : t('listBasePage:lock');
+            this.getList();
+            showSucsessMessage(
+                t(
+                    'listBasePage:showSuccessMessage',
+                    {
+                        actionName: action,
+                        objectName: this.objectName,
+                        defaultValue: defaultSuccessMessage
+                    },
+                ),
+                { t, ns: 'listBasePage' },
+            );
+        }
+        else {
+            this.getList();
+            showSucsessMessage(defaultSuccessMessage);
+        }
     }
 
     onChangeStatusError(status, err) {
-        const  action = status === STATUS_ACTIVE ? 'Hoạt động' : 'Khóa';
+        const { t } = this.props;
+        let action = status === STATUS_ACTIVE ? 'Active' : 'Lock';
+        const defaultFailedMessage = 'Failed!';
         if(err)
-            showErrorMessage(err.message);
-        else
-            showErrorMessage(`${action} ${this.objectName} thất bại. Vui lòng thử lại!`);
+            showErrorMessage(err.message, t ? { t, ns: 'listBasePage' } : null);
+        else {
+            if(t) {
+                action = status === STATUS_ACTIVE ? t('listBasePage:active') : t('listBasePage:lock');
+                showErrorMessage(
+                    t(
+                        'listBasePage:showErrorMessage',
+                        {
+                            actionName: action,
+                            objectName: this.objectName,
+                            defaultValue: defaultFailedMessage
+                        },
+                    ),
+                    { t, ns: 'listBasePage' },
+                );
+            }
+            else
+                showErrorMessage(defaultFailedMessage);
+        }
     }
 
     onDeleteCompleted() {
-        const { dataList } = this.props;
+        const { dataList, t } = this.props;
         if(dataList && this.pagination.current > 1 && dataList.content && dataList.content.length === 1) {
             this.pagination.current = this.pagination.current - 1;
             this.setQueryString();
@@ -226,12 +304,34 @@ class ListBasePage extends Component {
         else {
             this.getList();
         }
-        
-        showSucsessMessage(`Xóa ${this.objectName} thành công!`);
+        const defaultSuccessMessage = 'Successful!';
+        showSucsessMessage(
+            t ? t(
+                'listBasePage:showDeleteSuccessMessage',
+                {
+                    objectName: this.objectName,
+                    defaultValue: defaultSuccessMessage
+                },
+            )
+            : defaultSuccessMessage,
+            t ? { t, ns: 'listBasePage' } : null,
+        );
     }
 
     onDeleteError() {
-        showErrorMessage(`Xóa ${this.objectName} thất bại. Vui lòng thử lại!`);
+        const { t } = this.props;
+        const defaultFailedMessage = 'Failed!';
+        showErrorMessage(
+            t ? t(
+                'listBasePage:showDeleteErrorMessage',
+                {
+                    objectName: this.objectName,
+                    defaultValue: defaultFailedMessage
+                }
+            )
+            : defaultFailedMessage,
+            t ? { t, ns: 'listBasePage' } : null
+        );
     }
 
     onOkModal(values) {
@@ -320,13 +420,22 @@ class ListBasePage extends Component {
     }
 
     showChangeStatusConfirm(data) {
-        const  action = data.status === STATUS_ACTIVE ? 'khóa' : 'kích hoạt';
+        const { t } = this.props;
+        const action = data.status === STATUS_ACTIVE ? t('listBasePage:active') : t('listBasePage:lock');
+        const defaultMessage = `Are you sure to ${data.status === STATUS_ACTIVE ? 'lock' : 'active'}?`;
         confirm({
-          title: `Bạn có chắc ${action} ${this.objectName} này?`,
+          title: t ? t(
+            'listBasePage:titleConfirm',
+            {
+                actionName: action,
+                objectName: this.objectName,
+                defaultValue: defaultMessage
+            },
+          ) : defaultMessage,
           content: '',
-          okText: 'Có',
+          okText: t ? t('listBasePage:okText') : 'Yes',
           okType: 'danger',
-          cancelText: 'Không',
+          cancelText: t ? t('listBasePage:cancleText') : 'No',
           onOk: () => {
             this.onChangeStatus(data);
           },
@@ -337,12 +446,21 @@ class ListBasePage extends Component {
     }
 
     showDeleteConfirm(id) {
+        const { t } = this.props;
+        const defaultMessage = `Are you sure delete?`;
         confirm({
-          title: `Bạn có chắc xóa ${this.objectName} này?`,
+          title: t ? t(
+            'listBasePage:titleConfirm',
+            {
+                actionName: 'xóa',
+                objectName: this.objectName,
+                defaultValue: defaultMessage
+            },
+          ) : defaultMessage,
           content: '',
-          okText: 'Có',
+          okText: t ? t('listBasePage:okText') : 'Yes',
           okType: 'danger',
-          cancelText: 'Không',
+          cancelText: t ? t('listBasePage:cancleText') : 'No',
           onOk: () => {
             this.onDelete(id);
           },
@@ -353,8 +471,9 @@ class ListBasePage extends Component {
     }
 
     renderActionColumn() {
+        const { t } = this.props;
         return {
-            title: 'Hành động',
+            title: t ? t('listBasePage:titleActionCol') : 'Action',
             width: '100px',
             align: 'center',
             render: (dataRow) => {
@@ -430,8 +549,9 @@ class ListBasePage extends Component {
     }
 
     renderStatusColumn() {
+        const { t } = this.props;
         return {
-            title: 'Trạng thái',
+            title: t ? t('listBasePage:titleStatusCol') : 'Status',
             dataIndex: 'status',
             width: '100px',
             render: (status) => <StatusTag status={status}/>

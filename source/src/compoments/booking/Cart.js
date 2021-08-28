@@ -1,6 +1,8 @@
 import React from 'react'
 import { Input, Empty, Button, Avatar, Form, Modal, Spin } from 'antd'
 import { EditOutlined, SearchOutlined, ShoppingFilled, PlusOutlined, DeleteFilled } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
+
 import Utils from '../../utils'
 import ElementWithPermission from '../common/elements/ElementWithPermission'
 import { sitePathConfig } from '../../constants/sitePathConfig'
@@ -16,6 +18,7 @@ const Cart = ({
     totalPrice,
     setIsPaymenting,
 }) => {
+    const { t } = useTranslation("bookingContainer")
 
     const settings = actions.getUserData()?.settings
     const VAT =  settings && settings.Booking.vat
@@ -29,7 +32,7 @@ const Cart = ({
     return (
         <div className={`cart${hide ? ' hide' : ''}`}>
             <div className="header">
-                <h2>Giỏ hàng</h2>
+                <h2>{t("page.cart")}</h2>
             </div>
             <div className="list">
                 <ul className="orders">
@@ -51,7 +54,7 @@ const Cart = ({
                                                     type="ghost"
                                                     onClick={() => handleEventOnItem(product, "toggleDescription" )}
                                                     >
-                                                        {product.note ? "Sửa" : "Thêm"} ghi chú
+                                                        {product.note ? t("page.edit") : t("page.add")} {t("page.note")}
                                                         {product.note ? <EditOutlined /> : <PlusOutlined />}
                                                     </Button>
                                                 ) : null
@@ -101,7 +104,7 @@ const Cart = ({
                                         noStyle
                                         >
                                             <TextArea
-                                            placeholder="Điền vào đây"
+                                            placeholder={t("page.typeHere")}
                                             value={product.note}
                                             onPressEnter={(e) => { handleSubmitNote(
                                                 {
@@ -118,7 +121,7 @@ const Cart = ({
                                     type="primary"
                                     form={"form-" + product.id}
                                     >
-                                        Đồng ý
+                                       {t("page.accept")}
                                     </Button>
                                 </div>
                                 {
@@ -135,7 +138,7 @@ const Cart = ({
             </div>
             <div className="bottom">
                 <div className="calculate-total product">
-                    <div className="title">Tổng tiền đơn hàng:</div>
+                    <div className="title">{t("page.totalProductPrice")}</div>
                     <div className="total">
                         {Utils.formatMoney(totalPrice)}
                     </div>
@@ -147,7 +150,7 @@ const Cart = ({
                     </div>
                 </div>
                 <div className="calculate-total product-vat">
-                    <div className="title">Tổng tiền thanh toán:</div>
+                    <div className="title">{t("page.totalPayment")}</div>
                     <div className="total">
                         {Utils.formatMoney(totalPrice + totalPrice * Number(VAT / 100))}
                     </div>
@@ -158,7 +161,7 @@ const Cart = ({
                     type="primary"
                     disabled={selectedItems.length <= 0}
                     onClick={() => setIsPaymenting(true)}
-                    >Tiếp theo</Button>
+                    >{t("page.next")}</Button>
                 </ElementWithPermission>
             </div>
         </div>

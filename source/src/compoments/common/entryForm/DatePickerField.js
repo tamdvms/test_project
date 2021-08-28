@@ -6,6 +6,7 @@ import BaseField from './BaseField';
 
 import { DATE_FORMAT_DISPLAY } from '../../../constants'
 
+import { withTranslation } from 'react-i18next';
 
 class DatePickerField extends BaseField {
 
@@ -42,4 +43,4 @@ class DatePickerField extends BaseField {
     }
 }
 
-export default DatePickerField;
+export default withTranslation(['datePickerField', 'baseField'])(DatePickerField);

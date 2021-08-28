@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { navMenuConfig } from '../../../constants/menuConfig';
 import logoUrl from '../../../assets/images/logo.jpg';
 import { AppConstants } from '../../../constants'
+import { withTranslation } from 'react-i18next';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -67,7 +68,7 @@ class NavSider extends Component {
     }
 
     render() {
-        const { onToggleNavSide, currentPathname, navSidercollapsed, userData } = this.props;
+        const { onToggleNavSide, currentPathname, navSidercollapsed, userData, t } = this.props;
         const {
             loadingMenuItem,
         } = this.state;
@@ -125,7 +126,7 @@ class NavSider extends Component {
                                     {
                                         navMenuItem.icon
                                     }
-                                    <span>{navMenuItem.label}</span>
+                                    <span>{t(navMenuItem.label)}</span>
                                 </span>
                                 {
                                     navMenuItem.iconAfter && navMenuItem.iconAfter(this.props, `${window.location.host}/login/${userData.id}`)
@@ -152,7 +153,7 @@ class NavSider extends Component {
                                     return (
                                         <Menu.Item key={navChildMenu.key || navChildMenu.path}>
                                             <Link to={navChildMenu.path}>
-                                                <span>{navChildMenu.label}</span>
+                                            <span>{t(navChildMenu.label)}</span>
                                             </Link>
                                         </Menu.Item>
                                     )
@@ -171,7 +172,7 @@ class NavSider extends Component {
                                         navMenuItem.icon
                                     }
                                     
-                                    <span>{navMenuItem.label}</span>
+                                    <span>{t(navMenuItem.label)}</span>
                                 </span>
                             </Link>
                         </Menu.Item>
@@ -182,4 +183,4 @@ class NavSider extends Component {
     }
 }
 
-export default NavSider;
+export default withTranslation('navSider')(NavSider);

@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Button, Avatar } from "antd";
 import { PlusOutlined, UserOutlined } from "@ant-design/icons";
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import AdminForm from "../../compoments/user/AdminForm";
@@ -21,12 +22,13 @@ class UserAdminListPage extends ListBasePage {
 
   constructor(props) {
     super(props);
-    this.objectName = "quản trị viên";
-    this.breadcrumbs = [{ name: "Quản trị viên" }];
+    const {t} = this.props;
+    this.objectName =  t("objectName");
+    this.breadcrumbs = [{name: t('breadcrumbs.currentPage')}];
     this.columns = [
       this.renderIdColumn(),
       {
-        title: "Ảnh đại diện",
+        title: "#",
         dataIndex: "avatar",
         render: (avatar) => (
           <Avatar
@@ -36,12 +38,12 @@ class UserAdminListPage extends ListBasePage {
           />
         ),
       },
-      { title: "Tên đăng nhập", dataIndex: "username" },
-      { title: "Họ và tên", dataIndex: "fullName" },
-      { title: "Số điện thoại", dataIndex: "phone" },
+      { title:  t("table.username"), dataIndex: "username" },
+      { title:  t("table.fullName"), dataIndex: "fullName" },
+      { title:  t("table.phone"), dataIndex: "phone" },
       { title: "E-mail", dataIndex: "email", width: "200px" },
       {
-        title: "Ngày tạo",
+        title: t("table.createdDate"),
         dataIndex: "createdDate",
         render: (createdDate) => convertUtcToTimezone(createdDate),
       },
@@ -58,15 +60,16 @@ class UserAdminListPage extends ListBasePage {
   }
 
   getSearchFields() {
+    const {t} = this.props;
     return [
       {
         key: "username",
-        seachPlaceholder: "Tên đăng nhập",
+        seachPlaceholder: t('searchPlaceHolder.username'),
         initialValue: this.search.username,
       },
       {
         key: "fullName",
-        seachPlaceholder: "Họ và tên",
+        seachPlaceholder: t('searchPlaceHolder.fullName'),
         initialValue: this.search.fullName,
       },
     ];
@@ -103,6 +106,7 @@ class UserAdminListPage extends ListBasePage {
       dataList,
       loading,
       uploadFile,
+      t,
     } = this.props;
     const { isShowModifiedModal, isShowModifiedLoading } = this.state;
     const users = dataList.data || [];
@@ -116,7 +120,7 @@ class UserAdminListPage extends ListBasePage {
             type="primary"
             onClick={() => this.onShowModifiedModal(false)}
           >
-            <PlusOutlined /> Quản trị viên mới
+            <PlusOutlined /> {t("createNewButton", { var: t(`constants:${"Administrator"}`, "") })}
           </Button>
           ))}
         </div>
@@ -141,6 +145,7 @@ class UserAdminListPage extends ListBasePage {
             dataDetail={this.isEditing ? this.dataDetail : {}}
             loadingSave={isShowModifiedLoading}
             uploadFile={uploadFile}
+            t={t}
           />
         </BasicModal>
       </div>
@@ -162,4 +167,4 @@ const mapDispatchToProps = (dispatch) => ({
   uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserAdminListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['userAdminListPage','listBasePage'])(UserAdminListPage));

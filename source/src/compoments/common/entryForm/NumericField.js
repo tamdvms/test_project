@@ -4,6 +4,7 @@ import { Form, InputNumber } from 'antd';
 
 import BaseField from './BaseField';
 import Utils from '../../../utils';
+import { withTranslation } from 'react-i18next';
 
 class NumericField extends BaseField {
 
@@ -56,4 +57,4 @@ class NumericField extends BaseField {
     }
 }
 
-export default NumericField;
+export default withTranslation('baseField')(NumericField);

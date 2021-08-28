@@ -9,6 +9,7 @@ import { LayoutConfigs, StorageKeys } from '../../../constants';
 import { actions } from '../../../actions';
 import { sitePathConfig } from '../../../constants/sitePathConfig';
 import Utils from '../../../utils';
+import { withTranslation } from 'react-i18next';
 
 const { getUserData } = actions;
 
@@ -113,6 +114,7 @@ class MasterLayout extends Component {
             showFullScreenLoading,
             hideFullScreenLoading,
             siteConfig,
+            t,
         } = this.props;
         const { breadcrumbs, navSidercollapsed, userData } = this.state;
         const contentClass = siteConfig?.contentClass || '';
@@ -140,7 +142,7 @@ class MasterLayout extends Component {
                             <Breadcrumb className="app-breadcrumb" separator=">">
                                 <Breadcrumb.Item>
                                     {/* <Link to="/">Home</Link> */}
-                                    Trang chủ
+                                    {t('breadcrumbs.home')}
                                 </Breadcrumb.Item>
                                 {
                                     breadcrumbs
@@ -193,5 +195,5 @@ const mapDispatchToProps = dispatch => ({
     setUserData: (data) => actions.setUserData(data)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(MasterLayout);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation('masterLayout')(MasterLayout));
 

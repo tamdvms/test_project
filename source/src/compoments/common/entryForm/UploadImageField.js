@@ -5,6 +5,7 @@ import { Form, Upload } from 'antd';
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 
 import BaseField from './BaseField';
+import { withTranslation } from 'react-i18next';
 
 class UploadImageField extends BaseField {
     
@@ -32,11 +33,11 @@ class UploadImageField extends BaseField {
     }
 
     renderUploadButton() {
-        const { loading, showUploadList } = this.props;
+        const { loading, showUploadList, t } = this.props;
         return (
             <div>
                 {!showUploadList && loading ? <LoadingOutlined /> : <PlusOutlined />}
-                <div className="ant-upload-text">{loading ? 'Đang tải lên' : 'Tải lên'}</div>
+                <div className="ant-upload-text">{loading ? t('uploading') : t('upload')}</div>
             </div>
         );
     }
@@ -97,4 +98,4 @@ class UploadImageField extends BaseField {
     }
 }
 
-export default UploadImageField;
+export default withTranslation(['cropImageFiled', 'baseField'])(UploadImageField);

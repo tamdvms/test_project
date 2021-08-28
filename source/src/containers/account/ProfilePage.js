@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withTranslation } from "react-i18next";
 
 import ProfileForm from "../../compoments/account/ProfileForm";
 import { actions } from "../../actions";
@@ -23,10 +24,11 @@ class ProfilePage extends Component {
       getProfile,
       showFullScreenLoading,
       currentUser,
+      t
     } = this.props;
     showFullScreenLoading();
     getProfile({ kind: currentUser.kind });
-    changeBreadcrumb([{ name: "Hồ sơ" }]);
+    changeBreadcrumb([{ name: t('breadcrumbs.currentPage') }]);
   }
 
   onUpdate(valueForm) {
@@ -35,6 +37,7 @@ class ProfilePage extends Component {
       profileData,
       hideFullScreenLoading,
       changeUserData,
+      t,
     } = this.props;
     this.setState({ loading: true });
     updateProfile({
@@ -48,15 +51,15 @@ class ProfilePage extends Component {
         this.setState({ loading: false });
         hideFullScreenLoading();
         if (data.success === false) {
-          showErrorMessage("Cập nhật hồ sơ thất bại. Vui lòng thử lại!");
+          showErrorMessage(t('message.updateProfileFail'));
         } else {
-          showSucsessMessage("Hồ sơ của bạn đã được cập nhật!");
+          showSucsessMessage(t('message.updateProfileSuccess'));
         }
       },
       onError: () => {
         this.setState({ loading: false });
         hideFullScreenLoading();
-        showErrorMessage("Cập nhật hồ sơ thất bại. Vui lòng thử lại!");
+        showErrorMessage(t('message.updateProfileFail'));
       },
     });
   }
@@ -69,7 +72,7 @@ class ProfilePage extends Component {
     };
   };
   render() {
-    const { uploadFile, fullScreenLoading } = this.props;
+    const { uploadFile, fullScreenLoading, t } = this.props;
     const { loading } = this.state;
     const profileData = this.getProfileData();
     if (
@@ -85,6 +88,7 @@ class ProfilePage extends Component {
               loading={loading}
               userData={profileData}
               uploadFile={uploadFile}
+              t={t}
             />
           </div>
         </div>
@@ -105,4 +109,4 @@ const mapDispatchToProps = (dispatch) => ({
   uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfilePage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation('profilePage')(ProfilePage));

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Avatar, Tag, Button } from "antd";
 import { UserOutlined, PlusOutlined } from "@ant-design/icons";
 import qs from 'query-string';
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import CategoryForm from "../../compoments/category/CategoryForm";
@@ -24,9 +25,9 @@ class CategoryExportListPage extends ListBasePage {
     constructor(props) {
         super(props);
         const { t } = props;
-        this.objectName =  "Danh mục chi";
+        this.objectName = t("objectNameExport");
         this.breadcrumbs = [
-            { name: "Danh mục chi" },
+            { name: t("breadcrumbs.currentPageExport") },
         ];
         this.columns = [
         this.renderIdColumn(),
@@ -45,7 +46,7 @@ class CategoryExportListPage extends ListBasePage {
             ),
         },
         {
-            title: 'Tên',
+            title: t("table.name"),
             render: (dataRow) => {
                 return (
                     <span className="routing" onClick={()=>{
@@ -91,15 +92,16 @@ class CategoryExportListPage extends ListBasePage {
     }
 
     getSearchFields() {
+        const { t } = this.props;
         return [
         {
             key: "name",
-            seachPlaceholder: 'Tên',
+            seachPlaceholder: t("searchPlaceHolder.name"),
             initialValue: this.search.name,
         },
         {
             key: "status",
-            seachPlaceholder: "Chọn trạng thái",
+            seachPlaceholder: t("searchPlaceHolder.status"),
             fieldType: FieldTypes.SELECT,
             options: commonStatus,
             initialValue: this.search.status,
@@ -112,6 +114,7 @@ class CategoryExportListPage extends ListBasePage {
             dataList,
             loading,
             uploadFile,
+            t,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading } = this.state;
         const categoryData = dataList.data || [];
@@ -126,7 +129,7 @@ class CategoryExportListPage extends ListBasePage {
                     type="primary"
                     onClick={() => this.onShowModifiedModal(false)}
                     >
-                        <PlusOutlined /> Thêm mới
+                        <PlusOutlined /> {t("createNewButton")}
                     </Button>
                 ))
             }
@@ -153,6 +156,7 @@ class CategoryExportListPage extends ListBasePage {
                 uploadFile={uploadFile}
                 commonStatus={commonStatus}
                 loadingSave={isShowModifiedLoading}
+                t={t}
             />
             </BasicModal>
         </div>
@@ -174,4 +178,4 @@ const mapDispatchToProps = (dispatch) => ({
   uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoryExportListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['categoryListPage','listBasePage','constants', 'basicModal'])(CategoryExportListPage));

@@ -13,6 +13,8 @@ import { showErrorMessage } from "../../../services/notifyService";
 
 import { LIMIT_IMAGE_SIZE, UploadFileTypes } from "../../../constants";
 
+import { withTranslation } from 'react-i18next';
+
 const AlignStyle = ReactQuill.Quill.import('attributors/style/align');
 ReactQuill.Quill.register(AlignStyle, true);
 
@@ -105,7 +107,7 @@ class RichTextField extends BaseField {
                     })
                 }
                 else{
-                    showErrorMessage("Hình phải có dung lượng nhỏ hơn 500KB. Vui lòng thử lại!");
+                    showErrorMessage(t("imageTooLarge"));
                 }
             }
         });
@@ -143,4 +145,4 @@ const mapDispatchToProps = (dispatch) => ({
     uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect((state) => ({}), mapDispatchToProps)(RichTextField);
+export default connect((state) => ({}), mapDispatchToProps)(withTranslation(["baseField"])(RichTextField));

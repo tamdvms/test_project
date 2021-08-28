@@ -3,6 +3,7 @@ import React from 'react';
 import { Form, Select } from 'antd';
 import BaseField from './BaseField';
 import Utils from '../../../utils';
+import { withTranslation } from 'react-i18next';
 
 const Option = Select.Option;
 class AutoCompleteField extends BaseField {
@@ -32,6 +33,7 @@ class AutoCompleteField extends BaseField {
             optionLabelProp,
             autoComplete,
             className,
+            t,
         } = this.props;
 
         const optionValueKey = optionValue || 'value';
@@ -75,7 +77,7 @@ class AutoCompleteField extends BaseField {
                             renderCustomOption(option[optionValueKey], option[optionValueKey], option)
                             :
                             <Option key={option[optionValueKey]} value={option[optionValueKey]} other={option[optionOtherKey]} >
-                                {option[optionLabelKey]}
+                                {t(option[optionLabelKey])}
                             </Option>
                         )
                         :
@@ -90,4 +92,4 @@ class AutoCompleteField extends BaseField {
     }
 }
 
-export default AutoCompleteField;
+export default withTranslation(['constants', 'baseField'])(AutoCompleteField);
