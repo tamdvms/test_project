@@ -24,7 +24,7 @@ class SettingForm extends BasicForm {
   };
 
   render() {
-    const { isEditing, formId, loadingSave } = this.props;
+    const { isEditing, formId, loadingSave, t } = this.props;
 
     return (
       <Form
@@ -39,19 +39,19 @@ class SettingForm extends BasicForm {
             <TextField
               fieldName="name"
               min={6}
-              label="Tên"
+              label={t("form.label.name")}
               required
               disabled={loadingSave}
             />
           </Col>
           <Col span={12}>
-            <TextField fieldName="value" label="Giá trị" required disabled={loadingSave}/>
+            <TextField fieldName="value" label={t("form.label.value")} required disabled={loadingSave}/>
           </Col>
         </Row>
 
         <Row gutter={16}>
           <Col span={12}>
-            <TextField type="textarea" fieldName="description" label="Mô tả" disabled={loadingSave}/>
+            <TextField type="textarea" fieldName="description" label={t("form.label.description")} disabled={loadingSave}/>
           </Col>
           {/* <Col span={12} hidden={isEditing}>
             <BooleanField fieldName="editable" label="Có thể chỉnh sửa" disabled={isEditing || loadingSave}/>

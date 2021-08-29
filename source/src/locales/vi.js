@@ -668,4 +668,53 @@ export default {
         },
         createNewButton: 'Tạo {{ var, lowercase }} mới',
     },
+    settingsListPage: {
+        breadcrumbs: {
+            currentPage: 'Cài đặt',
+        },
+        objectName: 'cài đặt',
+        table: {
+            name: 'Tên',
+            value: 'Giá trị',
+            description: 'Mô tả',
+            status: 'Trạng thái',
+        },
+        form: {
+            label: {
+                name: 'Tên',
+                value: 'Giá trị',
+                description: 'Mô tả',
+                status: 'Trạng thái',
+            },
+            validationMessage: {
+                price: 'Giá tiền chỉ bao gồm các ký tự 0-9',
+            }
+        },
+    },
+    groupPermissionListPage: {
+        breadcrumbs: {
+            currentPage: 'Nhóm quyền',
+        },
+        objectName: 'Nhóm',
+        table: {
+            name: 'Tên',
+            description: 'Mô tả',
+        },
+        searchPlaceholder: {
+            name: 'Tên',
+        },
+        form: {
+            label: {
+                name: 'Tên',
+                value: 'Giá trị',
+                description: 'Mô tả',
+                status: 'Trạng thái',
+                kind: 'Loại',
+                groupPermission: 'Nhóm quyền',
+            },
+            validationMessage: {
+               permission: 'Vui lòng chọn nhóm quyền',
+            }
+        },
+    },
 }

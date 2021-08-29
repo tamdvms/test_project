@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import GroupPermissionForm from "../../compoments/groupPermission/GroupPermissionForm";
@@ -15,12 +16,13 @@ class GroupPermissionListPage extends ListBasePage {
 
   constructor(props) {
     super(props);
-    this.objectName = "groups";
-    this.breadcrumbs = [{ name: "Nhóm quyền" }];
+    const { t } = props;
+    this.objectName = t("objectName");
+    this.breadcrumbs = [{ name: t("breadcrumbs.currentPage") }];
     this.columns = [
       this.renderIdColumn(),
-      { title: "Tên", dataIndex: "name" },
-      { title: "Mô tả", dataIndex: "description", width: "200px" },
+      { title: t("table.name"), dataIndex: "name" },
+      { title: t("table.description"), dataIndex: "description", width: "200px" },
       this.renderActionColumn(),
     ];
     this.actionColumns = {
@@ -31,10 +33,11 @@ class GroupPermissionListPage extends ListBasePage {
   }
 
   getSearchFields() {
+    const { t } = this.props;
     return [
       {
         key: "name",
-        seachPlaceholder: "Tên",
+        seachPlaceholder: t("searchPlaceholder.name"),
         initialValue: this.search.group,
       },
     ];
@@ -52,6 +55,7 @@ class GroupPermissionListPage extends ListBasePage {
       dataList,
       loading,
       permissions,
+      t,
     } = this.props;
     const { isShowModifiedModal, isShowModifiedLoading } = this.state;
     const groupPermissions = dataList.data || [];
@@ -85,6 +89,7 @@ class GroupPermissionListPage extends ListBasePage {
             permissions={permissionsList || []}
             getPermissionList={this.props.getPermissionList}
             loadingSave={isShowModifiedLoading}
+            t={t}
           />
         </BasicModal>
       </div>
@@ -106,4 +111,4 @@ const mapDispatchToProps = (dispatch) => ({
   getPermissionList: (payload) => dispatch(actions.getPermissionList(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(GroupPermissionListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['groupPermissionListPage','listBasePage','constants', 'basicModal'])(GroupPermissionListPage));
