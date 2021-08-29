@@ -600,6 +600,7 @@ export default {
             employeeFullName: 'Nhân viên',
             ordersTotalMoney: 'Số tiền',
             ordersState: 'Tình trạng',
+            collaboratorFullName: 'Cộng tác viên',
         },
         form: {
             state: 'Tình trạng đơn hàng',
