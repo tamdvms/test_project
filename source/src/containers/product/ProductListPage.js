@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import { Avatar, Tag, Button, Divider } from "antd";
 import { UserOutlined, PlusOutlined, CheckOutlined, DeleteOutlined, EditOutlined, LockOutlined } from "@ant-design/icons";
 import qs from 'query-string';
-import StatusTag from '../../compoments/common/elements/StatusTag';
+import { withTranslation } from "react-i18next";
 
+import StatusTag from '../../compoments/common/elements/StatusTag';
 import ListBasePage from "../ListBasePage";
 import ProductForm from "../../compoments/product/ProductForm";
 import BaseTable from "../../compoments/common/table/BaseTable";
@@ -25,13 +26,14 @@ class ProductListPage extends ListBasePage {
 
     constructor(props) {
         super(props);
+        const { t } = props;
         const { location: { search } } = props;
         const { categoryName, categoryId } = qs.parse(search);
         this.categoryId = categoryId;
         this.pagination = { pageSize: 100 };
-        this.objectName =  "Sản phẩm";
+        this.objectName = t("objectName");
         this.breadcrumbs = [
-            { name: "Sản phẩm" },
+            { name: t("breadcrumbs.currentPage") },
             { name: categoryName }
         ];
         this.columns = [
@@ -73,7 +75,7 @@ class ProductListPage extends ListBasePage {
                 }
             },
             {
-                title: 'Tên',
+                title: t("table.productName"),
                 render: (dataRow) => {
                     return {
                         props: {
@@ -90,7 +92,7 @@ class ProductListPage extends ListBasePage {
                 }
             },
             {
-                title: <div className="tb-al-r force-one-line">Giảm giá (%)</div>,
+                title: <div className="tb-al-r force-one-line">{t("table.saleOff")} (%)</div>,
                 dataIndex: 'saleoff',
                 align: 'right',
                 width: 100,
@@ -106,7 +108,7 @@ class ProductListPage extends ListBasePage {
                 }
             },
             {
-                title: <div className="tb-al-r">Giá tiền</div>,
+                title: <div className="tb-al-r">{t("table.price")}</div>,
                 dataIndex: 'productPrice',
                 align: 'right',
                 width: 100,
@@ -122,7 +124,7 @@ class ProductListPage extends ListBasePage {
                 }
             },
             {
-                title: 'Trạng thái',
+                title: t("table.status"),
                 dataIndex: 'status',
                 width: '100px',
                 render: (status, dataRow) => {
@@ -156,8 +158,9 @@ class ProductListPage extends ListBasePage {
     }
 
     renderActionColumn = () => {
+        const { t } = this.props;
         return {
-            title: 'Hành động',
+            title: t("table.action"),
             width: '100px',
             align: 'center',
             render: (dataRow) => {
@@ -221,13 +224,13 @@ class ProductListPage extends ListBasePage {
 
     componentWillReceiveProps(nextProps) {
         if(nextProps.location.search !== this.props.location.search) {
-            const { location: { search } } = nextProps;
+            const { location: { search }, t } = nextProps;
             const { categoryName, categoryId } = qs.parse(search);
             this.categoryId = categoryId;
             this.pagination = { pageSize: 100 };
-            this.objectName =  "Sản phẩm";
+            this.objectName =  t("objectName");
             this.breadcrumbs = [
-                { name: "Sản phẩm" },
+                { name: t("breadcrumbs.currentPage") },
                 { name: categoryName}
             ];
             const { changeBreadcrumb } = nextProps;
@@ -275,15 +278,16 @@ class ProductListPage extends ListBasePage {
     }
 
     getSearchFields() {
+        const { t } = this.props;
         return [
             {
                 key: "name",
-                seachPlaceholder: 'Tên',
+                seachPlaceholder: t("searchPlaceHolder.productName"),
                 initialValue: this.search.name,
             },
             {
                 key: "status",
-                seachPlaceholder: "Chọn trạng thái",
+                seachPlaceholder: t("searchPlaceHolder.status"),
                 fieldType: FieldTypes.SELECT,
                 options: commonStatus,
                 initialValue: this.search.status,
@@ -303,6 +307,7 @@ class ProductListPage extends ListBasePage {
             dataList,
             loading,
             uploadFile,
+            t,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading } = this.state;
         const productData = dataList.data || [];
@@ -317,7 +322,7 @@ class ProductListPage extends ListBasePage {
                     type="primary"
                     onClick={() => this.onShowModifiedModal(false)}
                     >
-                        <PlusOutlined /> Thêm mới
+                        <PlusOutlined /> {t("createNewButton")}
                     </Button>
                 ))
             }
@@ -343,6 +348,7 @@ class ProductListPage extends ListBasePage {
                 dataDetail={this.isEditing ? this.dataDetail : {}}
                 uploadFile={uploadFile}
                 loadingSave={isShowModifiedLoading}
+                t={t}
             />
             </BasicModal>
         </div>
@@ -365,4 +371,4 @@ const mapDispatchToProps = (dispatch) => ({
   uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['productListPage','listBasePage','constants', 'basicModal'])(ProductListPage));

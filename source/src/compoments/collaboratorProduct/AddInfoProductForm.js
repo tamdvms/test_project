@@ -31,7 +31,6 @@ class AddInfoProductForm extends BasicForm {
 
     getInitialValue = () => {
         const { dataDetail, isEditing } = this.props
-        console.log(dataDetail)
         if(!isEditing) {
             return {
                 kind: COLLABORATOR_PRODUCT_KIND_MONEY
@@ -49,17 +48,17 @@ class AddInfoProductForm extends BasicForm {
     }
 
     render() {
-        const { formId, isEditing, dataDetail } = this.props;
+        const { formId, isEditing, dataDetail, t } = this.props;
         const { kind } = this.state;
         const { currencySymbol } = actions.getUserData()?.settings?.["Money and Number"]
         const valueKinds = [
             {
                 value: COLLABORATOR_PRODUCT_KIND_MONEY,
-                label: `Tiền (${currencySymbol})`
+                label: `${t("form.money")} (${currencySymbol})`
             },
             {
                 value: COLLABORATOR_PRODUCT_KIND_PERCENT,
-                label: 'Phần trăm (%)'
+                label: `${t("form.percent")} (%)`
             },
         ]
         return (
@@ -74,7 +73,7 @@ class AddInfoProductForm extends BasicForm {
                 <Col span={12}>
                     <DropdownField
                         fieldName="kind"
-                        label="Loại"
+                        label={t("form.label.kind")}
                         required
                         options={valueKinds}
                         onChange={this.handleChangeKind}
@@ -83,7 +82,7 @@ class AddInfoProductForm extends BasicForm {
                 <Col span={12}>
                     <NumericField
                     fieldName="value"
-                    label={`Hoa hồng (${kind === COLLABORATOR_PRODUCT_KIND_MONEY ? currencySymbol : '%'})`}
+                    label={`${t("form.label.commission")} (${kind === COLLABORATOR_PRODUCT_KIND_MONEY ? currencySymbol : '%'})`}
                     min={0}
                     max={kind === COLLABORATOR_PRODUCT_KIND_MONEY ? Infinity : 100}
                     width="100%"

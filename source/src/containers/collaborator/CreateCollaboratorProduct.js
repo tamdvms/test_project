@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import Fuse from 'fuse.js'
 import { Modal } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 import CreateCollaboratorProductPage from '../../compoments/collaboratorProduct/CreateCollaboratorProductPage'
 import { actions } from '../../actions'
@@ -21,7 +22,7 @@ const CreateCollaboratorProduct = ({
     fetchCollaboratorsProductList,
     collaboratorName,
 }) => {
-
+    const { t } = useTranslation("collaboratorProductListPage")
     const IformValues = {
         kind: null,
         value: null,
@@ -67,11 +68,11 @@ const CreateCollaboratorProduct = ({
             setSelectedKeysInTargets(moveKeys)
             transferRef.current.setStateKeys('right', [...moveKeys])
             confirm({
-                title: `Bạn có chắc muốn xóa?`,
+                title: t("createPage.confirmDelete"),
                 content: '',
-                okText: 'Có',
+                okText: t("createPage.yes"),
                 okType: 'danger',
-                cancelText: 'Không',
+                cancelText: t("createPage.no"),
                 onOk: () => {
                     handleDelete()
                 },
@@ -146,11 +147,11 @@ const CreateCollaboratorProduct = ({
                 setEditingMode(true)
                 setSelectedKeysInLeft([])
                 transferRef.current.setStateKeys('left', [])
-                showSucsessMessage('Thêm sản phẩm thành công!')
+                showSucsessMessage(t("showSuccessMessage.add"), { t, ns: 'listBasePage' })
             },
             onError: (err) => {
                 setFormLoading(false)
-                showErrorMessage(err ? err.message : 'Đã xảy ra lỗi!')
+                showErrorMessage(err ? err.message : t("showErrorMessage.add"), { t, ns: 'listBasePage' })
             }
         }))
     }
@@ -177,11 +178,11 @@ const CreateCollaboratorProduct = ({
                 setIsShowEditForm(false)
                 setSelectedKeysInTargets([])
                 transferRef.current.setStateKeys('right', [])
-                showSucsessMessage('Cập nhật sản phẩm thành công!')
+                showSucsessMessage(t("showSuccessMessage.update"), { t, ns: 'listBasePage' })
             },
             onError: (err) => {
                 setFormLoading(false)
-                showErrorMessage(err ? err.message : 'Đã xảy ra lỗi!')
+                showErrorMessage(err ? err.message : t("showErrorMessage.add"), { t, ns: 'listBasePage' })
             }
         }))
     }
@@ -268,11 +269,11 @@ const CreateCollaboratorProduct = ({
                 setIsShowEditForm(false)
                 setSelectedKeysInTargets([])
                 transferRef.current.setStateKeys('right', [])
-                showSucsessMessage('Xóa thành công!')
+                showSucsessMessage(t("showSuccessMessage.delete"), { t, ns: 'listBasePage' })
             },
             onError: (err) => {
                 setListLoading(false)
-                showErrorMessage(err ? err.message : 'Đã xảy ra lỗi!')
+                showErrorMessage(err ? err.message : t("showErrorMessage.add"), { t, ns: 'listBasePage' })
             }
         }))
     }
@@ -305,22 +306,22 @@ const CreateCollaboratorProduct = ({
                 setEditingMode(true)
                 setSelectedKeysInLeft([])
                 transferRef.current.setStateKeys('left', [])
-                showSucsessMessage('Thêm sản phẩm thành công!')
+                showSucsessMessage(t("showSuccessMessage.delete"), { t, ns: 'listBasePage' })
             },
             onError: (err) => {
                 setCollaboratorCategoryProductListLoading(false)
-                showErrorMessage(err ? err.message : 'Đã xảy ra lỗi!')
+                showErrorMessage(err ? err.message : t("showErrorMessage.add"), { t, ns: 'listBasePage' })
             }
         }))
     }
 
     const confirmCreatingCollaboratorProducts = (collaboratorCategoryProducts) => {
         confirm({
-            title: `Bạn có muốn thêm ${collaboratorCategoryProducts.length} sản phẩm?`,
+            title: t("createPage.confirmCreate", { var: collaboratorCategoryProducts.length }),
             content: '',
-            okText: 'Có',
+            okText: t("createPage.yes"),
             okType: 'danger',
-            cancelText: 'Không',
+            cancelText: t("createPage.no"),
             onOk: () => {
                 const prepareCreateData = collaboratorCategoryProducts.map(collaboratorCategoryProduct => ({
                     //* No need formValues because in collaboratorCategoryProduct obj has contained formValues
@@ -365,7 +366,7 @@ const CreateCollaboratorProduct = ({
             },
             onError: (err) => {
                 setCollaboratorCategoryProductListLoading(false)
-                showErrorMessage(err ? err.message : 'Đã xảy ra lỗi!')
+                showErrorMessage(err ? err.message : t("showErrorMessage.add"), { t, ns: 'listBasePage' })
             }
         }))
     }
@@ -415,7 +416,7 @@ const CreateCollaboratorProduct = ({
         />
         <BasicModal
             className="collaborator-product-edit-form"
-            title={editingMode ? "CHỈNH SỬA THÔNG TIN" : "THÊM SẢN PHẨM"}
+            title={editingMode ? t("form.titleUpdate") : t("form.titleAdd")}
 			visible={isShowEditForm}
 			onOk={handleOkeEditForm}
 			onCancel={() => {
@@ -427,6 +428,7 @@ const CreateCollaboratorProduct = ({
 			<AddInfoProductForm
             isEditing={editingMode}
             dataDetail={dataDetail}
+            t={t}
             />
 		</BasicModal>
         </>

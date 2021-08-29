@@ -84,9 +84,10 @@ class CollaboratorForm extends BasicForm {
     };
 
     compareToPassword = (rule, newPassword) => {
+        const { t } = this.props;
         const password = this.getFieldValue("password");
         if ((password || newPassword) && password !== newPassword) {
-        return Promise.reject("Mật khẩu không khớp vui lòng thử lại");
+        return Promise.reject(t("validationMessage.password"));
         } else {
         return Promise.resolve();
         }
@@ -126,6 +127,7 @@ class CollaboratorForm extends BasicForm {
         isEditing,
         formId,
         loadingSave,
+        t,
         } = this.props;
         const { avatar, uploading } = this.state;
 
@@ -138,14 +140,14 @@ class CollaboratorForm extends BasicForm {
             initialValues={this.getInitialFormValues()}
         >
             <FieldSet
-            title="Thông tin CTV"
+            title={t("form.fieldset.collaboratorInfo")}
             >
             <Row gutter={16}>
                 <Col span={12}>
                     <CropImageFiled
                         fieldName="avatarPath"
                         loading={uploading}
-                        label="Ảnh đại diện"
+                        label={t("form.label.avatar")}
                         imageUrl={avatar}
                         onChange={this.handleChangeAvatar}
                         uploadFile={this.uploadFileAvatar}
@@ -157,7 +159,7 @@ class CollaboratorForm extends BasicForm {
                 <Col span={12}>
                     <TextField
                     fieldName="username"
-                    label="Tài khoản đăng nhập"
+                    label={t("form.label.username")}
                     required
                     disabled={loadingSave || isEditing}
                     />
@@ -165,7 +167,7 @@ class CollaboratorForm extends BasicForm {
                 <Col span={12}>
                     <TextField
                     fieldName="fullName"
-                    label="Họ và tên"
+                    label={t("form.label.fullName")}
                     required
                     disabled={loadingSave}
                     />
@@ -176,7 +178,7 @@ class CollaboratorForm extends BasicForm {
                     <TextField
                         type="password"
                         fieldName="password"
-                        label={isEditing ? "Mật khẩu mới" : "Mật khẩu"}
+                        label={isEditing ? t("form.label.newPassword") : t("form.label.password")}
                         required={!isEditing}
                         validators={[this.validateToConfirmPassword]}
                         minLength={6}
@@ -187,7 +189,7 @@ class CollaboratorForm extends BasicForm {
                     <TextField
                         fieldName="confirmPassword"
                         type="password"
-                        label={isEditing ? "Nhập lại mật khẩu mới" : "Nhập lại mật khẩu"}
+                        label={isEditing ? t("form.label.typeNewPasswordAgain") : t("form.label.typePasswordAgain")}
                         required={!isEditing || this.getFieldValue("password")}
                         validators={[this.compareToPassword]}
                         disabled={loadingSave}
@@ -198,18 +200,18 @@ class CollaboratorForm extends BasicForm {
                 <Col span={12}>
                     <DatePickerField
                     fieldName="birthday"
-                    label="Ngày sinh"
+                    label={t("form.label.birthday")}
                     width="60%"
                     onChange={this.onChangeDateBDate}
                     format={"DD/MM/YYYY"}
                     disabled={loadingSave}
-                    placeholder="Chọn ngày sinh"
+                    placeholder={t("form.placeholder.birthday")}
                     />
                 </Col>
                 <Col span={12}>
                     <TextField
                     fieldName="phone"
-                    label="Số điện thoại"
+                    label={t("form.label.phone")}
                     type="number"
                     minLength={10}
                     maxLength={11}
@@ -225,41 +227,41 @@ class CollaboratorForm extends BasicForm {
                     label="E-mail"
                     type="email"
                     disabled={loadingSave}
-                    placeholder="Nhập email"
+                    placeholder={t("form.placeholder.email")}
                     />
                 </Col>
                 <Col span={12}>
                     <TextField
                     type="textarea"
                     fieldName="address"
-                    label="Địa chỉ"
+                    label={t("form.label.address")}
                     disabled={loadingSave}
-                    placeholder="Nhập địa chỉ"
+                    placeholder={t("form.placeholder.address")}
                     style={{height: 120}}
                     />
                 </Col>
             </Row>
             </FieldSet>
             <FieldSet
-            title="CMND"
+            title={t("form.fieldset.personalIdentityCard")}
             >
             <Row gutter={16}>
                 <Col span={12}>
                     <TextField
                     fieldName="identityNumber"
-                    label="CMND"
+                    label={t("form.label.personalIdentityCard")}
                     minLength={12}
                     maxLength={12}
                     disabled={loadingSave}
-                    placeholder="Nhập số CMND"
+                    placeholder={t("form.placeholder.personalIdentityCard")}
                     />
                 </Col>
                 <Col span={12}>
                     <TextField
                     fieldName="placeOfIssue"
-                    label="Nơi đăng ký"
+                    label={t("form.label.placeOfIssue")}
                     disabled={loadingSave}
-                    placeholder="Nhập nơi đăng ký"
+                    placeholder={t("form.placeholder.placeOfIssue")}
                     />
                 </Col>
             </Row>
@@ -267,37 +269,37 @@ class CollaboratorForm extends BasicForm {
                 <Col span={12}>
                     <DatePickerField
                     fieldName="dateOfIssue"
-                    label="Ngày đăng ký"
+                    label={t("form.label.dateOfIssue")}
                     width="60%"
                     format={"DD/MM/YYYY"}
                     onChange={this.onChangeDateIssue}
                     disabled={loadingSave}
-                    placeholder="Chọn ngày đăng ký"
+                    placeholder={t("form.placeholder.dateOfIssue")}
                     />
                 </Col>
             </Row>
             </FieldSet>
             <FieldSet
-            title="Ngân hàng"
+            title={t("form.fieldset.bank")}
             >
             <Row gutter={16}>
                 <Col span={12}>
                     <TextField
                     fieldName="bankName"
-                    label="Tên ngân hàng"
+                    label={t("form.label.bankName")}
                     disabled={loadingSave}
-                    placeholder="Nhập tên ngân hàng"
+                    placeholder={t("form.placeholder.bankName")}
                     />
                 </Col>
                 <Col span={12} >
                     <TextField
                     fieldName="bankNo"
-                    label="Số tài khoản"
+                    label={t("form.label.bankNo")}
                     type="number"
                     minLength={8}
                     maxLength={15}
                     disabled={loadingSave}
-                    placeholder="Nhập STK"
+                    placeholder={t("form.placeholder.bankNo")}
                     />
                 </Col>
             </Row>
@@ -305,21 +307,21 @@ class CollaboratorForm extends BasicForm {
                 <Col span={12}>
                     <TextField
                     fieldName="branchName"
-                    label="Chi nhánh"
+                    label={t("form.label.branchName")}
                     disabled={loadingSave}
-                    placeholder="Nhập chi nhánh"
+                    placeholder={t("form.placeholder.branchName")}
                     />
                 </Col>
             </Row>
             </FieldSet>
             <FieldSet
-            title="Trạng thái"
+            title={t("form.fieldset.status")}
             >
                 <Row gutter={16}>
                     <Col span={12}>
                     <DropdownField
                         fieldName="status"
-                        label="Trạng thái"
+                        label={t("form.label.status")}
                         required
                         options={commonStatus}
                         disabled={loadingSave}
@@ -328,7 +330,7 @@ class CollaboratorForm extends BasicForm {
                     <Col span={12}>
                     <TextField 
                         fieldName="note"
-                        label="Ghi chú"
+                        label={t("form.label.note")}
                         type="textarea"
                         style={{height: '120px'}}
                         disabled={loadingSave}

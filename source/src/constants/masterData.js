@@ -32,34 +32,6 @@ export const commonSex = [
     { value: 1, label: 'Nam' }
 ]
 
-export const QuestionRank = [
-    {
-        value: 1,
-        label: 'Câu hỏi thái độ',
-        score: 0,
-    },
-    {
-        value: 2,
-        label: 'Câu hỏi kiến thức mức cơ bản',
-        score: 1,
-    },
-    {
-        value: 3,
-        label: 'Câu hỏi kiến thức mức trung bình',
-        score: 2,
-    },
-    {
-        value: 4,
-        label: 'Câu hỏi kiến thức mức nâng cao',
-        score: 3,
-    },
-    {
-        value: 5,
-        label: 'Câu hỏi kỹ năng mức trung bình',
-        score: 5,
-    },
-]
-
 const GENDER_MALE = 1
 const GENDER_FEMALE = 2
 const GENDER_OTHER = 3

@@ -106,9 +106,12 @@ class ProductForm extends BasicForm {
         }
     }
 
-    validatePrice = (rule, price) => !!(/^[0-9]+$/.exec(price))
+    validatePrice = (rule, price) => {
+        const { t } = this.props;
+        return !!(/^[0-9]+$/.exec(price))
         ? Promise.resolve()
-        : Promise.reject('Price chỉ bao gồm các ký tự 0-9')
+        : Promise.reject(t("form.validationMessage.price"))
+    }
 
     handleCloseColorPicker = (e) => {
         if(!this.colorPickerRef.current.contains(e.target) && !this.toggleColorPickerRef.current.contains(e.target)) {
@@ -117,7 +120,7 @@ class ProductForm extends BasicForm {
     }
 
     render() {
-        const { formId, dataDetail, loadingSave, isEditing } = this.props;
+        const { formId, dataDetail, loadingSave, isEditing, t } = this.props;
         const {
 			uploading,
 			avatar,
@@ -138,7 +141,7 @@ class ProductForm extends BasicForm {
                     <CropImageFiled
                         fieldName="productImage"
                         loading={uploading}
-                        label="Ảnh đại diện"
+                        label={t("form.label.avatar")}
                         imageUrl={avatar}
                         onChange={this.handleChangeAvatar}
                         uploadFile={this.uploadFileAvatar}
@@ -149,7 +152,7 @@ class ProductForm extends BasicForm {
             <Row gutter={16}>
                 <Col span={12}>
                     <TextField
-                    fieldName="productName"
+                    fieldName={t("form.label.productName")}
                     label="Tên"
                     required
                     disabled={loadingSave}
@@ -159,7 +162,7 @@ class ProductForm extends BasicForm {
                     <TextField
                         type="number"
                         fieldName="productPrice"
-                        label="Giá tiền"
+                        label={t("form.label.productPrice")}
                         required
                         minLength={0}
                         width="100%"
@@ -172,7 +175,7 @@ class ProductForm extends BasicForm {
                 <Col span={12}>
                     <NumericField
                     fieldName="saleoff"
-                    label="Giảm giá (%)"
+                    label={`${t('form.label.saleOff')} (%)`}
                     disabled={loadingSave}
                     min={0}
                     max={100}
@@ -182,7 +185,7 @@ class ProductForm extends BasicForm {
                 </Col>
                 <Col span={12}>
 					<Form.Item
-					label="Chọn nhãn màu"
+					label={t("form.label.labelColor")}
 					>
                         <div style={{
                             display: 'flex',
@@ -213,7 +216,7 @@ class ProductForm extends BasicForm {
                             style={{
                                 boxShadow: 'none'
                             }}
-                            >Reset</Button>
+                            >{t("form.label.reset")}</Button>
                         </div>
                         <div
                         ref={this.colorPickerRef}
@@ -232,7 +235,7 @@ class ProductForm extends BasicForm {
                 <Col span={12}>
                     <DropdownField
                         fieldName="status"
-                        label="Trạng thái"
+                        label={t("form.label.status")}
                         required
                         options={commonStatus}
                         disabled={loadingSave}
@@ -242,7 +245,7 @@ class ProductForm extends BasicForm {
             <Row gutter={16}>
                 <Col span={24}>
                     <RichTextField
-                        label="Mô tả"
+                        label={t("form.label.description")}
                         fieldName="description"
                         disabled={loadingSave}
                     />

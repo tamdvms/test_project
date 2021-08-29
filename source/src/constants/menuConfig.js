@@ -102,6 +102,7 @@ const navMenuConfig = [
                                     label: c.categoryName,
                                     path: _pathnameWithQs,
                                     key: _pathname,
+                                    childrenKeys: this.childrenKeys
                                 })
                             })
                         }
