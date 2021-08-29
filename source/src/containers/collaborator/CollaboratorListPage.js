@@ -43,11 +43,8 @@ class CollaboratorListPage extends ListBasePage {
 		this.parentName = parentName;
 		this.breadcrumbs = [
 		{
-			name: t("breadcrumbs.employeePage"),
+			name: `${t("breadcrumbs.employeePage")} (${parentName})`,
 			path: `${sitePathConfig.employeeCollaborator.path}${this.handleRoutingParent()}`
-		},
-		{
-			name: parentName,
 		},
 		{
 			name: t("breadcrumbs.currentPage")

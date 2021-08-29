@@ -33,11 +33,8 @@ class CategoryExportListPageChild extends ListBasePage {
 
         this.breadcrumbs = [
             {
-                name: t("breadcrumbs.currentPageExport"),
+                name: `${t("breadcrumbs.currentPageExport")} (${parentName})`,
                 path: `${sitePathConfig.categoryExport.path}${this.handleRoutingParent()}`
-            },
-            {
-                name: parentName,
             },
         ];
         this.columns = [

@@ -32,11 +32,8 @@ class CategoryImportListPageChild extends ListBasePage {
 
         this.breadcrumbs = [
             {
-                name: t("breadcrumbs.currentPageProduct"),
+                name: `${t("breadcrumbs.currentPageProduct")} (${parentName})`,
                 path: `${sitePathConfig.categoryProduct.path}${this.handleRoutingParent()}`
-            },
-            {
-                name: parentName,
             },
         ];
         this.columns = [

@@ -38,11 +38,8 @@ class CollaboratorCategoryProductListPage extends ListBasePage {
         this.parentName = parentName;
         this.breadcrumbs = [
             {
-                name: t("breadcrumbs.parentPage"),
+                name: `${t("breadcrumbs.parentPage")} (${parentName})`,
                 path: `${sitePathConfig.collaboratorCategory.path}${this.handleRoutingParent('parentSearch')}`
-            },
-            {
-                name: parentName,
             },
         ];
         this.columns = [
