@@ -88,7 +88,7 @@ class CustomerForm extends BasicForm {
   // };
 
   render() {
-    const { formId, dataDetail, commonStatus, loadingSave, isEditing } = this.props;
+    const { formId, dataDetail, commonStatus, loadingSave, isEditing, t } = this.props;
     const { avatar, uploading } = this.state;
     return (
       <Form
@@ -103,7 +103,7 @@ class CustomerForm extends BasicForm {
 					<CropImageFiled
 						fieldName="customerAvatarPath"
 						loading={uploading}
-						label="Ảnh đại diện"
+						label={t("form.label.avatar")}
 						imageUrl={avatar}
 						onChange={this.handleChangeAvatar}
 						uploadFile={this.uploadFileAvatar}
@@ -117,7 +117,7 @@ class CustomerForm extends BasicForm {
           <TextField
             type="number"
             fieldName="customerPhone"
-            label="Số điện thoại"
+            label={t("form.label.phone")}
             required
             minLength={10}
             disabled={loadingSave || isEditing}
@@ -126,7 +126,7 @@ class CustomerForm extends BasicForm {
 				<Col span={12}>
 					<TextField
 					fieldName="customerFullName"
-					label="Họ và tên"
+					label={t("form.label.fullName")}
 					required
 					disabled={loadingSave}
 					/>
@@ -137,7 +137,7 @@ class CustomerForm extends BasicForm {
             <TextField
               type="password"
               fieldName="customerPassword"
-              label={isEditing ? "Mật khẩu mới" : "Mật khẩu"}
+              label={isEditing ? t("form.label.newPassword") : t("form.label.password")}
               validators={[this.validateToConfirmPassword]}
               minLength={6}
               disabled={loadingSave}
@@ -161,14 +161,14 @@ class CustomerForm extends BasicForm {
         <Col span={12}>
 					<TextField
 						fieldName="customerAddress"
-						label="Địa chỉ"
+						label={t("form.label.address")}
 						disabled={loadingSave}
 					/>
 				</Col>
 				<Col span={12}>
           <DropdownField
             fieldName="status"
-            label="Trạng thái"
+            label={t("form.label.status")}
             required
             options={commonStatus}
             disabled={loadingSave}

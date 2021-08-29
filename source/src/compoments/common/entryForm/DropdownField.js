@@ -4,6 +4,7 @@ import { Form, Select } from 'antd';
 
 import BaseField from './BaseField';
 import { FieldTypes } from '../../../constants/formConfig';
+import { withTranslation } from 'react-i18next';
 
 class DropdownField extends BaseField {
     constructor(props) {
@@ -28,6 +29,7 @@ class DropdownField extends BaseField {
             noStyle,
             dropdownClassName,
             allowClear,
+            t,
         } = this.props;
 
         let optionValueKey = optionValue || 'value';
@@ -56,7 +58,7 @@ class DropdownField extends BaseField {
                         options
                         ?
                         options.map(item =>
-                        <Select.Option key={item[optionValueKey]} value={item[optionValueKey]} other={item[optionOtherKey]}>{item[optionLabelKey]}{labelInValue?` (${item[optionValueKey]})` : null}</Select.Option>
+                            <Select.Option key={item[optionValueKey]} value={item[optionValueKey]} other={item[optionOtherKey]}>{t(item[optionLabelKey])}{labelInValue? t(item[optionLabelKey]): null}</Select.Option>
                         )
                         :
                         null
@@ -67,4 +69,4 @@ class DropdownField extends BaseField {
     }
 }
 
-export default DropdownField;
+export default withTranslation(['constants', 'baseField'])(DropdownField);

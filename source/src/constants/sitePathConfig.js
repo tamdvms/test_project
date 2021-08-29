@@ -163,7 +163,7 @@ export const sitePathConfig = {
     },
     employeeCollaborator: {
         path: '/employee-collaborator',
-        childrenKeys: ['/collaborator'],
+        childrenKeys: ['/collaborator', '/collaborator-product'],
         permissions: [
             apiConfig.collaborator.getEmployeeCollaboratorList.path,
             apiConfig.user.getAdminById.path,

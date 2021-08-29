@@ -20,8 +20,9 @@ const LayoutConfigs = {
 
 const UserTypes = {
     ADMIN: 1,
-    SHOP: 2,
+    CUSTOMER: 2,
     EMPLOYEE: 3,
+    COLLABORATOR: 4,
 }
 
 const GroupPermissonTypes = {

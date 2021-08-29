@@ -8,6 +8,8 @@ import {
     PlusOutlined,
     ArrowLeftOutlined,
 } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
+
 import Utils from '../../utils'
 import TextField from "../common/entryForm/TextField";
 import AutoCompleteField from '../common/entryForm/AutoCompleteField';
@@ -28,7 +30,7 @@ const Payment = ({
     listCustomerLoading,
     phoneInput,
 }) => {
-
+    const { t } = useTranslation("bookingContainer")
     const resetFormObject = {
         customerEmail: null,
         customerFullName: null,
@@ -97,11 +99,11 @@ const Payment = ({
         <div className={`payment-form${hide ? ' hide' : ''}`}>
             <div className="header">
                 <Button className="back" onClick={() => setIsPaymenting(false)}><ArrowLeftOutlined/></Button>
-                <h2>Thanh toán</h2>
+                <h2>{t("page.payment")}</h2>
             </div>
             <div className="payment-content">
                 <div className="form">
-                    <h3>Thông tin khách hàng</h3>
+                    <h3>{t("page.customerInfo")}</h3>
                     <Form
                         id="payment-form"
                         ref={formRef}
@@ -112,7 +114,7 @@ const Payment = ({
                             <Col span={12}>
                                 <AutoCompleteField
                                     fieldName="customerPhone"
-                                    label="Số điện thoại"
+                                    label={t("page.phoneNumber")}
                                     required
                                     minLength={10}
                                     disabled={loadingSave}
@@ -130,7 +132,7 @@ const Payment = ({
                             <Col span={12}>
                                 <TextField
                                 fieldName="customerFullName"
-                                label="Họ và tên"
+                                label={t("page.fullName")}
                                 required
                                 disabled={loadingSave || disabledFields}
                                 className="form-item-fullname"
@@ -148,7 +150,7 @@ const Payment = ({
                                 />
                                 <NumericField
                                 fieldName="customerDiscount"
-                                label="Giảm giá (%)"
+                                label={t("page.discount") + " (%)"}
                                 disabled={loadingSave}
                                 min={0}
                                 max={100}
@@ -161,7 +163,7 @@ const Payment = ({
                             <Col span={12}>
                                 <TextField
                                     fieldName="customerAddress"
-                                    label="Địa chỉ"
+                                    label={t("page.address")}
                                     disabled={loadingSave}
                                     type="textarea"
                                     style={{ height: 102 }}
@@ -171,7 +173,7 @@ const Payment = ({
                     </Form>
                 </div>
                 <div className="list">
-                    <h3>Danh sách mặt hàng</h3>
+                    <h3>{t("page.productList")}</h3>
                     <ul className="orders">
                         {
                             selectedItems.sort((a, b) => a.order - b.order).map(product => {
@@ -199,13 +201,13 @@ const Payment = ({
             </div>
             <div className="bottom">
                 <div className="calculate-total product">
-                    <div className="title">Tổng tiền đơn hàng:</div>
+                    <div className="title">{t("page.totalProductPrice")}</div>
                     <div className="total">
                         {Utils.formatMoney(totalPrice)}
                     </div>
                 </div>
                 <div className="calculate-total discount">
-                    <div className="title">Giảm giá{discount > 0 ? ` (${discount}%)`: ''}:</div>
+                    <div className="title">{t("page.discount")}{discount > 0 ? ` (${discount}%)`: ''}:</div>
                     <div className="total">
                         {Utils.formatMoney(discountPrice)}
                     </div>
@@ -217,7 +219,7 @@ const Payment = ({
                     </div>
                 </div>
                 <div className="calculate-total product-vat">
-                    <div className="title">Tổng tiền thanh toán:</div>
+                    <div className="title">{t("page.totalPayment")}</div>
                     <div className="total">
                         {Utils.formatMoney(finalPrice)}
                     </div>
@@ -231,7 +233,7 @@ const Payment = ({
                     disabled={selectedItems.length <= 0}
                     loading={loadingSave}
                     >
-                        Đặt hàng
+                        {t("page.payment")}
                     </Button>
                 </ElementWithPermission>
             </div>

@@ -10,7 +10,9 @@ import {
   PlusOutlined,
   UserOutlined,
   TeamOutlined,
-  CheckOutlined } from '@ant-design/icons';
+  CheckOutlined
+} from '@ant-design/icons';
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import AdminForm from "../../compoments/user/AdminForm";
@@ -31,8 +33,9 @@ class EmployeeListPage extends ListBasePage {
 
   constructor(props) {
     super(props);
-    this.objectName = "nhân viên";
-    this.breadcrumbs = [{ name: "Nhân viên" }];
+    const { t } = props;
+    this.objectName = t("objectName");
+    this.breadcrumbs = [{ name: t("breadcrumbs.currentPage") }];
     this.columns = [
       this.renderIdColumn(),
       {
@@ -48,12 +51,12 @@ class EmployeeListPage extends ListBasePage {
           />
         ),
       },
-      { title: "Tên đăng nhập", dataIndex: "username" },
-      { title: "Họ và tên", dataIndex: "fullName" },
-      { title: "Số điện thoại", dataIndex: "phone" },
+      { title: t("table.username"), dataIndex: "username" },
+      { title: t("table.fullName"), dataIndex: "fullName" },
+      { title: t("table.phone"), dataIndex: "phone" },
       { title: "E-mail", dataIndex: "email", width: "200px" },
       {
-        title: "Ngày tạo",
+        title: t("table.createdDate"),
         dataIndex: "createdDate",
         render: (createdDate) => convertUtcToTimezone(createdDate),
       },
@@ -68,15 +71,16 @@ class EmployeeListPage extends ListBasePage {
   }
 
   getSearchFields() {
+    const { t } = this.props;
     return [
       {
         key: "username",
-        seachPlaceholder: "Tên đăng nhập",
+        seachPlaceholder: t("searchPlaceHolder.username"),
         initialValue: this.search.username,
       },
       {
         key: "fullName",
-        seachPlaceholder: "Họ và tên",
+        seachPlaceholder: t("searchPlaceHolder.fullName"),
         initialValue: this.search.fullName,
       },
     ];
@@ -111,6 +115,7 @@ class EmployeeListPage extends ListBasePage {
       dataList,
       loading,
       uploadFile,
+      t,
     } = this.props;
     const { isShowModifiedModal, isShowModifiedLoading } = this.state;
     const employees = dataList.data || [];
@@ -124,7 +129,7 @@ class EmployeeListPage extends ListBasePage {
             type="primary"
             onClick={() => this.onShowModifiedModal(false)}
           >
-            <PlusOutlined /> Tạo nhân viên mới
+            <PlusOutlined /> { t("createNewButton") }
           </Button>
           ))}
         </div>
@@ -150,6 +155,7 @@ class EmployeeListPage extends ListBasePage {
             loadingSave={isShowModifiedLoading}
             uploadFile={uploadFile}
             showColorPicker={true}
+            t={t}
           />
         </BasicModal>
       </div>
@@ -172,4 +178,4 @@ const mapDispatchToProps = (dispatch) => ({
   uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeeListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['employeeListPage','listBasePage','constants', 'basicModal'])(EmployeeListPage));

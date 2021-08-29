@@ -28,7 +28,7 @@ class CollaboratorCategoryForm extends BasicForm {
     }
 
     render() {
-        const { formId, dataDetail, loadingSave, isEditing } = this.props;
+        const { formId, dataDetail, loadingSave, isEditing, t } = this.props;
         return (
         <Form
             id={formId}
@@ -41,7 +41,7 @@ class CollaboratorCategoryForm extends BasicForm {
                 <Col span={12}>
                     <TextField
                     fieldName="categoryName"
-                    label="Tên danh mục"
+                    label={t("form.label.categoryName")}
                     required
                     disabled={loadingSave}
                     />
@@ -50,7 +50,7 @@ class CollaboratorCategoryForm extends BasicForm {
                     <TextField
                     type="textarea"
                     fieldName="categoryDescription"
-                    label="Mô tả"
+                    label={t("form.label.categoryDescription")}
                     required
                     style={{
                         height: 100
@@ -64,7 +64,7 @@ class CollaboratorCategoryForm extends BasicForm {
                         <Col span={12}>
                             <DropdownField
                                 fieldName="status"
-                                label="Trạng thái"
+                                label={t("form.label.status")}
                                 required
                                 options={commonStatus}
                                 disabled={loadingSave}

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Avatar, Tag, Button, Modal, Divider } from "antd";
 import { UserOutlined, PlusOutlined, EditOutlined, DeleteOutlined, FileSearchOutlined } from "@ant-design/icons";
 import qs from 'query-string';
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import OrdersForm from "../../compoments/orders/OrdersForm";
@@ -29,15 +30,15 @@ class OrdersListPage extends ListBasePage {
 
     constructor(props) {
         super(props);
-
+        const { t } = props;
         this.pagination = { pageSize: 100 };
-        this.objectName =  "Đơn hàng";
+        this.objectName = t("objectName");
         this.breadcrumbs = [
-            { name: "Đơn hàng" }
+            { name: t("breadcrumbs.currentPage") }
         ];
         this.columns = [
             {
-                title: "Mã đơn hàng",
+                title: t("table.ordersCode"),
                 dataIndex: "ordersCode",
                 width: 130,
                 render: (ordersCode) => {
@@ -45,14 +46,14 @@ class OrdersListPage extends ListBasePage {
                 }
             },
             {
-                title: <div style={{ paddingRight: 20 }}>Ngày tạo</div>,
+                title: <div style={{ paddingRight: 20 }}>{t("table.createdDate")}</div>,
                 dataIndex: "createdDate",
                 align: "right",
                 width: 100,
                 render: (createdDate) => <div style={{ paddingRight: 20, whiteSpace: 'nowrap' }}>{convertUtcToTimezone(createdDate, Utils.getSettingsDateFormat("date-format-product"))}</div>,
             },
             {
-                title: 'Khách hàng',
+                title: t("table.customerFullName"),
                 dataIndex: ['customerDto', 'customerFullName'],
                 render: (customerFullName, dataRow) => {
                     return (
@@ -63,25 +64,25 @@ class OrdersListPage extends ListBasePage {
                 }
             },
             {
-                title: 'Nhân viên',
+                title: t("table.employeeFullName"),
                 dataIndex: 'employeeDto',
                 render: (employeeDto) => {
                     return (
-                        employeeDto.labelColor
+                        employeeDto?.labelColor
                             ? (<div>
-                            <Tag color={employeeDto.labelColor} style={{
+                            <Tag color={employeeDto?.labelColor} style={{
                                 padding: '2px 7px',
                                 fontSize: '14px',
-                            }}>{employeeDto.fullName}</Tag>
+                            }}>{employeeDto?.fullName}</Tag>
                             </div>)
                             : <div style={{
                                 padding: '2px 7px',
-                            }}>{employeeDto.fullName}</div>
+                            }}>{employeeDto?.fullName}</div>
                     )
                 }
             },
             {
-                title: <div className="tb-al-r">Số tiền</div>,
+                title: <div className="tb-al-r">{t("table.ordersTotalMoney")}</div>,
                 dataIndex: 'ordersTotalMoney',
                 align: 'right',
                 render: (ordersTotalMoney, dataRow) => {
@@ -93,7 +94,7 @@ class OrdersListPage extends ListBasePage {
                 }
             },
             {
-                title: 'Tình trạng',
+                title: t("table.ordersState"),
                 dataIndex: 'ordersState',
                 width: 90,
                 render: (ordersState, dataRow) => {
@@ -123,42 +124,22 @@ class OrdersListPage extends ListBasePage {
         };
     }
 
-    getList() {
-        const { getDataList } = this.props;
-        const page = this.pagination.current ? this.pagination.current - 1 : 0;
-        const params = { page, size: this.pagination.pageSize, search: this.search};
-        getDataList({
-            params,
-            onCompleted: (data = []) => {
-                const randomColorsArrayByEmployeeId = data.reduce((r, a) => {
-                    r[a.employeeDto.id] = null;
-                    return r;
-                   }, {})
-                Object.keys(randomColorsArrayByEmployeeId).forEach(employeeId => {
-                    randomColorsArrayByEmployeeId[employeeId] = Utils.getRandomColor()
-                })
-                this.setState({
-                    randomColorsArrayByEmployeeId,
-                })
-            },
-        });
-    }
-
     getSearchFields() {
+        const { t } = this.props;
         return [
             {
                 key: "employeeFullName",
-                seachPlaceholder: 'Tên nhân viên',
+                seachPlaceholder: t("searchPlaceHolder.employeeFullName"),
                 initialValue: this.search.employeeFullName,
             },
             {
                 key: "code",
-                seachPlaceholder: 'Mã đơn hàng',
+                seachPlaceholder: t("searchPlaceHolder.code"),
                 initialValue: this.search.code,
             },
             {
                 key: "state",
-                seachPlaceholder: "Chọn tình trạng",
+                seachPlaceholder: t("searchPlaceHolder.state"),
                 fieldType: FieldTypes.SELECT,
                 options: OrdersStates,
                 initialValue: this.search.state,
@@ -167,7 +148,7 @@ class OrdersListPage extends ListBasePage {
     }
 
     handleCancelStateNoConfirm = (values) => {
-        const { updateStateOrders, cancelOrders } = this.props
+        const { updateStateOrders, cancelOrders, t } = this.props
         this.setState({
             isShowModifiedLoading: true,
         })
@@ -178,13 +159,13 @@ class OrdersListPage extends ListBasePage {
             onCompleted: () => {
                 this.getList()
                 this.getDetail(this.dataDetail.id)
-                showSucsessMessage("Cập nhật thành công!")
+                showSucsessMessage(t("showSuccessMessage.update") , { t, ns: 'listBasePage' })
                 this.setState({
                     isShowModifiedLoading: false,
                 })
             },
             onError: (error) => {
-                showErrorMessage(error.message || "Cập nhật thất bại. Vui lòng thử lại!")
+                showErrorMessage(error.message || t("showErrorMessage.update"), { t, ns: 'listBasePage' })
                 this.setState({
                     isShowModifiedLoading: false,
                 })
@@ -193,13 +174,13 @@ class OrdersListPage extends ListBasePage {
     }
 
     handleUpdateState = (values) => {
-        const { updateStateOrders, cancelOrders } = this.props
+        const { updateStateOrders, cancelOrders, t } = this.props
         confirm({
-            title: `Bạn có chắc muốn thay đổi trạng thái đơn hàng này?`,
+            title: t("confirmUpdateState"),
             content: '',
-            okText: 'Có',
+            okText: t("yes"),
             okType: 'danger',
-            cancelText: 'Không',
+            cancelText: t("no"),
             onOk: () => {
                 this.setState({
                     isShowModifiedLoading: true,
@@ -212,13 +193,13 @@ class OrdersListPage extends ListBasePage {
                         onCompleted: () => {
                             this.getList()
                             this.getDetail(this.dataDetail.id)
-                            showSucsessMessage("Cập nhật thành công!")
+                            showSucsessMessage(t("showSuccessMessage.update") , { t, ns: 'listBasePage' })
                             this.setState({
                                 isShowModifiedLoading: false,
                             })
                         },
                         onError: (error) => {
-                            showErrorMessage(error.message || "Cập nhật thất bại. Vui lòng thử lại!")
+                            showErrorMessage(error.message || t("showErrorMessage.update"), { t, ns: 'listBasePage' })
                             this.setState({
                                 isShowModifiedLoading: false,
                             })
@@ -233,13 +214,13 @@ class OrdersListPage extends ListBasePage {
                         onCompleted: () => {
                             this.getList()
                             this.getDetail(this.dataDetail.id)
-                            showSucsessMessage("Cập nhật thành công!")
+                            showSucsessMessage(t("showSuccessMessage.update") , { t, ns: 'listBasePage' })
                             this.setState({
                                 isShowModifiedLoading: false,
                             })
                         },
                         onError: (error) => {
-                            showErrorMessage(error.message || "Cập nhật thất bại. Vui lòng thử lại!")
+                            showErrorMessage(error.message || t("showErrorMessage.update"), { t, ns: 'listBasePage' })
                             this.setState({
                                 isShowModifiedLoading: false,
                             })
@@ -254,7 +235,7 @@ class OrdersListPage extends ListBasePage {
     }
 
     handleUpdate = (values) => {
-        const { updateData } = this.props
+        const { updateData, t } = this.props
         this.setState({
             isShowModifiedLoading: true,
         })
@@ -264,14 +245,14 @@ class OrdersListPage extends ListBasePage {
             },
             onCompleted: () => {
                 this.getList()
-                showSucsessMessage("Cập nhật thành công!")
+                showSucsessMessage(t("showSuccessMessage.update") , { t, ns: 'listBasePage' })
                 this.setState({
                     isShowModifiedLoading: false,
                     isShowModifiedModal: false,
                 })
             },
             onError: (error) => {
-                showErrorMessage(error.message || "Cập nhật thất bại. Vui lòng thử lại!")
+                showErrorMessage(error.message || t("showErrorMessage.update"), { t, ns: 'listBasePage' })
                 this.setState({
                     isShowModifiedLoading: false,
                 })
@@ -280,7 +261,8 @@ class OrdersListPage extends ListBasePage {
     }
 
     renderUpdateButtons = () => {
-        const { isShowModifiedLoading } = this.props;
+        const { t } = this.props;
+        const { isShowModifiedLoading } = this.state;
         return (<>
             <ElementWithPermission permissions={[sitePathConfig.orders.permissions[4]]}>
                 <Button
@@ -297,7 +279,7 @@ class OrdersListPage extends ListBasePage {
                     ordersState: OrdersStates[4].value
                 })}
                 >
-                    Hủy đơn hàng
+                    {t("cancelOrders")}
                 </Button>
             </ElementWithPermission>
             <ElementWithPermission permissions={[sitePathConfig.orders.permissions[5]]}>
@@ -311,7 +293,7 @@ class OrdersListPage extends ListBasePage {
                     ? 'btn-update-orders disabled' : 'btn-update-orders'
                 }
                 >
-                    Lưu
+                    {t("save")}
                 </Button>
             </ElementWithPermission>
         </>
@@ -333,6 +315,7 @@ class OrdersListPage extends ListBasePage {
         const {
             dataList,
             loading,
+            t,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading } = this.state;
         const ordersData = dataList.data || [];
@@ -355,7 +338,7 @@ class OrdersListPage extends ListBasePage {
             visible={isShowModifiedModal}
             isEditing={this.isEditing}
             objectName={this.objectName}
-            title="CHI TIẾT ĐƠN HÀNG"
+            title={t("titleModal")}
             onCancel={this.onCancelModal}
             additionalButton={this.renderUpdateButtons()}
             >
@@ -365,6 +348,7 @@ class OrdersListPage extends ListBasePage {
                 handleSubmit={this.handleSubmit}
                 handleCancelStateNoConfirm={this.handleCancelStateNoConfirm}
                 loadingSave={isShowModifiedLoading}
+                t={t}
             />
             </BasicModal>
         </div>
@@ -385,4 +369,4 @@ const mapDispatchToProps = (dispatch) => ({
   updateData: (payload) => dispatch(actions.updateOrders(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrdersListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['ordersListPage','listBasePage','constants', 'basicModal'])(OrdersListPage));

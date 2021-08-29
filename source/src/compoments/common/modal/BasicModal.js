@@ -1,27 +1,28 @@
 import React, {Component} from 'react';
 import { Button, Modal } from 'antd';
+import { withTranslation } from "react-i18next";
 
 class BasicModal extends Component {
 
     getTitle() {
-        const { hiddenTile, title, isEditing, objectName } = this.props;
+        const { hiddenTile, title, isEditing, objectName, t } = this.props;
         if(hiddenTile)
             return null;
         else if(title) {
             return title;
         }
         const name = objectName || '';
-        return isEditing ? `CẬP NHẬT ${name.toUpperCase()}` : `THÊM ${name.toUpperCase()} MỚI`;
+        return isEditing ? t('updateTitle', { objectName: name}) : t('createTitle', { objectName: name});
     }
 
     render() {
-        const { visible, onOk, onCancel, loading, children, objectName, width, top, formId, bodyStyle, maskClosable, noFooter, additionalButton, className, closable = true, centered } = this.props;
+        const { visible, onOk, onCancel, loading, children, objectName, width, top, formId, bodyStyle, maskClosable, noFooter, additionalButton, className, closable = true, centered, t } = this.props;
         const formSubmitId = formId || `form-${objectName}`;
         let footerComponent = [<Button className="modal-btn-close" key="back" onClick={onCancel}>Đóng</Button>];
         if(onOk) {
             footerComponent.push(
                 <Button className="modal-btn-save" key="submit" htmlType="submit" type="primary" loading={loading} form={formSubmitId}>
-                    Lưu
+                   {t('saveButton')}
                 </Button>
             )
         }
@@ -55,4 +56,4 @@ class BasicModal extends Component {
     }
 }
 
-export default BasicModal;
+export default withTranslation('basicModal')(BasicModal);

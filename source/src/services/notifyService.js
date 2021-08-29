@@ -1,22 +1,22 @@
 import { notification } from 'antd';
 
-const showSucsessMessage = (content) => {
+const showSucsessMessage = (content, translate) => {
     notification.success({
-        message: 'Thành công',
+        message: translate?.t(`${translate.ns}:success`, 'Success') || 'Success',
         description: content
     });
 }
 
-const showErrorMessage = (content) => {
+const showErrorMessage = (content, translate) => {
     notification.error({
-        message: 'Lỗi',
+        message: translate?.t(`${translate.ns}:error`, 'Error') || 'Error',
         description: content
     });
 }
 
-const showWarningMessage = (content) => {
+const showWarningMessage = (content, translate) => {
     notification.warning({
-        message: 'Thông tin lỗi',
+        message: translate?.t(`${translate.ns}:error`, 'Error Message') || 'Error Message',
         description: content
     });
 }

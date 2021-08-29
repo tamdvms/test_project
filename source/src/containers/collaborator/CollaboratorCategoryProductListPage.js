@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Button, Avatar } from "antd";
 import { PlusOutlined, UserOutlined, EditOutlined } from "@ant-design/icons";
 import qs from 'query-string';
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import BaseTable from "../../compoments/common/table/BaseTable";
@@ -25,7 +26,9 @@ class CollaboratorCategoryProductListPage extends ListBasePage {
 
     constructor(props) {
         super(props);
-        this.objectName = "Danh mục CTV sản phẩm";
+        const { t } = props;
+        this.objectName = t("objectName");
+
         const { location: { search } } = props;
         const {
             parentName,
@@ -35,7 +38,7 @@ class CollaboratorCategoryProductListPage extends ListBasePage {
         this.parentName = parentName;
         this.breadcrumbs = [
             {
-                name: "Danh mục CTV",
+                name: t("breadcrumbs.parentPage"),
                 path: `${sitePathConfig.collaboratorCategory.path}${this.handleRoutingParent('parentSearch')}`
             },
             {
@@ -79,7 +82,7 @@ class CollaboratorCategoryProductListPage extends ListBasePage {
                 }
             },
             {
-                title: "Tên sản phẩm",
+                title: t("table.productName"),
                 dataIndex: ["productDto", "productName"],
                 render: (productName, dataRow) => {
                     return {
@@ -95,7 +98,7 @@ class CollaboratorCategoryProductListPage extends ListBasePage {
                 }
             },
             {
-                title: <div className="tb-al-r">Hoa hồng</div>,
+                title: <div className="tb-al-r">{t("table.commission")}</div>,
                 dataIndex: "value",
                 width: "200px",
                 align: 'right',
@@ -153,10 +156,11 @@ class CollaboratorCategoryProductListPage extends ListBasePage {
     }
 
     getSearchFields() {
+        const { t } = this.props;
         return [
             {
                 key: "productName",
-                seachPlaceholder: "Tên sản phẩm",
+                seachPlaceholder: t("searchPlaceHolder.productName"),
                 initialValue: this.search.username,
             },
         ];
@@ -180,6 +184,7 @@ class CollaboratorCategoryProductListPage extends ListBasePage {
             dataList,
             loading,
             uploadFile,
+            t,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading, active } = this.state;
         const collaboratorCategoryProducts = dataList.data || [];
@@ -193,7 +198,7 @@ class CollaboratorCategoryProductListPage extends ListBasePage {
                 type="primary"
                 onClick={() => this.handleShowCreatePage(false)}
             >
-                Chỉnh sửa sản phẩm <EditOutlined />
+                {t("editButton")} <EditOutlined />
             </Button>
             ))}
             </div>
@@ -238,4 +243,4 @@ const mapDispatchToProps = (dispatch) => ({
     deleteData: (payload) => dispatch(actions.deleteCollaboratorCategoryProduct(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CollaboratorCategoryProductListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['collaboratorCategoryProductListPage','listBasePage','constants', 'basicModal'])(CollaboratorCategoryProductListPage));

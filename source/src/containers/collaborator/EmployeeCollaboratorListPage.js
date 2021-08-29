@@ -8,7 +8,9 @@ import {
   LockOutlined,
   UserOutlined,
   TeamOutlined,
-  CheckOutlined } from '@ant-design/icons';
+  CheckOutlined
+} from '@ant-design/icons';
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import BaseTable from "../../compoments/common/table/BaseTable";
@@ -24,8 +26,9 @@ class EmployeeCollaboratorListPage extends ListBasePage {
 
   constructor(props) {
     super(props);
-    this.objectName = "nhân viên";
-    this.breadcrumbs = [{ name: "Nhân viên" }];
+    const { t } = props;
+    this.objectName = t("objectName");
+    this.breadcrumbs = [{ name: t("breadcrumbs.currentPage") }];
     this.columns = [
       this.renderIdColumn(),
       {
@@ -41,15 +44,15 @@ class EmployeeCollaboratorListPage extends ListBasePage {
           />
         ),
       },
-      { title: "Họ và tên", dataIndex: "fullName" },
+      { title: t("table.fullName"), dataIndex: "fullName" },
       {
-        title: "Số lượng CTV",
+        title: t("table.countColl"),
         dataIndex: "countColl",
         width: "130px",
         align: 'center',
         render: (countColl, dataRow) => {
           return <div>
-            <span>{countColl}</span>
+            <span>({countColl})</span>
             {
               this.renderButton((
                 <Button style={{ marginLeft: 4 }} type="link" onClick={() => this.handleRouting(dataRow.id, dataRow.fullName)} className="no-padding">
@@ -111,4 +114,4 @@ const mapDispatchToProps = (dispatch) => ({
   getDataList: (payload) => dispatch(actions.getEmployeeCollaboratorList(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EmployeeCollaboratorListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['employeeCollaboratorListPage','listBasePage','constants', 'basicModal'])(EmployeeCollaboratorListPage));

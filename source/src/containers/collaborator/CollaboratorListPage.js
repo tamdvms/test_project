@@ -11,6 +11,7 @@ import {
 	InboxOutlined,
 } from "@ant-design/icons";
 import qs from 'query-string';
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import CollaboratorForm from "../../compoments/collaborator/CollaboratorForm";
@@ -31,7 +32,8 @@ class CollaboratorListPage extends ListBasePage {
 
   	constructor(props) {
 		super(props);
-		this.objectName = "cộng tác viên";
+		const { t } = props;
+		this.objectName = t("objectName");
 		const { location: { search } } = props;
 		const {
 			parentName,
@@ -41,14 +43,14 @@ class CollaboratorListPage extends ListBasePage {
 		this.parentName = parentName;
 		this.breadcrumbs = [
 		{
-			name: "Nhân viên",
+			name: t("breadcrumbs.employeePage"),
 			path: `${sitePathConfig.employeeCollaborator.path}${this.handleRoutingParent()}`
 		},
 		{
 			name: parentName,
 		},
 		{
-			name: "Cộng tác viên"
+			name: t("breadcrumbs.currentPage")
 		},
 		];
 		this.columns = [
@@ -65,12 +67,12 @@ class CollaboratorListPage extends ListBasePage {
 			/>
 			),
 		},
-		{ title: "Tên đăng nhập", dataIndex: "username" },
-		{ title: "Họ và tên", dataIndex: "fullName" },
-		{ title: "Số điện thoại", dataIndex: "phone" },
+		{ title: t("table.username"), dataIndex: "username" },
+		{ title: t("table.fullName"), dataIndex: "fullName" },
+		{ title: t("table.phone"), dataIndex: "phone" },
 		{ title: "E-mail", dataIndex: "email", width: "200px" },
 		{
-			title: "Ngày tạo",
+			title: t("table.createdDate"),
 			dataIndex: "createdDate",
 			render: (createdDate) => convertUtcToTimezone(createdDate),
 		},
@@ -87,8 +89,9 @@ class CollaboratorListPage extends ListBasePage {
 	}
 
 	renderActionColumn() {
+		const { t } = this.props;
 		return {
-			title: 'Hành động',
+			title: t("table.action"),
 			width: '100px',
 			align: 'center',
 			render: (dataRow) => {
@@ -178,15 +181,16 @@ class CollaboratorListPage extends ListBasePage {
 	}
 
 	getSearchFields() {
+		const { t } =  this.props;
 		return [
 		{
 			key: "username",
-			seachPlaceholder: "Tên đăng nhập",
+			seachPlaceholder: t("searchPlaceHolder.username"),
 			initialValue: this.search.username,
 		},
 		{
 			key: "fullName",
-			seachPlaceholder: "Họ và tên",
+			seachPlaceholder: t("searchPlaceHolder.fullName"),
 			initialValue: this.search.fullName,
 		},
 		];
@@ -197,6 +201,7 @@ class CollaboratorListPage extends ListBasePage {
 		dataList,
 		loading,
 		uploadFile,
+		t,
 		} = this.props;
 		const { isShowModifiedModal, isShowModifiedLoading } = this.state;
 		const collaborators = dataList.data || [];
@@ -210,7 +215,7 @@ class CollaboratorListPage extends ListBasePage {
 				type="primary"
 				onClick={() => this.onShowModifiedModal(false)}
 			>
-				<PlusOutlined /> Tạo CTV mới
+				<PlusOutlined /> {t("createNewButton")}
 			</Button>
 			))}
 			</div>
@@ -235,6 +240,7 @@ class CollaboratorListPage extends ListBasePage {
 				dataDetail={this.isEditing ? this.dataDetail : {}}
 				loadingSave={isShowModifiedLoading}
 				uploadFile={uploadFile}
+				t={t}
 			/>
 			</BasicModal>
 		</div>
@@ -256,4 +262,4 @@ const mapDispatchToProps = (dispatch) => ({
   uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CollaboratorListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['collaboratorListPage','listBasePage','constants', 'basicModal'])(CollaboratorListPage));

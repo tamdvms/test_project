@@ -61,12 +61,15 @@ class ExportManagementForm extends BasicForm {
         });
     };
 
-	validatePrice = (rule, price) => !!(/^[0-9]+$/.exec(price))
+	validatePrice = (rule, price) => {
+		const { t } = this.props;
+		return !!(/^[0-9]+$/.exec(price))
         ? Promise.resolve()
-        : Promise.reject('Price chỉ bao gồm các ký tự 0-9')
+        : Promise.reject(t("validationMessage.price"))
+	}
 
 	render() {
-		const { formId, dataDetail, loadingSave, categoryAutoComplete } = this.props;
+		const { formId, dataDetail, loadingSave, categoryAutoComplete, t } = this.props;
 		const {
 			uploading,
 			avatar,
@@ -85,7 +88,7 @@ class ExportManagementForm extends BasicForm {
 							<UploadImageField
 								fieldName="filePath"
 								loading={uploading}
-								label="Ảnh chứng từ"
+								label={t("form.label.filePathExport")}
 								imageUrl={avatar}
 								onChange={this.handleChangeAvatar}
 								uploadFile={this.uploadFileAvatar}
@@ -104,7 +107,7 @@ class ExportManagementForm extends BasicForm {
 									type="primary"
 									onClick={() => this.setState({preview: true})}
 								>
-									<EyeOutlined />Xem chi tiết
+									<EyeOutlined />{t("form.label.preview")}
 								</Button>
 							) : null
 						}
@@ -113,7 +116,7 @@ class ExportManagementForm extends BasicForm {
 						<Col span={12}>
 							<DropdownField
 								fieldName={["categoryDto", "id"]}
-								label="Danh mục"
+								label={t("form.label.category")}
 								required
 								options={categoryAutoComplete}
 								disabled={loadingSave}
@@ -124,7 +127,7 @@ class ExportManagementForm extends BasicForm {
 						<Col span={12}>
 							<TextField
 							fieldName="code"
-							label="Mã chứng từ"
+							label={t("form.label.code")}
 							disabled={loadingSave}
 							/>
 						</Col>
@@ -134,7 +137,7 @@ class ExportManagementForm extends BasicForm {
 							<TextField
 								type="number"
 								fieldName="money"
-								label="Giá tiền"
+								label={t("form.label.money")}
 								required
 								minLength={0}
 								width="100%"
@@ -146,7 +149,7 @@ class ExportManagementForm extends BasicForm {
 							<TextField
 							type="textarea"
 							fieldName="note"
-							label="Ghi chú"
+							label={t("form.label.note")}
 							disabled={loadingSave}
 							style={{ height: 110 }}
 							/>

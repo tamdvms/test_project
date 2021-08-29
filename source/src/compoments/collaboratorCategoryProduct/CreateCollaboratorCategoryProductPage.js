@@ -3,6 +3,7 @@ import TableTransfer from '../collaboratorProduct/TableTransfer'
 import { AppConstants, STATUS_LOCK } from '../../constants'
 import { Avatar, Button } from 'antd'
 import { ArrowLeftOutlined, PlusOutlined, EditOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 
 import { COLLABORATOR_PRODUCT_KIND_MONEY } from '../../constants/masterData'
 import Utils from '../../utils'
@@ -24,6 +25,7 @@ function CreateCollaboratorCategoryProductPage({
     collaboratorName,
 }) {
 
+    const { t } = useTranslation("collaboratorCategoryProductListPage")
     const renderItem = (item) => {
         return (
             <div key={item.id} className="item" style={{backgroundColor: item.labelColor}}>
@@ -59,7 +61,7 @@ function CreateCollaboratorCategoryProductPage({
             }
         },
         {
-            title: "Tên sản phẩm",
+            title: t("table.productName"),
             dataIndex: "productName",
             render: (productName, dataRow) => {
                 return {
@@ -76,7 +78,7 @@ function CreateCollaboratorCategoryProductPage({
             }
         },
         {
-            title: <div className="tb-al-r">Hoa hồng</div>,
+            title: <div className="tb-al-r">{t("table.commission")}</div>,
             dataIndex: "value",
             width: "100px",
             align: 'right',
@@ -110,7 +112,7 @@ function CreateCollaboratorCategoryProductPage({
         type="primary"
         >
             {
-                <><EditOutlined /> Sửa thông tin </>
+                <><EditOutlined /> {t("table.edit")} </>
             }
         </Button>)
 
@@ -122,7 +124,7 @@ function CreateCollaboratorCategoryProductPage({
                 onClick={handleBack}
                 type="primary"
                 >
-                    <ArrowLeftOutlined /> Trở về
+                    <ArrowLeftOutlined /> {t("table.back")}
                 </Button>
                 <h2>
                     {collaboratorName}
@@ -130,7 +132,7 @@ function CreateCollaboratorCategoryProductPage({
             </div>
             <TableTransfer
                 transferRef={transferRef}
-                titles={['Danh sách sản phẩm', EditButton]}
+                titles={[t("table.productList"), EditButton]}
                 dataSource={products.map(e => ({...e, key: e.id}))}
                 targetKeys={targetKeys}
                 showSearch
@@ -142,15 +144,15 @@ function CreateCollaboratorCategoryProductPage({
                     height: '100%',
                 }}
                 locale={{
-                    searchPlaceholder: 'Tìm tại đây',
-                    itemUnit: 'sản phẩm',
-                    itemsUnit: 'sản phẩm',
-                    remove: 'Xóa',
-                    selectAll: 'Chọn tất cả',
-                    selectCurrent: 'Chọn hiện tại',
-                    selectInvert: 'Chọn ngược lại',
-                    removeAll: 'Xóa tất cả',
-                    removeCurrent: 'Xóa hiện tại',
+                    searchPlaceholder: t("table.searchPlaceHolder"),
+                    itemUnit: t("table.product"),
+                    itemsUnit: t("table.product"),
+                    remove: t("table.delete"),
+                    selectAll: t("table.selectAll"),
+                    selectCurrent: t("table.selectCurrent"),
+                    selectInvert: t("table.selectInvert"),
+                    removeAll: t("table.removeAll"),
+                    removeCurrent: t("table.removeCurrent"),
                 }}
                 showHeader={false}
                 pagination={false}

@@ -49,9 +49,10 @@ class AdminForm extends BasicForm {
 	};
 
 	compareToPassword = (rule, newPassword) => {
+		const { t } = this.props;
 		const password = this.getFieldValue("password");
 		if ((password || newPassword) && password !== newPassword) {
-		return Promise.reject("Mật khẩu không khớp!");
+		return Promise.reject(t("form.validationMessage.comparePassword"));
 		} else {
 		return Promise.resolve();
 		}
@@ -119,7 +120,7 @@ class AdminForm extends BasicForm {
 	};
 
 	render() {
-		const { isEditing, formId, loadingSave, showColorPicker } = this.props;
+		const { isEditing, formId, loadingSave, showColorPicker, t } = this.props;
 		const {
 			uploading,
 			logo,
@@ -139,7 +140,7 @@ class AdminForm extends BasicForm {
 				<CropImageFiled
 				fieldName="avatar"
 				loading={uploading}
-				label="Ảnh đại diện"
+				label={t("form.label.avatar")}
 				imageUrl={logo}
 				onChange={this.handleChangeLogo}
 				uploadFile={this.uploadFileLogo}
@@ -152,14 +153,14 @@ class AdminForm extends BasicForm {
 				<TextField
 				fieldName="username"
 				min={6}
-				label="Tên đăng nhập"
+				label={t("form.label.username")}
 				disabled={isEditing || loadingSave}
 				required={!isEditing}
 				validators={[Utils.validateUsernameForm]}
 				/>
 			</Col>
 			<Col span={12}>
-				<TextField fieldName="fullName" label="Họ và tên" required disabled={loadingSave}/>
+				<TextField fieldName="fullName" label={t("form.label.fullName")} required disabled={loadingSave}/>
 			</Col>
 			</Row>
 			<Row gutter={16}>
@@ -167,7 +168,7 @@ class AdminForm extends BasicForm {
 				<TextField
 				type="password"
 				fieldName="password"
-				label={isEditing ? "Mật khẩu mới" : "Mật khẩu"}
+				label={isEditing ? t("form.label.newPassword") : t("form.label.password")}
 				required={!isEditing}
 				validators={[this.validateToConfirmPassword]}
 				minLength={6}
@@ -178,7 +179,7 @@ class AdminForm extends BasicForm {
 				<TextField
 				type="password"
 				fieldName="confirmPassword"
-				label={isEditing ? "Xác nhận mật khẩu mới" : "Xác nhận mật khẩu"}
+				label={isEditing ? t("form.label.confirmNewPassword") : t("form.label.confirmPassword")}
 				required={!isEditing || this.getFieldValue("password")}
 				validators={[this.compareToPassword]}
 				disabled={loadingSave}
@@ -193,7 +194,7 @@ class AdminForm extends BasicForm {
 				<TextField
 				type="number"
 				fieldName="phone"
-				label="Số điện thoại"
+				label={t("form.label.phone")}
 				required
 				minLength={10}
 				disabled={loadingSave}
@@ -204,7 +205,7 @@ class AdminForm extends BasicForm {
 			<Col span={12}>
 				<DropdownField
 					fieldName="status"
-					label="Trạng thái"
+					label={t("form.label.status")}
 					required
 					options={commonStatus}
 					disabled={loadingSave}
@@ -212,7 +213,7 @@ class AdminForm extends BasicForm {
 				</Col>
 				<Col span={12} hidden={!showColorPicker}>
 					<Form.Item
-					label="Chọn nhãn màu"
+					label={t("form.label.labelColor")}
 					>
 						<div
 						style={{

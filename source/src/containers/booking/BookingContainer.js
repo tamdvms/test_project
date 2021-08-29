@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import Fuse from 'fuse.js'
+import { useTranslation } from 'react-i18next'
 
 import BookingPage from '../../compoments/booking/BookingPage'
 import { actions } from '../../actions'
@@ -11,8 +12,9 @@ const DEFAULT_ITEM_SIZE = 20
 const BookingContainer = ({
     changeBreadcrumb,
 }) => {
+    const { t } = useTranslation("bookingContainer")
     const dispatch = useDispatch()
-    const breadcrumbs = [{ name: "Đặt hàng" }]
+    const breadcrumbs = [{ name: t("currentPage") }]
     const defaultAdditionalData = {
         isShowNote: false,
         quantity: 1,
@@ -190,12 +192,12 @@ const BookingContainer = ({
                 setIsPaymenting(false)
                 setSelectedItems([])
                 setCustomersList([])
-                showSucsessMessage("Đặt hàng thành công")
+                showSucsessMessage(t("showSuccessMessage.booking"), { t, ns: 'listBasePage' })
                 cb(true)
             },
             onError: () => {
                 setLoadingSave(false)
-                showErrorMessage("Đặt hàng thất bại. Vui lòng thử lại!")
+                showErrorMessage(t("showErrorMessage.booking"), { t, ns: 'listBasePage' })
                 cb(false)
             },
         }))

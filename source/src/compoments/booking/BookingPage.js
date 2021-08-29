@@ -2,6 +2,7 @@ import React from 'react'
 import { Input, Empty, Avatar, Spin, Modal, Button } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import BasicModal from '../common/modal/BasicModal'
+import { useTranslation } from 'react-i18next'
 
 import Utils from '../../utils'
 import { AppConstants } from '../../constants'
@@ -39,35 +40,15 @@ const BookingPage = ({
     tbProductChildLoading,
     handleOpenModal,
 }) => {
-
-    const loadMore = numLoadMore > 0 && !listLoading
-        ? (
-            <div className="load-more">
-				<div
-					className="loader-container"
-					style={{
-						textAlign: 'center',
-						marginTop: 12,
-						height: 32,
-						lineHeight: '32px',
-					}}
-				>
-					{
-						loadmoreLoading
-						? <div className="loader">Loading...</div>
-						: <Button onClick={handleChangeLoadMore}>Xem thêm {numLoadMore} (sản phẩm)</Button>
-					}
-				</div>
-			</div>
-        ) : null;
+    const { t } = useTranslation("bookingContainer")
 
     const handleRemoveSelectingItem = (product) => {
         confirm({
-            title: `Bạn có chắc muốn xóa sản phẩm này?`,
+            title: t("page.confirm"),
             content: '',
-            okText: 'Có',
+            okText: t("page.yes"),
             okType: 'danger',
-            cancelText: 'Không',
+            cancelText: t("page.no"),
             onOk: () => {
                 handleDeselectingItem(product)
             },
@@ -87,7 +68,7 @@ const BookingPage = ({
                 <div className="auto-complete">
                     <Input
                         className="input"
-                        placeholder="Nhập tên sản phẩm"
+                        placeholder={t("page.searchPlaceHolder")}
                         prefix={<SearchOutlined />}
                         onChange={handleChangeSearchInput}
                     />
@@ -115,7 +96,7 @@ const BookingPage = ({
                                             <div className="price">
                                                 {
                                                     product.hasChild ? (
-                                                        "Chọn phân loại"
+                                                        t("page.chooseCategory")
                                                     ) : (<>
                                                         {
                                                             product.saleoff > 0 ? (
@@ -140,7 +121,6 @@ const BookingPage = ({
                                 : (<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />)
                             )
                         }
-                        {loadMore}
                     </ul>
                 </div>
             </div>
@@ -171,7 +151,7 @@ const BookingPage = ({
                 className="product-child-list-modal"
                 noFooter={true}
                 closable={false}
-                title="Danh sách phân loại"
+                title={t("page.categoryList")}
 				visible={isShowModal}
 				onCancel={onCancelModal}
                 width={600}

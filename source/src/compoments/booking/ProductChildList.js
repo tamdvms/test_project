@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import qs from 'query-string';
 import { Avatar, Empty, Spin } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { useTranslation } from "react-i18next";
 
 import BaseTable from "../../compoments/common/table/BaseTable";
 import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '../../constants';
@@ -15,6 +16,7 @@ const ProductChildList = ({
     parentId,
     getDataList
 }) => {
+    const { t } = useTranslation("bookingContainer")
 
     useEffect(() => {
         if(parentProduct) {

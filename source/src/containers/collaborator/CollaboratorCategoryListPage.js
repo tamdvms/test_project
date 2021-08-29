@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Avatar, Tag, Button } from "antd";
 import { UserOutlined, PlusOutlined } from "@ant-design/icons";
 import qs from 'query-string';
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import BaseTable from "../../compoments/common/table/BaseTable";
@@ -25,14 +26,15 @@ class CollaboratorCategoryListPage extends ListBasePage {
     constructor(props) {
         super(props);
         const { t } = props;
-        this.objectName =  "Danh mục CTV";
+        this.objectName = t("objectName");
+
         this.breadcrumbs = [
-            { name: "Danh mục CTV" },
+            { name: t("breadcrumbs.currentPage") }
         ];
         this.columns = [
         this.renderIdColumn(),
         {
-            title: 'Tên',
+            title: t("table.name"),
             render: (dataRow) => {
                 return (
                     <span className="routing" onClick={()=>{
@@ -79,15 +81,16 @@ class CollaboratorCategoryListPage extends ListBasePage {
     }
 
     getSearchFields() {
+        const { t } = this.props;
         return [
         {
             key: "name",
-            seachPlaceholder: 'Tên',
+            seachPlaceholder: t("searchPlaceHolder.name"),
             initialValue: this.search.name,
         },
         {
             key: "status",
-            seachPlaceholder: "Chọn trạng thái",
+            seachPlaceholder: t("searchPlaceHolder.status"),
             fieldType: FieldTypes.SELECT,
             options: commonStatus,
             initialValue: this.search.status,
@@ -100,6 +103,7 @@ class CollaboratorCategoryListPage extends ListBasePage {
             dataList,
             loading,
             uploadFile,
+            t,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading } = this.state;
         const categoryData = dataList.data || [];
@@ -114,7 +118,7 @@ class CollaboratorCategoryListPage extends ListBasePage {
                     type="primary"
                     onClick={() => this.onShowModifiedModal(false)}
                     >
-                        <PlusOutlined /> Thêm mới
+                        <PlusOutlined /> {t("createNewButton")}
                     </Button>
                 ))
             }
@@ -141,6 +145,7 @@ class CollaboratorCategoryListPage extends ListBasePage {
                 uploadFile={uploadFile}
                 commonStatus={commonStatus}
                 loadingSave={isShowModifiedLoading}
+                t={t}
             />
             </BasicModal>
         </div>
@@ -162,4 +167,4 @@ const mapDispatchToProps = (dispatch) => ({
   uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CollaboratorCategoryListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['collaboratorCategoryListPage','listBasePage','constants', 'basicModal'])(CollaboratorCategoryListPage));

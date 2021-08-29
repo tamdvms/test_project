@@ -8,6 +8,7 @@ import {
     MenuFoldOutlined,
     MenuUnfoldOutlined
 } from '@ant-design/icons';
+import { withTranslation } from 'react-i18next';
 import { AppConstants, LayoutConfigs } from '../../../constants';
 const {  Header } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -15,7 +16,7 @@ const SubMenu = Menu.SubMenu;
 class AppHeader extends Component {
 
     render() {
-        const { onLogout , userData, onToggleNavSide, navSidercollapsed } = this.props;
+        const { onLogout , userData, onToggleNavSide, navSidercollapsed, t } = this.props;
 
         return (
             <Header className="app-header"
@@ -50,12 +51,12 @@ class AppHeader extends Component {
                         <Menu.Item key="/profile">
                             <Link to="/profile">
                                 <UserOutlined/>
-                                <span>Hồ sơ</span>
+                                <span>{t('profile')}</span>
                             </Link>
                         </Menu.Item>
                         <Menu.Item onClick={onLogout}>
                             <LoginOutlined/>
-                            <span>Đăng xuất</span>
+                            <span>{t('logout')}</span>
                         </Menu.Item>
                     </SubMenu>
                 </Menu>
@@ -64,4 +65,4 @@ class AppHeader extends Component {
     }
 }
 
-export default AppHeader;
+export default withTranslation('appHeader')(AppHeader);

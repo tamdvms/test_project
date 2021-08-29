@@ -76,7 +76,7 @@ class CategoryForm extends BasicForm {
     }
 
     render() {
-        const { formId, dataDetail, loadingSave, isEditing } = this.props;
+        const { formId, dataDetail, loadingSave, isEditing, t } = this.props;
         const { avatar, uploading } = this.state;
         return (
         <Form
@@ -91,7 +91,7 @@ class CategoryForm extends BasicForm {
                     <CropImageFiled
                         fieldName="categoryImage"
                         loading={uploading}
-                        label="Ảnh đại diện"
+                        label={t("form.label.avatar")}
                         imageUrl={avatar}
                         onChange={this.handleChangeAvatar}
                         uploadFile={this.uploadFileAvatar}
@@ -103,7 +103,7 @@ class CategoryForm extends BasicForm {
                 <Col span={12}>
                     <TextField
                     fieldName="categoryName"
-                    label="Tên danh mục"
+                    label={t("form.label.categoryName")}
                     required
                     disabled={loadingSave}
                     />
@@ -112,7 +112,7 @@ class CategoryForm extends BasicForm {
                     <TextField
                     type="textarea"
                     fieldName="categoryDescription"
-                    label="Mô tả"
+                    label={t("form.label.categoryDescription")}
                     required
                     style={{
                         height: 100
@@ -126,7 +126,7 @@ class CategoryForm extends BasicForm {
                         <Col span={12}>
                             <DropdownField
                                 fieldName="status"
-                                label="Trạng thái"
+                                label={t("form.label.status")}
                                 required
                                 options={commonStatus}
                                 disabled={loadingSave}

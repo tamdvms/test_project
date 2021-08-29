@@ -6,6 +6,7 @@ import BasicForm from './BasicForm';
 import Utils from '../../../utils';
 import { FieldTypes } from '../../../constants/formConfig';
 import { DATE_FORMAT_DISPLAY } from '../../../constants';
+import { withTranslation } from "react-i18next";
 const { RangePicker } = DatePicker;
 
 class SearchForm extends BasicForm {
@@ -71,6 +72,7 @@ class SearchForm extends BasicForm {
     }
 
     renderFormType(fieldItem) {
+        const { t } = this.props;
         if (fieldItem === undefined || fieldItem === null) {
             return null
         }
@@ -117,7 +119,7 @@ class SearchForm extends BasicForm {
                     {
                         this.getSelectOptions(fieldItem).map(option =>
                             <Select.Option key={option[optionValueKey]}>
-                                {option[optionLabelKey]}
+                                {t(`constants:${option[optionLabelKey]}`, option[optionLabelKey])}
                             </Select.Option>
                         )
                     }
@@ -149,7 +151,7 @@ class SearchForm extends BasicForm {
                             renderItem(option[optionValueKey], option[optionValueKey], option)
                             :
                             <Select.Option key={option[optionValueKey]}>
-                                {option[optionLabelKey]}
+                                {t(`constants:${option[optionLabelKey]}`, option[optionLabelKey])}
                             </Select.Option>
                         )
                     }
@@ -176,7 +178,7 @@ class SearchForm extends BasicForm {
     }
 
     render() {
-        const { searchFields, className, hiddenAction } = this.props;
+        const { searchFields, className, hiddenAction, t } = this.props;
         return (
             <Form
                 ref={this.formRef}
@@ -204,10 +206,10 @@ class SearchForm extends BasicForm {
                     :
                     <Form.Item>
                         <Button icon={<SearchOutlined />} type="primary" htmlType="submit">
-                            Tìm kiếm
+                        {t('searchButton')}
                         </Button>
                         <Button style={{ marginLeft: 8 }} onClick={this.handleReset}>
-                            <i className="icfa fa-refresh" /> Làm mới
+                            <i className="icfa fa-refresh" /> {t('clearButton')}
                         </Button>
                     </Form.Item>
                 }
@@ -216,4 +218,4 @@ class SearchForm extends BasicForm {
     }
 }
 
-export default SearchForm;
+export default withTranslation(['searchForm', 'constants', 'baseField'])(SearchForm);

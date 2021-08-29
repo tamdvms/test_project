@@ -26,63 +26,63 @@ const strParams = params => {
 
 const navMenuConfig = [
     {
-        label: 'Quản lý tài khoản',
+        label: 'Account Management',
         icon: <UsergroupAddOutlined />,
         children: [
             {
-                label: 'Quản trị viên',
+                label: 'Admin',
                 ...sitePathConfig.admin
             },
             {
-                label: 'Nhân viên',
+                label: 'Employee',
                 ...sitePathConfig.employee
             },
         ]
     },
     {
-        label: 'Hệ thống',
+        label: 'System',
         icon: <ControlOutlined />,
         children: [
             {
-                label: 'Cài Đặt',
+                label: 'Setting',
                 ...sitePathConfig.setting
             },
             {
-                label: 'Quyền',
+                label: 'Role',
                 ...sitePathConfig.groupPermission
             },
         ]
     },
     {
-        label: 'Khách hàng',
+        label: 'Customer',
         icon: <UserOutlined />,
         children: [
             {
-                label: 'Khách hàng',
+                label: 'Customer',
                 ...sitePathConfig.customer,
             }
         ]
     },
     {
-        label: 'Danh mục',
+        label: 'Category',
         icon: <UnorderedListOutlined />,
         children: [
             {
-                label: 'Danh mục thu',
+                label: 'CategoryImport',
                 ...sitePathConfig.categoryImport,
             },
             {
-                label: 'Danh mục chi',
+                label: 'CategoryExport',
                 ...sitePathConfig.categoryExport,
             },
             {
-                label: 'Danh mục sản phẩm',
+                label: 'CategoryProduct',
                 ...sitePathConfig.categoryProduct,
             },
         ]
     },
     {
-        label: 'Sản phẩm',
+        label: 'Product',
         icon: <InboxOutlined />,
         ...sitePathConfig.product,
         children: [],
@@ -102,6 +102,7 @@ const navMenuConfig = [
                                     label: c.categoryName,
                                     path: _pathnameWithQs,
                                     key: _pathname,
+                                    childrenKeys: this.childrenKeys
                                 })
                             })
                         }
@@ -120,43 +121,43 @@ const navMenuConfig = [
         },
     },
     {
-        label: 'Bán hàng',
+        label: 'Selling',
         icon: <ShoppingCartOutlined />,
         children: [
             {
-                label: 'Đặt hàng',
+                label: 'Booking',
                 ...sitePathConfig.booking
             },
             {
-                label: 'Quản lý đơn hàng',
+                label: 'Orders Management',
                 ...sitePathConfig.orders
             },
         ]
     },
     {
-        label: 'Quản lý bán hàng',
+        label: 'Selling Management',
         icon: <CarryOutOutlined />,
         children: [
             {
-                label: 'Quản lý thu',
+                label: 'Import Management',
                 ...sitePathConfig.importManagement
             },
             {
-                label: 'Quản lý chi',
+                label: 'Export Management',
                 ...sitePathConfig.exportManagement
             },
         ]
     },
     {
-        label: 'Quản lý CTV',
+        label: 'Collaborator Management',
         icon: <UserAddOutlined />,
         children: [
             {
-                label: 'Danh mục CTV',
+                label: 'Collaborator Category',
                 ...sitePathConfig.collaboratorCategory
             },
             {
-                label: 'Quản lý CTV',
+                label: 'Collaborator Management',
                 ...sitePathConfig.employeeCollaborator
             },
         ]
