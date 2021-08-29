@@ -40,7 +40,7 @@ class OrdersListPage extends ListBasePage {
             {
                 title: t("table.ordersCode"),
                 dataIndex: "ordersCode",
-                width: 130,
+                width: 115,
                 render: (ordersCode) => {
                     return <div>#{ordersCode}</div>
                 }
@@ -82,9 +82,20 @@ class OrdersListPage extends ListBasePage {
                 }
             },
             {
+                title: t("table.collaboratorFullName"),
+                dataIndex: 'collaboratorDto',
+                render: (collaboratorDto) => {
+                    return (<div style={{
+                                padding: '2px 7px',
+                            }}>{collaboratorDto?.fullName}</div>
+                    )
+                }
+            },
+            {
                 title: <div className="tb-al-r">{t("table.ordersTotalMoney")}</div>,
                 dataIndex: 'ordersTotalMoney',
                 align: 'right',
+                width: 100,
                 render: (ordersTotalMoney, dataRow) => {
                     return (
                         <div className="tb-al-r">
