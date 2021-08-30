@@ -718,4 +718,58 @@ export default {
             }
         },
     },
+    collaboratorOrdersListPage: {
+        breadcrumbs: {
+            employeePage: 'Nhân viên',
+            collaboratorPage: 'Cộng tác viên',
+        },
+        objectName: 'cộng tác viên',
+        searchPlaceHolder: {
+            code: 'Mã đơn hàng',
+            state: 'Chọn tình trạng',
+            employeeFullName: 'Tên nhân viên',
+        },
+        table: {
+            ordersCode: 'Mã đơn hàng',
+            customerFullName: 'Khách hàng',
+            createdDate: 'Ngày tạo',
+            employeeFullName: 'Nhân viên',
+            ordersTotalMoney: 'Số tiền',
+            ordersState: 'Tình trạng',
+            collaboratorFullName: 'Cộng tác viên',
+        },
+        form: {
+            state: 'Tình trạng đơn hàng',
+            label: {
+                customerFullName: 'Họ và tên',
+                customerPhone: 'Số điện thoại',
+                ordersSaleOff: 'Giảm giá',
+                ordersAddress: 'Địa chỉ',
+            },
+            fieldSet: {
+                customerInfo: 'Thông tin khách hàng',
+                productList: 'Danh sách mặt hàng',
+            },
+            totalProductPrice: 'Tổng tiền đơn hàng',
+            saleOff: 'Giảm giá',
+            totalPayment: 'Tổng tiền thanh toán',
+        },
+        titleModal: "CHI TIẾT ĐƠN HÀNG",
+        confirmUpdateState: 'Bạn có chắc muốn thay đổi trạng thái đơn hàng này?',
+        yes: 'Có',
+        no: 'Không',
+        cancelOrders: 'Hủy đơn hàng',
+        save: 'Lưu',
+        confirmDeleteItem: 'Bạn có chắc muốn xóa sản phẩm này?',
+        confirmDeleteFinalItem: 'Xóa sản phẩm cuối cùng sẽ chuyển trạng thái đơn hàng thành \'Đã hủy\' (vẫn giữ lại sản phẩm)! Bạn có muốn thực hiện?',
+        validationMessage: {
+            price: 'Giá tiền chỉ bao gồm các ký tự 0-9',
+        },
+        showSuccessMessage: {
+            update: 'Cập nhật thành công!',
+        },
+        showErrorMessage: {
+            update: "Cập nhật thất bại. Vui lòng thử lại!",
+        },
+    },
 }

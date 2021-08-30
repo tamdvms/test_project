@@ -21,6 +21,10 @@ function* getOrdersList({ payload: { params, onCompleted } }) {
     const apiParams = apiConfig.orders.getList;
     const searchParams = { page: params.page, size: params.size };
 
+    if(params.collaboratorId) {
+        searchParams.collaboratorId = params.collaboratorId
+    }
+
     if(params.search) {
         if(params.search.employeeFullName) {
             searchParams.employeeFullName = params.search.employeeFullName

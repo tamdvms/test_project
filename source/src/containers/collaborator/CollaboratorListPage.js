@@ -42,16 +42,13 @@ class CollaboratorListPage extends ListBasePage {
 		this.parentId = parentId;
 		this.parentName = parentName;
 		this.breadcrumbs = [
-		{
-			name: t("breadcrumbs.employeePage"),
-			path: `${sitePathConfig.employeeCollaborator.path}${this.handleRoutingParent()}`
-		},
-		{
-			name: parentName,
-		},
-		{
-			name: t("breadcrumbs.currentPage")
-		},
+			{
+				name: `${t("breadcrumbs.employeePage")} (${parentName})`,
+				path: `${sitePathConfig.employeeCollaborator.path}${this.handleRoutingParent()}`
+			},
+			{
+				name: t("breadcrumbs.currentPage")
+			},
 		];
 		this.columns = [
 		this.renderIdColumn(),
@@ -67,7 +64,16 @@ class CollaboratorListPage extends ListBasePage {
 			/>
 			),
 		},
-		{ title: t("table.username"), dataIndex: "username" },
+		{
+			title: t("table.username"),
+			render: (dataRow) => {
+				return <span className="routing"
+				onClick={() => this.handleRouting(dataRow.id, dataRow.fullName, sitePathConfig.wrapperCollaboratorOrders.path, true)}
+				>
+					{dataRow.username}
+				</span>
+			}
+		},
 		{ title: t("table.fullName"), dataIndex: "fullName" },
 		{ title: t("table.phone"), dataIndex: "phone" },
 		{ title: "E-mail", dataIndex: "email", width: "200px" },
@@ -98,7 +104,7 @@ class CollaboratorListPage extends ListBasePage {
 				const actionColumns = [];
 				if(this.actionColumns.isProduct) {
 					actionColumns.push(this.renderButton((
-						<Button type="link" onClick={() => this.handleRouting(dataRow.id, dataRow.fullName)} className="no-padding">
+						<Button type="link" onClick={() => this.handleRouting(dataRow.id, dataRow.fullName, sitePathConfig.collaboratorProduct.path)} className="no-padding">
 							<InboxOutlined/>
 						</Button>
 					), [5]))
@@ -138,14 +144,21 @@ class CollaboratorListPage extends ListBasePage {
 		}
 	}
 
-	handleRouting(parentId, parentName) {
+	handleRouting(parentId, parentName, pathname, blankTarget) {
 		const { location: { search }, history } = this.props;
 		const queryString = qs.parse(search);
 		const result = {};
 		Object.keys(queryString).map(q => {
 			result[`parentSearch${q}`] = queryString[q];
 		})
-		history.push(`${sitePathConfig.collaboratorProduct.path}?${qs.stringify({...result, parentId, parentName})}`);
+		const path = `${pathname}?${qs.stringify({...result, parentId, parentName})}`;
+		if(blankTarget) {
+			window.open(path, '_blank')
+			window.focus()
+		}
+		else {
+			history.push(path);
+		}
 	}
 
 	prepareCreateData(data) {

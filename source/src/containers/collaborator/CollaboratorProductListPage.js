@@ -38,14 +38,11 @@ class CollaboratorProductListPage extends ListBasePage {
         this.parentName = parentName;
         this.breadcrumbs = [
             {
-                name: t("breadcrumbs.employeePage"),
+                name: `${t("breadcrumbs.employeePage")} (${parentSearchparentName})`,
                 path: `${sitePathConfig.employeeCollaborator.path}${this.handleRoutingParent('parentSearchparentSearch')}`
             },
             {
-                name: parentSearchparentName,
-            },
-            {
-                name: t("breadcrumbs.collaboratorPage"),
+                name: `${t("breadcrumbs.collaboratorPage")} (${parentName})`,
                 path: `${sitePathConfig.collaborator.path}${this.handleRoutingParent('parentSearch')}`
             },
         ];

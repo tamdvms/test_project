@@ -41,9 +41,8 @@ class ProductListPageChild extends ListBasePage {
         this.objectName = t("objectName");
         this.breadcrumbs = [
             { name: t("breadcrumbs.currentPage") },
-            { name: parentSearchcategoryName },
             {
-                name: parentName,
+                name: `${parentSearchcategoryName} (${parentName})`,
                 path: `${sitePathConfig.product.path}/${parentSearchcategoryId}${this.handleRoutingParent()}`
             },
         ];
