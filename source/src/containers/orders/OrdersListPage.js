@@ -33,6 +33,11 @@ class OrdersListPage extends ListBasePage {
         const { t } = props;
         this.pagination = { pageSize: 100 };
         this.objectName = t("objectName");
+        this.state = {
+            isShowModifiedModal: false,
+            isShowModifiedLoading: false,
+            disableButton: null
+        }
         this.breadcrumbs = [
             { name: t("breadcrumbs.currentPage") }
         ];
@@ -98,7 +103,7 @@ class OrdersListPage extends ListBasePage {
                 width: 100,
                 render: (ordersTotalMoney, dataRow) => {
                     return (
-                        <div className="tb-al-r">
+                        <div className="tb-al-r force-one-line">
                             {Utils.formatMoney(ordersTotalMoney)}
                         </div>
                     )
@@ -162,6 +167,7 @@ class OrdersListPage extends ListBasePage {
         const { updateStateOrders, cancelOrders, t } = this.props
         this.setState({
             isShowModifiedLoading: true,
+            disableButton: 'all',
         })
         cancelOrders({
             params: {
@@ -173,12 +179,14 @@ class OrdersListPage extends ListBasePage {
                 showSucsessMessage(t("showSuccessMessage.update") , { t, ns: 'listBasePage' })
                 this.setState({
                     isShowModifiedLoading: false,
+                    disableButton: null,
                 })
             },
             onError: (error) => {
                 showErrorMessage(error.message || t("showErrorMessage.update"), { t, ns: 'listBasePage' })
                 this.setState({
                     isShowModifiedLoading: false,
+                    disableButton: null,
                 })
             }
         })
@@ -195,6 +203,7 @@ class OrdersListPage extends ListBasePage {
             onOk: () => {
                 this.setState({
                     isShowModifiedLoading: true,
+                    disableButton: values.ordersState === OrdersStates[4].value ? 'cancel-orders' : 'all'
                 })
                 if(values.ordersState != OrdersStates[4].value) {
                     updateStateOrders({
@@ -207,12 +216,14 @@ class OrdersListPage extends ListBasePage {
                             showSucsessMessage(t("showSuccessMessage.update") , { t, ns: 'listBasePage' })
                             this.setState({
                                 isShowModifiedLoading: false,
+                                disableButton: null,
                             })
                         },
                         onError: (error) => {
                             showErrorMessage(error.message || t("showErrorMessage.update"), { t, ns: 'listBasePage' })
                             this.setState({
                                 isShowModifiedLoading: false,
+                                disableButton: null,
                             })
                         }
                     })
@@ -228,12 +239,14 @@ class OrdersListPage extends ListBasePage {
                             showSucsessMessage(t("showSuccessMessage.update") , { t, ns: 'listBasePage' })
                             this.setState({
                                 isShowModifiedLoading: false,
+                                disableButton: null,
                             })
                         },
                         onError: (error) => {
                             showErrorMessage(error.message || t("showErrorMessage.update"), { t, ns: 'listBasePage' })
                             this.setState({
                                 isShowModifiedLoading: false,
+                                disableButton: null,
                             })
                         }
                     })
@@ -249,6 +262,7 @@ class OrdersListPage extends ListBasePage {
         const { updateData, t } = this.props
         this.setState({
             isShowModifiedLoading: true,
+            disableButton: 'update-orders',
         })
         updateData({
             params: {
@@ -260,12 +274,14 @@ class OrdersListPage extends ListBasePage {
                 this.setState({
                     isShowModifiedLoading: false,
                     isShowModifiedModal: false,
+                    disableButton: null,
                 })
             },
             onError: (error) => {
                 showErrorMessage(error.message || t("showErrorMessage.update"), { t, ns: 'listBasePage' })
                 this.setState({
                     isShowModifiedLoading: false,
+                    disableButton: null,
                 })
             }
         })
@@ -273,22 +289,26 @@ class OrdersListPage extends ListBasePage {
 
     renderUpdateButtons = () => {
         const { t } = this.props;
-        const { isShowModifiedLoading } = this.state;
+        const { isShowModifiedLoading, disableButton } = this.state;
         return (<>
             <ElementWithPermission permissions={[sitePathConfig.orders.permissions[4]]}>
                 <Button
                 type="primary"
-                loading={isShowModifiedLoading}
+                loading={disableButton === "cancel-orders"}
+                disabled={isShowModifiedLoading || disableButton === "all"}
                 className={
                     this.dataDetail.ordersState === OrdersStates[3].value
                     || this.dataDetail.ordersState === OrdersStates[4].value
                     ? 'btn-cancel-orders disabled' : 'btn-cancel-orders'
                 }
-                onClick={() => this.dataDetail.ordersState !== OrdersStates[3].value
-                    && this.dataDetail.ordersState !== OrdersStates[4].value && this.handleUpdateState({
-                    id: this.dataDetail.id,
-                    ordersState: OrdersStates[4].value
-                })}
+                onClick={
+                    () => this.dataDetail.ordersState !== OrdersStates[3].value
+                        && this.dataDetail.ordersState !== OrdersStates[4].value
+                        && this.handleUpdateState({
+                            id: this.dataDetail.id,
+                            ordersState: OrdersStates[4].value
+                        })
+                }
                 >
                     {t("cancelOrders")}
                 </Button>
@@ -298,7 +318,8 @@ class OrdersListPage extends ListBasePage {
                 htmlType="submit"
                 form="customer-info-form"
                 type="primary"
-                loading={isShowModifiedLoading}
+                loading={disableButton === "update-orders"}
+                disabled={isShowModifiedLoading || disableButton === "all"}
                 className={
                     this.dataDetail.ordersState > OrdersStates[0].value
                     ? 'btn-update-orders disabled' : 'btn-update-orders'

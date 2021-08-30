@@ -216,4 +216,14 @@ export const sitePathConfig = {
             contentClass: 'collaborator-site',
         }
     },
+    wrapperCollaboratorOrders: {
+        path: '/collaborator-orders',
+        permissions: [
+            apiConfig.orders.getList.path,
+            apiConfig.orders.getById.path,
+        ],
+        siteConfig: {
+            contentClass: 'wrapper-collaborator-orders',
+        }
+    },
 }
