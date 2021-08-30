@@ -219,7 +219,7 @@ export const sitePathConfig = {
     wrapperCollaboratorOrders: {
         path: '/collaborator-orders',
         permissions: [
-            apiConfig.orders.getList.path,
+            apiConfig.orders.getCollaboratorOrdersList.path,
             apiConfig.orders.getById.path,
         ],
         siteConfig: {

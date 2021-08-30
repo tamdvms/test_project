@@ -728,6 +728,8 @@ export default {
             code: 'Mã đơn hàng',
             state: 'Chọn tình trạng',
             employeeFullName: 'Tên nhân viên',
+            fromDate: 'Từ ngày',
+            toDate: 'Đến ngày',
         },
         table: {
             ordersCode: 'Mã đơn hàng',
@@ -737,6 +739,7 @@ export default {
             ordersTotalMoney: 'Số tiền',
             ordersState: 'Tình trạng',
             collaboratorFullName: 'Cộng tác viên',
+            totalCollaboratorCommission: 'Hoa hồng',
         },
         form: {
             state: 'Tình trạng đơn hàng',
