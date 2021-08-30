@@ -286,6 +286,11 @@ const apiConfig = {
             method: 'GET',
             headers: baseHeader,
         },
+        getCollaboratorOrdersList: {
+            path:  '/v1/orders/list-collaborator-orders',
+            method: 'GET',
+            headers: baseHeader,
+        },
         getById: {
             path: '/v1/orders/get',
             method: 'GET',

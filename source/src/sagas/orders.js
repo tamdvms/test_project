@@ -13,6 +13,7 @@ const {
     UPDATE_ORDERS,
     UPDATE_STATE_ORDERS,
     CANCEL_ORDERS,
+    GET_COLLABORATOR_ORDERS_LIST,
 } = actionTypes;
 
 
@@ -35,6 +36,10 @@ function* getOrdersList({ payload: { params, onCompleted } }) {
         if(params.search.code) {
             searchParams.code = params.search.code
         }
+        if(params.search.fromDateToDate) {
+            searchParams.from = params.search.fromDateToDate[0];
+            searchParams.to = params.search.fromDateToDate[1];
+        }
     }
     try {
         const result = yield call(sendRequest, apiParams, searchParams);
@@ -47,6 +52,38 @@ function* getOrdersList({ payload: { params, onCompleted } }) {
     catch(error) {
         console.error(error.message)
         yield put({ type: defineActionFailed(GET_ORDERS_LIST) });
+    }
+}
+
+function* getCollaboratorOrdersList({ payload: { params, onCompleted } }) {
+
+    const apiParams = apiConfig.orders.getCollaboratorOrdersList;
+    const searchParams = { page: params.page, size: params.size };
+
+    if(params.collaboratorId) {
+        searchParams.collaboratorId = params.collaboratorId
+    }
+
+    if(params.search) {
+        if(params.search.state) {
+            searchParams.state = params.search.state
+        }
+        if(params.search.fromDateToDate) {
+            searchParams.from = params.search.fromDateToDate[0];
+            searchParams.to = params.search.fromDateToDate[1];
+        }
+    }
+    try {
+        const result = yield call(sendRequest, apiParams, searchParams);
+        onCompleted && onCompleted(result.responseData.data?.data)
+        yield put({
+            type: defineActionSuccess(GET_COLLABORATOR_ORDERS_LIST),
+            collaboratorOrdersData: result.responseData && result.responseData.data,
+        });
+    }
+    catch(error) {
+        console.error(error.message)
+        yield put({ type: defineActionFailed(GET_COLLABORATOR_ORDERS_LIST) });
     }
 }
 
@@ -99,6 +136,7 @@ function* cancelOrders({ payload: { params, onCompleted, onError } }) {
 
 const sagas = [
     takeLatest(defineActionLoading(GET_ORDERS_LIST), getOrdersList),
+    takeLatest(defineActionLoading(GET_COLLABORATOR_ORDERS_LIST), getCollaboratorOrdersList),
     takeLatest(GET_ORDERS_BY_ID, getOrdersById),
     takeLatest(UPDATE_STATE_ORDERS, updateStateOrders),
     takeLatest(UPDATE_ORDERS, updateOrders),

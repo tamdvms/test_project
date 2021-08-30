@@ -4,6 +4,7 @@ import { Avatar, Tag, Button, Modal, Divider } from "antd";
 import { UserOutlined, PlusOutlined, EditOutlined, DeleteOutlined, FileSearchOutlined } from "@ant-design/icons";
 import qs from 'query-string';
 import { withTranslation } from "react-i18next";
+import moment from "moment";
 
 import ListBasePage from "../ListBasePage";
 import CollaboratorOrdersForm from "../../compoments/collaboratorOrders/CollaboratorOrdersForm";
@@ -20,12 +21,14 @@ import { showErrorMessage, showSucsessMessage } from "../../services/notifyServi
 import ElementWithPermission from "../../compoments/common/elements/ElementWithPermission";
 import { sitePathConfig } from "../../constants/sitePathConfig";
 import { convertUtcToTimezone } from "../../utils/datetimeHelper";
+import SearchForm from "../../compoments/common/entryForm/SearchForm";
+import { convertTimezoneToUtc } from "../../utils/datetimeHelper";
 
 const { confirm } = Modal
 
 class CollaboratorOrdersListPage extends ListBasePage {
     initialSearch() {
-        return { employeeFullName: "", code: "", state: null };
+        return { fromDateToDate: [moment().startOf('month'), moment().endOf('month')] , state: null };
     }
 
     constructor(props) {
@@ -59,7 +62,7 @@ class CollaboratorOrdersListPage extends ListBasePage {
         this.columns = [
             {
                 title: t("table.ordersCode"),
-                dataIndex: "ordersCode",
+                dataIndex: "code",
                 width: 115,
                 render: (ordersCode) => {
                     return <div>#{ordersCode}</div>
@@ -74,8 +77,8 @@ class CollaboratorOrdersListPage extends ListBasePage {
             },
             {
                 title: t("table.customerFullName"),
-                dataIndex: ['customerDto', 'customerFullName'],
-                render: (customerFullName, dataRow) => {
+                dataIndex: 'customerFullName',
+                render: (customerFullName) => {
                     return (
                         <div>
                             {customerFullName}
@@ -84,44 +87,43 @@ class CollaboratorOrdersListPage extends ListBasePage {
                 }
             },
             {
-                title: t("table.collaboratorFullName"),
-                dataIndex: 'collaboratorDto',
-                render: (collaboratorDto) => {
-                    return (<div style={{
-                                padding: '2px 7px',
-                            }}>{collaboratorDto?.fullName}</div>
-                    )
-                }
-            },
-            {
                 title: <div className="tb-al-r">{t("table.ordersTotalMoney")}</div>,
-                dataIndex: 'ordersTotalMoney',
+                dataIndex: 'totalMoney',
                 align: 'right',
                 width: 100,
-                render: (ordersTotalMoney, dataRow) => {
+                render: (totalMoney, dataRow) => {
                     return (
                         <div className="tb-al-r force-one-line">
-                            {Utils.formatMoney(ordersTotalMoney)}
+                            {Utils.formatMoney(totalMoney)}
                         </div>
                     )
                 }
             },
             {
-                title: t("table.ordersState"),
-                dataIndex: 'ordersState',
+                title: <span className="tb-al-r">{t("table.totalCollaboratorCommission")}</span>,
+                dataIndex: 'totalCollaboratorCommission',
                 width: 90,
-                render: (ordersState, dataRow) => {
-                    const state = OrdersStates.find(state => state.value === ordersState);
+                align: 'right',
+                render: (totalCollaboratorCommission) => {
+                    return <div className="force-one-line tb-al-r">{Utils.formatMoney(totalCollaboratorCommission)}</div>
+                }
+            },
+            {
+                title: t("table.ordersState"),
+                dataIndex: 'state',
+                width: 90,
+                render: (state, dataRow) => {
+                    const _state = OrdersStates.find(s => s.value === state);
                     return (
                         <div>
                             <Tag style={
                                 {
-                                    background: state?.color,
+                                    background: _state?.color,
                                     color: 'white',
                                     padding: '2px 7px',
                                     fontSize: '14px',
                                 }
-                            }>{state?.label}</Tag>
+                            }>{_state?.label}</Tag>
                         </div>
                     )
                 }
@@ -137,10 +139,50 @@ class CollaboratorOrdersListPage extends ListBasePage {
         };
     }
 
+    renderSearchForm(hiddenAction) {
+        const searchFields = this.getSearchFields();
+		const from = this.search.fromDateToDate?.[0];
+		const to = this.search.fromDateToDate?.[1];
+        if(searchFields.length > 0)
+            return <SearchForm
+                searchFields={searchFields}
+                onSubmit={this.onSearch}
+                onResetForm={this.onResetFormSearch}
+                hiddenAction={hiddenAction}
+                initialValues={
+					{
+						...this.search,
+						fromDateToDate: from && to ? [
+							moment(from),
+							moment(to),
+						] : undefined,
+					}
+				}
+                />;
+        return null;
+    }
+
     getList() {
         const { getDataList } = this.props;
         const page = this.pagination.current ? this.pagination.current - 1 : 0;
-        const params = { page, size: this.pagination.pageSize, search: this.search, collaboratorId: this.parentId};
+        const fromDateToDate = {
+            ...this.search.fromDateToDate
+        }
+        const from = moment(fromDateToDate[0]);
+        const to = moment(fromDateToDate[1]);
+        if(from && to) {
+            fromDateToDate[0] = convertTimezoneToUtc(moment(from).format("DD/MM/YYYY") + " 00:00:00", "DD/MM/YYYY HH:mm:ss");
+            fromDateToDate[1] = convertTimezoneToUtc(moment(to).format("DD/MM/YYYY") + " 23:59:59", "DD/MM/YYYY HH:mm:ss");
+        }
+        const params = {
+            page,
+            size: this.pagination.pageSize,
+            search: {
+                ...this.search,
+                fromDateToDate,
+            },
+            collaboratorId: this.parentId
+        }
         getDataList({ params });
     }
 
@@ -160,15 +202,16 @@ class CollaboratorOrdersListPage extends ListBasePage {
         const { t } = this.props;
         return [
             {
-                key: "employeeFullName",
-                seachPlaceholder: t("searchPlaceHolder.employeeFullName"),
-                initialValue: this.search.employeeFullName,
-            },
-            {
-                key: "code",
-                seachPlaceholder: t("searchPlaceHolder.code"),
-                initialValue: this.search.code,
-            },
+				key: 'fromDateToDate',
+				seachPlaceholder: [t("searchPlaceHolder.fromDate"), t("searchPlaceHolder.toDate")],
+				fieldType: FieldTypes.DATE_RANGE,
+				format: "DD/MM/YYYY",
+				disabledDate: (current) => {
+					// Can not select days after today
+					return current > moment().endOf('day');
+				},
+				width: 250,
+			},
             {
                 key: "state",
                 seachPlaceholder: t("searchPlaceHolder.state"),
@@ -235,12 +278,12 @@ class CollaboratorOrdersListPage extends ListBasePage {
 }
 
 const mapStateToProps = (state) => ({
-  loading: state.orders.tbOrdersLoading,
-  dataList: state.orders.ordersData || {},
+  loading: state.orders.tbCollaboratorOrdersLoading,
+  dataList: state.orders.collaboratorOrdersData || {},
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getDataList: (payload) => dispatch(actions.getOrdersList(payload)),
+  getDataList: (payload) => dispatch(actions.getCollaboratorOrdersList(payload)),
   getDataById: (payload) => dispatch(actions.getOrdersById(payload)),
 });
 

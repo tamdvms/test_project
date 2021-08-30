@@ -68,7 +68,7 @@ class CollaboratorListPage extends ListBasePage {
 			title: t("table.username"),
 			render: (dataRow) => {
 				return <span className="routing"
-				onClick={() => this.handleRouting(dataRow.id, dataRow.fullName, sitePathConfig.wrapperCollaboratorOrders.path, true)}
+				onClick={() => this.handleRouting(dataRow.id, dataRow.fullName, sitePathConfig.wrapperCollaboratorOrders.path)}
 				>
 					{dataRow.username}
 				</span>
