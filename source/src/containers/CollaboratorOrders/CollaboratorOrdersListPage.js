@@ -63,7 +63,7 @@ class CollaboratorOrdersListPage extends ListBasePage {
             {
                 title: t("table.ordersCode"),
                 dataIndex: "code",
-                width: 115,
+                width: 120,
                 render: (ordersCode) => {
                     return <div>#{ordersCode}</div>
                 }
@@ -72,7 +72,7 @@ class CollaboratorOrdersListPage extends ListBasePage {
                 title: <div style={{ paddingRight: 20 }}>{t("table.createdDate")}</div>,
                 dataIndex: "createdDate",
                 align: "right",
-                width: 100,
+                width: 120,
                 render: (createdDate) => <div style={{ paddingRight: 20, whiteSpace: 'nowrap' }}>{convertUtcToTimezone(createdDate, Utils.getSettingsDateFormat("date-format-product"))}</div>,
             },
             {
@@ -90,7 +90,7 @@ class CollaboratorOrdersListPage extends ListBasePage {
                 title: <div className="tb-al-r">{t("table.ordersTotalMoney")}</div>,
                 dataIndex: 'totalMoney',
                 align: 'right',
-                width: 100,
+                width: 120,
                 render: (totalMoney, dataRow) => {
                     return (
                         <div className="tb-al-r force-one-line">
@@ -102,7 +102,7 @@ class CollaboratorOrdersListPage extends ListBasePage {
             {
                 title: <span className="tb-al-r">{t("table.totalCollaboratorCommission")}</span>,
                 dataIndex: 'totalCollaboratorCommission',
-                width: 90,
+                width: 120,
                 align: 'right',
                 render: (totalCollaboratorCommission) => {
                     return <div className="force-one-line tb-al-r">{Utils.formatMoney(totalCollaboratorCommission)}</div>
@@ -111,7 +111,7 @@ class CollaboratorOrdersListPage extends ListBasePage {
             {
                 title: t("table.ordersState"),
                 dataIndex: 'state',
-                width: 90,
+                width: 100,
                 render: (state, dataRow) => {
                     const _state = OrdersStates.find(s => s.value === state);
                     return (
@@ -139,6 +139,13 @@ class CollaboratorOrdersListPage extends ListBasePage {
         };
     }
 
+    onResetFormSearch(formRef) {
+        formRef.current.setFieldsValue({["fromDateToDate"]: this.initialSearch().fromDateToDate});
+        this.search = this.initialSearch();
+        this.pagination.current = 1;
+        this.setQueryString();
+    }
+
     renderSearchForm(hiddenAction) {
         const searchFields = this.getSearchFields();
 		const from = this.search.fromDateToDate?.[0];
@@ -155,7 +162,7 @@ class CollaboratorOrdersListPage extends ListBasePage {
 						fromDateToDate: from && to ? [
 							moment(from),
 							moment(to),
-						] : undefined,
+						] : [moment().startOf('month'), moment().endOf('month')],
 					}
 				}
                 />;
@@ -210,6 +217,7 @@ class CollaboratorOrdersListPage extends ListBasePage {
 					// Can not select days after today
 					return current > moment().endOf('day');
 				},
+                allowClear: false,
 				width: 250,
 			},
             {
