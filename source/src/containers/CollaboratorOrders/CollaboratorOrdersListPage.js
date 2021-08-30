@@ -175,8 +175,8 @@ class CollaboratorOrdersListPage extends ListBasePage {
         const fromDateToDate = {
             ...this.search.fromDateToDate
         }
-        const from = moment(fromDateToDate[0]);
-        const to = moment(fromDateToDate[1]);
+        const from = fromDateToDate[0] ? moment(fromDateToDate[0]) : this.initialSearch().fromDateToDate[0]
+        const to = fromDateToDate[1] ? moment(fromDateToDate[1]) : this.initialSearch().fromDateToDate[1];
         if(from && to) {
             fromDateToDate[0] = convertTimezoneToUtc(moment(from).format("DD/MM/YYYY") + " 00:00:00", "DD/MM/YYYY HH:mm:ss");
             fromDateToDate[1] = convertTimezoneToUtc(moment(to).format("DD/MM/YYYY") + " 23:59:59", "DD/MM/YYYY HH:mm:ss");
