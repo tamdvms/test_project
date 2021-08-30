@@ -32,7 +32,7 @@ class BasicForm extends Component {
        
         this.formRef.current.resetFields();
         if(onResetForm)
-            onResetForm();
+            onResetForm(this.formRef);
         
     };
 }

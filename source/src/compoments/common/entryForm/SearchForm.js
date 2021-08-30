@@ -72,7 +72,7 @@ class SearchForm extends BasicForm {
     }
 
     renderFormType(fieldItem) {
-        const { t } = this.props;
+        const { t, allowClear } = this.props;
         if (fieldItem === undefined || fieldItem === null) {
             return null
         }
@@ -98,6 +98,7 @@ class SearchForm extends BasicForm {
                     style={{ width: fieldItem.width || 200 }}
                     format={dateFormat}
                     onChange={(date) => this.onChangeDateField(date, fieldItem)}
+                    allowClear={allowClear}
                 />
             )
         }
