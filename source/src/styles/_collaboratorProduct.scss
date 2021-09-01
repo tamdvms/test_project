@@ -1,0 +1,68 @@
+.collaborator-site {
+    .list-page {
+        display: none;
+    }
+    .list-page.active {
+        display: block;
+    }
+
+    .create-page {
+        height: calc(100vh - 218px);
+        .container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            .action {
+                flex-shrink: 0;
+                display: flex;
+                margin-bottom: 16px;
+                h2 {
+                    flex: 1;
+                    text-align: center;
+                    margin-left: -91px;
+                    margin-bottom: 0;
+                }
+            }
+            .ant-transfer {
+                flex: 1;
+                overflow-y: hidden;
+                .ant-transfer-list {
+                    .ant-transfer-list-header-dropdown {
+                        display: none;
+                    }
+                    .ant-checkbox-wrapper {
+                        margin-right: 8px;
+                    }
+                    .ant-transfer-list-body {
+                        display: flex;
+                        flex-direction: column;
+                        .ant-transfer-list-body-search-wrapper {
+                            flex-shrink: 0;
+                        }
+                        .ant-transfer-list-body-customize-wrapper {
+                            flex: 1;
+                            overflow-y: auto;
+                            .ant-table-tbody {
+                                .ant-table-row {
+                                    cursor: pointer;
+                                }
+                                .ant-avatar {
+                                    width: 40px;
+                                    height: 40px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.collaborator-product-edit-form {
+
+}
+
+.collaborator-category-dropdown {
+    width: fit-content !important;
+}

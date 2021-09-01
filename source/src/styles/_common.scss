@@ -52,11 +52,9 @@ body {
     align-items: flex-end;
 }
 
-.table-setting {
-    .ant-table-tbody {
-        .ant-table-cell {
-            height: 50px;
-        }
+.ant-table-tbody {
+    .ant-table-cell {
+        height: 50px;
     }
 }
 
@@ -273,12 +271,10 @@ body {
     display: none;
 }
 
-.table-avatar {
+.ant-avatar {
     width: 54px;
     height: 54px;
-    margin: 8px;
 }
-
 .table-avatar img{
     border-radius: 50%;
 }
@@ -473,7 +469,7 @@ body {
 }
 
 .disabled {
-    cursor: not-allowed;
+    cursor: not-allowed !important;
 }
 .ql-container {
     input {
@@ -492,4 +488,12 @@ body {
 
 .text-red {
     color: red;
+}
+
+.force-one-line {
+    white-space: nowrap !important;
+}
+
+.selectable {
+    cursor: pointer;
 }

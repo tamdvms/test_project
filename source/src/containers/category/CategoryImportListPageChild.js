@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Avatar, Tag, Button } from "antd";
 import { UserOutlined, PlusOutlined } from "@ant-design/icons";
 import qs from 'query-string';
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import CategoryForm from "../../compoments/category/CategoryForm";
@@ -24,38 +25,37 @@ class CategoryImportListPageChild extends ListBasePage {
 
     constructor(props) {
         super(props);
+        const { t } = props;
         const { location: { search } } = this.props;
         const { parentId, parentName } = qs.parse(search);
         this.parentId = parentId;
-        this.objectName =  "Danh mục thu";
+        this.objectName = t("objectNameImport");
+
         this.breadcrumbs = [
             {
-                name: "Danh mục thu",
+                name: `${t("breadcrumbs.currentPageImport")} (${parentName})`,
                 path: `${sitePathConfig.categoryImport.path}${this.handleRoutingParent()}`
-            },
-            {
-                name: parentName,
             },
         ];
         this.columns = [
-        this.renderIdColumn(),
-        {
-            title: "#",
-            dataIndex: "categoryImage",
-            align: 'center',
-            width: 100,
-            render: (avatarPath) => (
-            <Avatar
-                className="table-avatar"
-                size="large"
-                icon={<UserOutlined />}
-                src={avatarPath ? `${AppConstants.contentRootUrl}${avatarPath}` : null}
-            />
-            ),
-        },
-        { title: 'Tên', dataIndex: "categoryName" },
-        this.renderStatusColumn(),
-        this.renderActionColumn(),
+            this.renderIdColumn(),
+            {
+                title: "#",
+                dataIndex: "categoryImage",
+                align: 'center',
+                width: 100,
+                render: (avatarPath) => (
+                <Avatar
+                    className="table-avatar"
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={avatarPath ? `${AppConstants.contentRootUrl}${avatarPath}` : null}
+                />
+                ),
+            },
+            { title: t("table.name"), dataIndex: "categoryName" },
+            this.renderStatusColumn(),
+            this.renderActionColumn(),
         ];
         this.actionColumns = {
             isEdit: true,
@@ -99,19 +99,20 @@ class CategoryImportListPageChild extends ListBasePage {
     }
 
     getSearchFields() {
+        const { t } = this.props;
         return [
-            {
-                key: "name",
-                seachPlaceholder: 'Tên',
-                initialValue: this.search.name,
-            },
-            {
-                key: "status",
-                seachPlaceholder: "Chọn trạng thái",
-                fieldType: FieldTypes.SELECT,
-                options: commonStatus,
-                initialValue: this.search.status,
-            },
+        {
+            key: "name",
+            seachPlaceholder: t("searchPlaceHolder.name"),
+            initialValue: this.search.name,
+        },
+        {
+            key: "status",
+            seachPlaceholder: t("searchPlaceHolder.status"),
+            fieldType: FieldTypes.SELECT,
+            options: commonStatus,
+            initialValue: this.search.status,
+        },
         ];
     }
 
@@ -120,6 +121,7 @@ class CategoryImportListPageChild extends ListBasePage {
             dataList,
             loading,
             uploadFile,
+            t,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading } = this.state;
         const categoryData = dataList.data || [];
@@ -134,7 +136,7 @@ class CategoryImportListPageChild extends ListBasePage {
                     type="primary"
                     onClick={() => this.onShowModifiedModal(false)}
                     >
-                        <PlusOutlined /> Thêm mới
+                        <PlusOutlined /> {t("createNewButton")}
                     </Button>
                 ))
             }
@@ -161,6 +163,7 @@ class CategoryImportListPageChild extends ListBasePage {
                 uploadFile={uploadFile}
                 commonStatus={commonStatus}
                 loadingSave={isShowModifiedLoading}
+                t={t}
             />
             </BasicModal>
         </div>
@@ -182,4 +185,4 @@ const mapDispatchToProps = (dispatch) => ({
   uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoryImportListPageChild);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['categoryListPage','listBasePage','constants', 'basicModal'])(CategoryImportListPageChild));

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Form, Input } from 'antd';
+import { withTranslation } from 'react-i18next';
 
 import BaseField from './BaseField';
 const { TextArea } = Input;
@@ -8,17 +9,17 @@ const { TextArea } = Input;
 class TextField extends BaseField {
 
     getMaxLengthMsg() {
-        const { maxLength, maxLengthMsg } = this.props;
-        return maxLengthMsg || `Trường này không thể nhiều hơn ${maxLength} ký tự`;
+        const { maxLength, maxLengthMsg, t } = this.props;
+        return maxLengthMsg || t('maxLengthMsg', { var: maxLength});
     }
 
     getMinLengthMsg() {
-        const { minLength, minLengthMsg } = this.props;
-        return minLengthMsg || `Trường này không thể ít hơn ${minLength} characters`;
+        const { minLength, minLengthMsg, t } = this.props;
+        return minLengthMsg || t('minLengthMsg', { var: minLength});
     }
 
     getTextFieldRules() {
-        const { maxLength, minLength, type, invalidEmailMsg } = this.props;
+        const { maxLength, minLength, type, invalidEmailMsg, t } = this.props;
         const rules = [];
         if(maxLength) {
             rules.push({max: maxLength, message: this.getMaxLengthMsg()});
@@ -29,7 +30,7 @@ class TextField extends BaseField {
         if(type === 'email') {
             rules.push({
                 type,
-                message: invalidEmailMsg || 'Định dạng email không hợp lệ!'
+                message: invalidEmailMsg || t('invalidEmailMsg')
             })
         }
 
@@ -45,11 +46,14 @@ class TextField extends BaseField {
             onBlur,
             validateStatus,
             help,
-            style
+            style,
+            className,
+            onChange,
         } = this.props;
 
         return (
             <Form.Item
+                className={className}
                 label={label}
                 name={fieldName}
                 validateStatus={validateStatus}
@@ -62,13 +66,13 @@ class TextField extends BaseField {
                 {
                     type === 'textarea'
                     ?
-                    <TextArea style={style} placeholder={this.getPlaceHolder()} disabled={disabled} onBlur={onBlur}/>
+                    <TextArea onChange={onChange} style={style} placeholder={this.getPlaceHolder()} disabled={disabled} onBlur={onBlur}/>
                     :
-                    <Input style={style} size={size} placeholder={this.getPlaceHolder()} disabled={disabled} type={type} onBlur={onBlur}/>
+                    <Input onChange={onChange} style={style} size={size} placeholder={this.getPlaceHolder()} disabled={disabled} type={type} onBlur={onBlur}/>
                 } 
             </Form.Item>
         )
     }
 }
 
-export default TextField;
+export default withTranslation(['textField', 'baseField'])(TextField);

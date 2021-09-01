@@ -7,6 +7,8 @@ import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 
 import BaseField from './BaseField';
 
+import { withTranslation } from 'react-i18next';
+
 class CropImageFiled extends BaseField {
     
     constructor(props) {
@@ -33,11 +35,11 @@ class CropImageFiled extends BaseField {
     }
 
     renderUploadButton() {
-        const { loading, showUploadList, style } = this.props;
+        const { loading, showUploadList, style, t } = this.props;
         return (
             <div style={style}>
                 {!showUploadList && loading ? <LoadingOutlined /> : <PlusOutlined />}
-                <div className="ant-upload-text">{loading ? 'Đang tải lên' : 'Tải lên'}</div>
+                <div className="ant-upload-text">{loading ? t('uploading') : t('upload')}</div>
             </div>
         );
     }
@@ -103,4 +105,4 @@ class CropImageFiled extends BaseField {
     }
 }
 
-export default CropImageFiled;
+export default withTranslation(['cropImageFiled', 'baseField'])(CropImageFiled);

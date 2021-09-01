@@ -4,6 +4,7 @@ import { Button, Divider } from "antd";
 import { PlusOutlined, EditOutlined, LockOutlined, CheckOutlined, DeleteOutlined } from "@ant-design/icons";
 import qs from 'query-string';
 import moment from "moment";
+import { withTranslation } from "react-i18next";
 
 import SearchForm from '../../compoments/common/entryForm/SearchForm';
 import ListBasePage from "../ListBasePage";
@@ -30,22 +31,23 @@ class ImportManagementListPage extends ListBasePage {
 
 	constructor(props) {
 		super(props);
-		this.objectName = "Quản lý thu";
+		const { t } = props;
 		this.pagination = { pageSize: 100 };
+		this.objectName = t("objectName");
 		this.breadcrumbs = [
 			{
-				name: "Quản lý thu",
+				name: t('breadcrumbs.currentPage'),
 			},
 		];
 
 		this.columns = [
 			{
-				title: "Danh mục",
+				title: t("table.categoryName"),
 				width: "21%",
 				dataIndex: ["categoryDto", "categoryName"],
 			},
 			{
-				title:  <div style={{paddingRight: "20px"}}>Giá tiền</div>,
+				title:  <div style={{paddingRight: "20px"}}>{t("table.money")}</div>,
 				dataIndex: "money",
 				align: "right",
 				width: 150,
@@ -54,7 +56,7 @@ class ImportManagementListPage extends ListBasePage {
 				}
 			},
 			{
-				title: "Nhân viên",
+				title: t("table.employeeFullName"),
 				width: 150,
 				dataIndex: ["accountAdminDto", "fullName"],
 				render: (fullName) => {
@@ -62,12 +64,12 @@ class ImportManagementListPage extends ListBasePage {
 				}
 			},
 			{
-				title: "Ghi chú",
+				title: t("table.note"),
 				width: 200,
 				dataIndex: "note",
 			},
 			{
-				title: <div style={{paddingRight: "20px"}}>Ngày tạo</div>,
+				title: <div style={{paddingRight: "20px"}}>{t("table.date")}</div>,
 				dataIndex: "createdDate",
 				align: "right",
 				width: 180,
@@ -89,15 +91,16 @@ class ImportManagementListPage extends ListBasePage {
 	}
 
 	getSearchFields() {
+		const { t } = this.props;
 		return [
 			{
 				key: "code",
-				seachPlaceholder: "Mã chứng từ",
+				seachPlaceholder: t("searchPlaceHolder.code"),
 				initialValue: this.search.code,
 			},
 			{
 				key: "categoryId",
-				seachPlaceholder: "Chọn thể loại",
+				seachPlaceholder: t("searchPlaceHolder.categoryId"),
 				fieldType: FieldTypes.SELECT,
 				options: this.props.categoryAutoComplete?.data || [],
 				initialValue: this.search.categoryId,
@@ -107,7 +110,7 @@ class ImportManagementListPage extends ListBasePage {
 			},
 			{
 				key: 'fromDateToDate',
-				seachPlaceholder: ["Từ ngày", "Đến ngày"],
+				seachPlaceholder: [t("searchPlaceHolder.fromDate"), t("searchPlaceHolder.toDate")],
 				fieldType: FieldTypes.DATE_RANGE,
 				format: "DD/MM/YYYY",
 				disabledDate: (current) => {
@@ -197,8 +200,9 @@ class ImportManagementListPage extends ListBasePage {
     }
 
 	renderActionColumn() {
+		const { t } = this.props;
         return {
-            title: 'Hành động',
+            title: t('listBasePage:titleActionCol'),
             width: '100px',
             align: 'center',
             render: (dataRow) => {
@@ -258,6 +262,7 @@ class ImportManagementListPage extends ListBasePage {
 			history,
 			uploadFile,
 			categoryAutoComplete,
+			t,
 		} = this.props;
 		const { isShowModifiedModal, isShowModifiedLoading } = this.state;
 		const importManagement = dataList.data || [];
@@ -266,14 +271,14 @@ class ImportManagementListPage extends ListBasePage {
 		<div>
 			{this.renderSearchForm()}
 			<div className="action-bar province">
-				<div className="summary text-green">TỔNG THU: {Utils.formatMoney(dataList.sum) || Utils.formatMoney(0)}</div>
+				<div className="summary text-green">{t("totalExport")}: {Utils.formatMoney(dataList.sum) || Utils.formatMoney(0)}</div>
 				{
 					this.renderButton((
 						<Button
 							type="primary"
 							onClick={() => this.onShowModifiedModal(false)}
 						>
-							<PlusOutlined /> Tạo mới
+							<PlusOutlined /> {t("createNewButton")}
 						</Button>
 					), [2, 5])
 				}
@@ -300,6 +305,7 @@ class ImportManagementListPage extends ListBasePage {
 				loadingSave={isShowModifiedLoading}
 				uploadFile={uploadFile}
 				categoryAutoComplete={categoryAutoComplete.data || []}
+				t={t}
 			/>
 			</BasicModal>
 		</div>
@@ -323,4 +329,4 @@ const mapDispatchToProps = (dispatch) => ({
   getCategoryAutoComplete: (payload) => dispatch(actions.getCategoryAutoCompleteImport(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ImportManagementListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(["imExManagementListPage", "listBasePage"])(ImportManagementListPage));

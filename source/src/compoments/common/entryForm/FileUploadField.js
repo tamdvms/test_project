@@ -6,6 +6,8 @@ import { UploadOutlined } from '@ant-design/icons';
 
 import BaseField from './BaseField';
 
+import { withTranslation } from 'react-i18next';
+
 class FileUploadField extends BaseField {
     
     uploadFile = ({file, onSuccess}) => {
@@ -29,6 +31,7 @@ class FileUploadField extends BaseField {
             accept,
             onChange,
             beforeUpload,
+            t,
         } = this.props;
 
         return (
@@ -48,7 +51,7 @@ class FileUploadField extends BaseField {
                     showUploadList={true}
                 >
                     <Button>
-                        <UploadOutlined /> Nhấp để tải lên
+                        <UploadOutlined /> {t('clickToUpload')}
                     </Button>
                     
                 </Upload>
@@ -58,4 +61,4 @@ class FileUploadField extends BaseField {
     }
 }
 
-export default FileUploadField;
+export default withTranslation(['fileUploadField', 'baseField'])(FileUploadField);

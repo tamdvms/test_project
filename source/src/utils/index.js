@@ -2,6 +2,9 @@ import { commonStatus,commonKinds } from '../constants/masterData';
 import { STATUS_DELETE, CurrentcyPositions } from '../constants';
 import { showErrorMessage } from '../services/notifyService';
 import { actions } from '../actions';
+
+const { getUserData } = actions;
+
 const Utils = {
     camelCaseToTitleCase(camelCase) {
         if (camelCase === null || camelCase === '') {
@@ -99,6 +102,9 @@ const Utils = {
                     value = value.toString().substring(0, decimalIndex) + decimalSeparator + value.toString().substring(decimalIndex + 1);
                 }
             }
+            else {
+                value = value.toFixed(Number(setting.decimal) || 0);
+            }
             value = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, groupSeparator);
             if(currencySymbolPosition === CurrentcyPositions.FRONT) {
                 return `${currentcy} ${value}`;
@@ -140,6 +146,49 @@ const Utils = {
                 .replace(/đ/g, 'd').replace(/Đ/g, 'D');
         return str;
     },
+    validateUsernameForm(rule, username){
+        return (!!(/^[a-z0-9_]+$/.exec(username))
+        ? Promise.resolve()
+        : Promise.reject('Username chỉ bao gồm các ký tự a-z, 0-9, _'))
+    },
+    formatIntegerNumber(value){
+        value = value.replace(/\$\s?|(,*)/g, '')
+        value = value.replace(/\$\s?|(\.*)/g, '')
+        return value
+    },
+    getSettingsDateFormat(key) {
+        return actions.getUserData()?.settings?.["DateFormat"]?.[key];
+    },
+    getRandomColor() {
+        const letters = 'ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * letters.length)];
+        }
+        return color;
+    },
+    checkPermission(permissions = []) {
+        const userData = getUserData();
+        return !!!permissions.some(permission=>userData.permissions.indexOf(permission) < 0)
+    },
+    rgba2hex(orig) {
+        let a, isPercent,
+          rgb = orig.replace(/\s/g, '').match(/^rgba?\((\d+),(\d+),(\d+),?([^,\s)]+)?/i),
+          alpha = (rgb && rgb[4] || "").trim(),
+          hex = rgb ?
+          (rgb[1] | 1 << 8).toString(16).slice(1) +
+          (rgb[2] | 1 << 8).toString(16).slice(1) +
+          (rgb[3] | 1 << 8).toString(16).slice(1) : orig;
+        if (alpha !== "") {
+          a = alpha;
+        } else {
+          a = 1;
+        }
+        // multiply before convert to HEX
+        a = ((a * 255) | 1 << 8).toString(16).slice(1)
+        hex = hex + a;
+        return hex;
+    }
 }
 
 export default Utils;

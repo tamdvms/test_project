@@ -229,7 +229,7 @@ const apiConfig = {
             path: '/v1/category/auto-complete',
             method: 'GET',
             headers: baseHeader
-        }
+        },
     },
     importExportManagement: {
         getList: {
@@ -260,6 +260,151 @@ const apiConfig = {
         getCategoryAutoComplete: {
             path:  '/v1/category/auto-complete',
             method: 'GET',
+            headers: baseHeader,
+        },
+    },
+    booking: {
+        getProductAutoComplete: {
+            path:  '/v1/product/auto-complete',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getCustomerAutoComplete: {
+            path: '/v1/customer/auto-complete',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        createOrders: {
+            path: '/v1/orders/create',
+            method: 'POST',
+            headers: baseHeader,
+        }
+    },
+    orders: {
+        getList: {
+            path:  '/v1/orders/list',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getCollaboratorOrdersList: {
+            path:  '/v1/orders/list-collaborator-orders',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getById: {
+            path: '/v1/orders/get',
+            method: 'GET',
+            headers: baseHeader
+        },
+        update: {
+            path: '/v1/orders/update',
+            method: 'PUT',
+            headers: baseHeader
+        },
+        cancelOrders: {
+            path: '/v1/orders/cancel-orders',
+            method: 'PUT',
+            headers: baseHeader
+        },
+        updateState: {
+            path: '/v1/orders/update-state',
+            method: 'PUT',
+            headers: baseHeader
+        },
+    },
+    collaborator: {
+        getList: {
+            path:  '/v1/collaborator/list',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getById: {
+            path:  '/v1/collaborator/get',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        create: {
+            path:  '/v1/collaborator/create',
+            method: 'POST',
+            headers: baseHeader,
+        },
+        update: {
+            path:  '/v1/collaborator/update',
+            method: 'PUT',
+            headers: baseHeader,
+        },
+        delete: {
+            path:  '/v1/collaborator/delete',
+            method: 'DELETE',
+            headers: baseHeader,
+        },
+        getEmployeeCollaboratorList: {
+            path:  '/v1/collaborator/list-employee-collaborator',
+            method: 'GET',
+            headers: baseHeader,
+        },
+    },
+    collaboratorProduct: {
+        getList: {
+            path:  '/v1/collaborator-product/list',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getById: {
+            path:  '/v1/collaborator-product/get',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        create: {
+            path:  '/v1/collaborator-product/create',
+            method: 'POST',
+            headers: baseHeader,
+        },
+        update: {
+            path:  '/v1/collaborator-product/update',
+            method: 'PUT',
+            headers: baseHeader,
+        },
+        delete: {
+            path:  '/v1/collaborator-product/delete',
+            method: 'DELETE',
+            headers: baseHeader,
+        },
+        categoryAutoComplete: {
+            path: '/v1/category/auto-complete',
+            method: 'GET',
+            headers: baseHeader
+        },
+        getCollaboratorCategoryProductList: {
+            path:  '/v1/collaborator-category-product/list',
+            method: 'GET',
+            headers: baseHeader,
+        },
+    },
+    collaboratorCategoryProduct: {
+        getList: {
+            path:  '/v1/collaborator-category-product/list',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getById: {
+            path:  '/v1/collaborator-category-product/get',
+            method: 'GET',
+            headers: baseHeader,
+        },
+        create: {
+            path:  '/v1/collaborator-category-product/create',
+            method: 'POST',
+            headers: baseHeader,
+        },
+        update: {
+            path:  '/v1/collaborator-category-product/update',
+            method: 'PUT',
+            headers: baseHeader,
+        },
+        delete: {
+            path:  '/v1/collaborator-category-product/delete',
+            method: 'DELETE',
             headers: baseHeader,
         },
     },

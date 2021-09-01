@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Avatar, Tag, Button } from "antd";
 import { UserOutlined, PlusOutlined } from "@ant-design/icons";
 import qs from 'query-string';
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import CategoryForm from "../../compoments/category/CategoryForm";
@@ -24,17 +25,15 @@ class CategoryImportListPageChild extends ListBasePage {
 
     constructor(props) {
         super(props);
-        const { location: { search } } = this.props;
+        const { location: { search }, t } = this.props;
         const { parentId, parentName } = qs.parse(search);
         this.parentId = parentId;
-        this.objectName =  "Danh mục chi";
+        this.objectName = t("objectNameProduct");
+
         this.breadcrumbs = [
             {
-                name: "Danh mục chi",
+                name: `${t("breadcrumbs.currentPageProduct")} (${parentName})`,
                 path: `${sitePathConfig.categoryProduct.path}${this.handleRoutingParent()}`
-            },
-            {
-                name: parentName,
             },
         ];
         this.columns = [
@@ -53,7 +52,7 @@ class CategoryImportListPageChild extends ListBasePage {
             />
             ),
         },
-        { title: 'Tên', dataIndex: "categoryName" },
+        { title: t("table.name"), dataIndex: "categoryName" },
         this.renderStatusColumn(),
         this.renderActionColumn(),
         ];
@@ -99,19 +98,20 @@ class CategoryImportListPageChild extends ListBasePage {
     }
 
     getSearchFields() {
+        const { t } = this.props;
         return [
-            {
-                key: "name",
-                seachPlaceholder: 'Tên',
-                initialValue: this.search.name,
-            },
-            {
-                key: "status",
-                seachPlaceholder: "Chọn trạng thái",
-                fieldType: FieldTypes.SELECT,
-                options: commonStatus,
-                initialValue: this.search.status,
-            },
+        {
+            key: "name",
+            seachPlaceholder: t("searchPlaceHolder.name"),
+            initialValue: this.search.name,
+        },
+        {
+            key: "status",
+            seachPlaceholder: t("searchPlaceHolder.status"),
+            fieldType: FieldTypes.SELECT,
+            options: commonStatus,
+            initialValue: this.search.status,
+        },
         ];
     }
 
@@ -120,6 +120,7 @@ class CategoryImportListPageChild extends ListBasePage {
             dataList,
             loading,
             uploadFile,
+            t,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading } = this.state;
         const categoryData = dataList.data || [];
@@ -134,7 +135,7 @@ class CategoryImportListPageChild extends ListBasePage {
                     type="primary"
                     onClick={() => this.onShowModifiedModal(false)}
                     >
-                        <PlusOutlined /> Thêm mới
+                        <PlusOutlined /> {t("createNewButton")}
                     </Button>
                 ))
             }
@@ -182,4 +183,4 @@ const mapDispatchToProps = (dispatch) => ({
   uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoryImportListPageChild);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['categoryListPage','listBasePage','constants', 'basicModal'])(CategoryImportListPageChild));

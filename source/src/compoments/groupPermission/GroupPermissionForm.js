@@ -26,7 +26,7 @@ class GroupPermissionForm extends BasicForm {
     }
 
     render() {
-        const { formId, dataDetail, isEditing, loadingSave } = this.props;
+        const { formId, dataDetail, isEditing, loadingSave, t } = this.props;
         const groupPermissions = this.getGroupPermission();
 
         return (
@@ -41,7 +41,7 @@ class GroupPermissionForm extends BasicForm {
                     <Col span={12}>
                         <Row gutter={16}>
                             <Col span={24}>
-                                <TextField fieldName="name" label="Tên" required disabled={loadingSave}/>
+                                <TextField fieldName="name" label={t('form.label.name')} required disabled={loadingSave}/>
                             </Col> 
                         </Row>
                         <Row>
@@ -50,7 +50,7 @@ class GroupPermissionForm extends BasicForm {
                                         optionValue="value"
                                         optionLabel="label"
                                         fieldName="kind"
-                                        label="Loại"
+                                        label={t('form.label.kind')}
                                         required
                                         options={groupPermissionTypes}
                                         disabled={loadingSave}
@@ -60,7 +60,7 @@ class GroupPermissionForm extends BasicForm {
                     </Col>
                     
                     <Col span={12}>
-                        <TextField style={{height: '150px'}} fieldName="description" label="Mô tả" type="textarea" required disabled={loadingSave}/>
+                        <TextField style={{height: '150px'}} fieldName="description" label={t('form.label.description')} type="textarea" required disabled={loadingSave}/>
                     </Col>
                 </Row>
 
@@ -68,9 +68,9 @@ class GroupPermissionForm extends BasicForm {
                 
                 <Row gutter={16}>
                     <Col span={24}>
-                        <Form.Item name="permissions" label="Nhóm quyền"
+                        <Form.Item name="permissions" label={t('form.label.groupPermission')}
                             rules={[
-                                { required: true, message: 'Vui lòng chọn nhóm quyền'}
+                                { required: true, message: t('form.validationMessage.permission')}
                             ]}
                         >
                            <Checkbox.Group style={{ width: '100%' }} disabled={loadingSave}>    

@@ -4,6 +4,7 @@ import { Form, InputNumber } from 'antd';
 
 import BaseField from './BaseField';
 import Utils from '../../../utils';
+import { withTranslation } from 'react-i18next';
 
 class NumericField extends BaseField {
 
@@ -27,6 +28,8 @@ class NumericField extends BaseField {
             onBlur,
             formatter,
             parser,
+            className,
+            defaultValue,
         } = this.props;
 
         return (
@@ -34,6 +37,7 @@ class NumericField extends BaseField {
                 label={label}
                 name={fieldName}
                 rules={this.getRules()}
+                className={className}
             >
                 <InputNumber
                     placeholder={this.getPlaceHolder()}
@@ -45,6 +49,7 @@ class NumericField extends BaseField {
                     parser={parser || this.parser}
                     onChange={onChange}
                     onBlur={onBlur}
+                    defaultValue={defaultValue}
                 />
                 
             </Form.Item>
@@ -52,4 +57,4 @@ class NumericField extends BaseField {
     }
 }
 
-export default NumericField;
+export default withTranslation('baseField')(NumericField);

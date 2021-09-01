@@ -1,32 +1,40 @@
 import React, {Component} from 'react';
 import { Button, Modal } from 'antd';
+import { withTranslation } from "react-i18next";
 
 class BasicModal extends Component {
 
     getTitle() {
-        const { hiddenTile, title, isEditing, objectName } = this.props;
+        const { hiddenTile, title, isEditing, objectName, t } = this.props;
         if(hiddenTile)
             return null;
         else if(title) {
             return title;
         }
         const name = objectName || '';
-        return isEditing ? `CẬP NHẬT ${name.toUpperCase()}` : `THÊM ${name.toUpperCase()} MỚI`;
+        return isEditing ? t('updateTitle', { objectName: name}) : t('createTitle', { objectName: name});
     }
 
     render() {
-        const { visible, onOk, onCancel, loading, children, objectName, width, top, formId, bodyStyle, maskClosable } = this.props;
+        const { visible, onOk, onCancel, loading, children, objectName, width, top, formId, bodyStyle, maskClosable, noFooter, additionalButton, className, closable = true, centered, t } = this.props;
         const formSubmitId = formId || `form-${objectName}`;
-        let footerComponent = [<Button key="back" onClick={onCancel}>Đóng</Button>];
+        let footerComponent = [<Button className="modal-btn-close" key="back" onClick={onCancel}>Đóng</Button>];
         if(onOk) {
             footerComponent.push(
-                <Button key="submit" htmlType="submit" type="primary" loading={loading} form={formSubmitId}>
-                    Lưu
+                <Button className="modal-btn-save" key="submit" htmlType="submit" type="primary" loading={loading} form={formSubmitId}>
+                   {t('saveButton')}
                 </Button>
+            )
+        }
+        if(additionalButton) {
+            footerComponent.push(
+                additionalButton
             )
         }
         return (
             <Modal
+                closable={closable}
+                className={className}
                 maskClosable={!!maskClosable}
                 bodyStyle={bodyStyle || { maxHeight: '84vh', overflow: 'auto'}}
                 destroyOnClose // rerender child component when modal close
@@ -36,7 +44,8 @@ class BasicModal extends Component {
                 title={this.getTitle()}
                 onOk={onOk}
                 onCancel={onCancel}
-                footer={footerComponent}
+                footer={noFooter || footerComponent}
+                centered={centered}
                 >
                     {React.cloneElement(children, {
                         formId: formSubmitId,
@@ -47,4 +56,4 @@ class BasicModal extends Component {
     }
 }
 
-export default BasicModal;
+export default withTranslation('basicModal')(BasicModal);

@@ -47,6 +47,10 @@
                 .submenu-title-wrapper {
                     display: flex;
                     align-items: center;
+                    .ant-avatar {
+                        width: 32px;
+                        height: 32px;
+                    }
                     .ant-avatar-icon {
                         margin-right: 5px;
                         .anticon-user {
@@ -75,7 +79,7 @@
         height: 100vh;
         position: fixed;
         left: 0px;
-        z-index: 2;
+        z-index: 3;
         &__collapsed {
             flex: 0 0 $navSiderCollapsedWidth;
             max-width: $navSiderCollapsedWidth;

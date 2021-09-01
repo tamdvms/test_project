@@ -1,5 +1,6 @@
 import React from "react";
-import { Form, Col, Row } from "antd";
+import { Form, Col, Row, Button } from "antd";
+import { SketchPicker } from 'react-color';
 
 import BasicForm from "../common/entryForm/BasicForm";
 import TextField from "../common/entryForm/TextField";
@@ -20,13 +21,48 @@ import RichTextField from "../common/entryForm/RichTextField";
 class ProductForm extends BasicForm {
     constructor(props) {
         super(props);
+        this.colorPickerRef = React.createRef();
+        this.toggleColorPickerRef = React.createRef();
+        this.defaultColor = '#ffffff00'
         this.state = {
         avatar: props.dataDetail.productImage
             ? `${AppConstants.contentRootUrl}/${props.dataDetail.productImage}`
             : "",
         uploading: false,
+        color: props.dataDetail.labelColor ? props.dataDetail.labelColor : this.defaultColor,
+		displayColorPicker: false,
         }
     }
+
+    handleResetColor = () => {
+        this.setState({
+            color: this.defaultColor
+        })
+    }
+
+    handleSubmit(formValues) {
+		const { onSubmit } = this.props;
+		const { color } = this.state;
+        if(color !== this.defaultColor) {
+            formValues['labelColor'] = color;
+        }
+		onSubmit({
+			...formValues,
+			...this.otherData,
+		});
+	}
+
+    handleClick = () => {
+		this.setState({ displayColorPicker: !this.state.displayColorPicker })
+	};
+
+	handleClose = () => {
+		this.setState({ displayColorPicker: false })
+	};
+
+	handleChange = (color) => {
+		this.setState({ color: color.hex })
+	};
 
     handleChangeAvatar = (info) => {
         console.log(info);
@@ -62,6 +98,7 @@ class ProductForm extends BasicForm {
         return {
             ...dataDetail,
             status: STATUS_ACTIVE,
+            saleoff: 0,
         }
         }
         return {
@@ -69,13 +106,27 @@ class ProductForm extends BasicForm {
         }
     }
 
-    validatePrice = (rule, price) => !!(/^[0-9]+$/.exec(price))
+    validatePrice = (rule, price) => {
+        const { t } = this.props;
+        return !!(/^[0-9]+$/.exec(price))
         ? Promise.resolve()
-        : Promise.reject('Price chỉ bao gồm các ký tự 0-9')
+        : Promise.reject(t("form.validationMessage.price"))
+    }
+
+    handleCloseColorPicker = (e) => {
+        if(!this.colorPickerRef.current.contains(e.target) && !this.toggleColorPickerRef.current.contains(e.target)) {
+            this.handleClose()
+        }
+    }
 
     render() {
-        const { formId, dataDetail, loadingSave, isEditing } = this.props;
-        const { avatar, uploading } = this.state;
+        const { formId, dataDetail, loadingSave, isEditing, t } = this.props;
+        const {
+			uploading,
+			avatar,
+			color,
+			displayColorPicker,
+		} = this.state;
         return (
         <Form
             id={formId}
@@ -83,25 +134,25 @@ class ProductForm extends BasicForm {
             layout="vertical"
             onFinish={this.handleSubmit}
             initialValues={this.getInitialValue()}
+            onClick={this.handleCloseColorPicker}
         >
             <Row gutter={16}>
                 <Col span={12}>
                     <CropImageFiled
                         fieldName="productImage"
                         loading={uploading}
-                        label="Ảnh đại diện"
+                        label={t("form.label.avatar")}
                         imageUrl={avatar}
                         onChange={this.handleChangeAvatar}
                         uploadFile={this.uploadFileAvatar}
                         disabled={loadingSave}
-                        required
                     />
                 </Col>
             </Row>
             <Row gutter={16}>
                 <Col span={12}>
                     <TextField
-                    fieldName="productName"
+                    fieldName={t("form.label.productName")}
                     label="Tên"
                     required
                     disabled={loadingSave}
@@ -111,7 +162,7 @@ class ProductForm extends BasicForm {
                     <TextField
                         type="number"
                         fieldName="productPrice"
-                        label="Giá tiền"
+                        label={t("form.label.productPrice")}
                         required
                         minLength={0}
                         width="100%"
@@ -122,9 +173,69 @@ class ProductForm extends BasicForm {
             </Row>
             <Row gutter={16}>
                 <Col span={12}>
+                    <NumericField
+                    fieldName="saleoff"
+                    label={`${t('form.label.saleOff')} (%)`}
+                    disabled={loadingSave}
+                    min={0}
+                    max={100}
+                    width="100%"
+                    parser={(value) => Utils.formatIntegerNumber(value)}
+                    />
+                </Col>
+                <Col span={12}>
+					<Form.Item
+					label={t("form.label.labelColor")}
+					>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'start',
+                        }}>
+                            <div
+                            ref={this.toggleColorPickerRef}
+                            style={{
+                                marginTop: '1px',
+                                padding: '5px',
+                                background: '#fff',
+                                borderRadius: '1px',
+                                boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+                                display: 'inline-block',
+                                cursor: 'pointer',
+                            }}
+                            onClick={ this.handleClick }
+                            >
+                                <div style={{
+                                    width: '64px',
+                                    height: '20px',
+                                    borderRadius: '2px',
+                                    background: color,
+                                }} />
+                            </div>
+                            <Button type="ghost"
+                            onClick={this.handleResetColor}
+                            style={{
+                                boxShadow: 'none'
+                            }}
+                            >{t("form.label.reset")}</Button>
+                        </div>
+                        <div
+                        ref={this.colorPickerRef}
+                        style={{
+                            position: 'absolute',
+                            zIndex: '2',
+                            display: displayColorPicker ? 'block' : 'none'
+                        }}
+                        >
+                            <SketchPicker color={ color } onChange={ this.handleChange }/>
+                        </div>
+					</Form.Item>
+				</Col>
+            </Row>
+            <Row gutter={16}>
+                <Col span={12}>
                     <DropdownField
                         fieldName="status"
-                        label="Trạng thái"
+                        label={t("form.label.status")}
                         required
                         options={commonStatus}
                         disabled={loadingSave}
@@ -134,7 +245,7 @@ class ProductForm extends BasicForm {
             <Row gutter={16}>
                 <Col span={24}>
                     <RichTextField
-                        label="Mô tả"
+                        label={t("form.label.description")}
                         fieldName="description"
                         disabled={loadingSave}
                     />

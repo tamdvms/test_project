@@ -1,3 +1,6 @@
+import React from 'react'
+import { HourglassOutlined , SolutionOutlined, CarOutlined, StopOutlined, CheckCircleOutlined } from '@ant-design/icons';
+
 const AppConstants = {
     apiRootUrl: process.env.REACT_APP_API,
     contentRootUrl: `${process.env.REACT_APP_API}/v1/file/download`,
@@ -7,7 +10,7 @@ const AppConstants = {
 
 
 const StorageKeys = {
-    userData: 'digi-user-data'
+    userData: 'nails-user-data'
 }
 
 const LayoutConfigs = {
@@ -17,8 +20,9 @@ const LayoutConfigs = {
 
 const UserTypes = {
     ADMIN: 1,
-    SHOP: 2,
+    CUSTOMER: 2,
     EMPLOYEE: 3,
+    COLLABORATOR: 4,
 }
 
 const GroupPermissonTypes = {
@@ -56,11 +60,39 @@ const CurrentcyPositions = {
     BACK: 1,
 }
 
-const CategoryKinds = {
-    CATEGORY_KIND_NEWS: 1,
-    CATEGORY_KIND_UNIVERSITY: 2,
-    CATEGORY_KIND_JOB: 3,
-}
+const OrdersStates = [
+    {
+        value: 0,
+        label: 'Mới tạo',
+        color: '#171717',
+        icon: <HourglassOutlined />,
+    },
+    {
+        value: 1,
+        label: 'Đã duyệt',
+        color: 'orange',
+        icon: <SolutionOutlined />,
+    },
+    {
+        value: 2,
+        label: 'Vận chuyển',
+        color: 'blue',
+        icon: <CarOutlined />,
+    },
+    {
+        value: 3,
+        label: 'Hoàn tất',
+        color: 'green',
+        icon: <CheckCircleOutlined />,
+    },
+    {
+        value: 4,
+        label: 'Đã hủy',
+        color: 'red',
+        icon: <StopOutlined/>,
+    },
+]
+
 export const LIMIT_IMAGE_SIZE = 512000;
 
 // Pagination config
@@ -84,6 +116,6 @@ export {
     GroupPermissonTypes,
     UploadFileTypes,
     ProvinceKinds,
-    CategoryKinds,
     CurrentcyPositions,
+    OrdersStates,
 };

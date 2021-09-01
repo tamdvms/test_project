@@ -1,9 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Avatar, Tag, Button } from "antd";
-import { UserOutlined, PlusOutlined } from "@ant-design/icons";
+import { Avatar, Tag, Button, Divider } from "antd";
+import { UserOutlined, PlusOutlined, CheckOutlined, DeleteOutlined, EditOutlined, LockOutlined } from "@ant-design/icons";
 import qs from 'query-string';
+import { withTranslation } from "react-i18next";
 
+import StatusTag from '../../compoments/common/elements/StatusTag';
 import ListBasePage from "../ListBasePage";
 import ProductForm from "../../compoments/product/ProductForm";
 import BaseTable from "../../compoments/common/table/BaseTable";
@@ -14,6 +16,8 @@ import { FieldTypes } from "../../constants/formConfig";
 import { AppConstants } from "../../constants";
 import { commonStatus } from "../../constants/masterData";
 import Utils from "../../utils";
+import { STATUS_ACTIVE } from "../../constants";
+import { sitePathConfig } from "../../constants/sitePathConfig";
 
 class ProductListPage extends ListBasePage {
     initialSearch() {
@@ -22,50 +26,118 @@ class ProductListPage extends ListBasePage {
 
     constructor(props) {
         super(props);
+        const { t } = props;
         const { location: { search } } = props;
         const { categoryName, categoryId } = qs.parse(search);
         this.categoryId = categoryId;
         this.pagination = { pageSize: 100 };
-        this.objectName =  "Sản phẩm";
+        this.objectName = t("objectName");
         this.breadcrumbs = [
-            { name: "Sản phẩm" },
-            { name: categoryName}
+            { name: t("breadcrumbs.currentPage") },
+            { name: categoryName }
         ];
         this.columns = [
-            this.renderIdColumn(),
+            {
+                title: 'ID',
+                dataIndex: 'id',
+                width: '50px',
+                align: 'center',
+                render: (id, dataRow) => {
+                    return {
+                        props: {
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <div>{id}</div>
+                        ),
+                    }
+                }
+            },
             {
                 title: "#",
                 dataIndex: "productImage",
                 align: 'center',
                 width: 100,
-                render: (avatarPath) => (
-                <Avatar
-                    className="table-avatar"
-                    size="large"
-                    icon={<UserOutlined />}
-                    src={avatarPath ? `${AppConstants.contentRootUrl}${avatarPath}` : null}
-                />
-                ),
-            },
-            {
-                title: 'Tên',
-                render: (dataRow) => {
-                    return (
-                        <span>
-                            {dataRow.productName}
-                        </span>
-                    )
+                render: (avatarPath, dataRow) => {
+                    return {
+                        props: {
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <Avatar
+                                className="table-avatar"
+                                size="large"
+                                icon={<UserOutlined />}
+                                src={avatarPath ? `${AppConstants.contentRootUrl}${avatarPath}` : null}
+                            />
+                        ),
+                    }
                 }
             },
             {
-                title: <div className="tb-al-r">Giá tiền</div>,
+                title: t("table.productName"),
+                render: (dataRow) => {
+                    return {
+                        props: {
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <span className="routing" onClick={()=>{
+                                this.handleRouting(dataRow.id, dataRow.productName);
+                            }}>
+                                {dataRow.productName}
+                            </span>
+                        ),
+                    }
+                }
+            },
+            {
+                title: <div className="tb-al-r force-one-line">{t("table.saleOff")} (%)</div>,
+                dataIndex: 'saleoff',
+                align: 'right',
+                width: 100,
+                render: (saleoff, dataRow) => {
+                    return {
+                        props: {
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <span className="tb-al-r force-one-line">{saleoff || 0}</span>
+                        ),
+                    }
+                }
+            },
+            {
+                title: <div className="tb-al-r">{t("table.price")}</div>,
                 dataIndex: 'productPrice',
                 align: 'right',
-                render: (productPrice) => {
-                    return <span className="tb-al-r">{Utils.formatMoney(productPrice)}</span>
+                width: 100,
+                render: (productPrice, dataRow) => {
+                    return {
+                        props: {
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <span className="tb-al-r force-one-line">{Utils.formatMoney(productPrice)}</span>
+                        ),
+                    }
                 }
             },
-            this.renderStatusColumn(),
+            {
+                title: t("table.status"),
+                dataIndex: 'status',
+                width: '100px',
+                render: (status, dataRow) => {
+                    return {
+                        props: {
+                            style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                        },
+                        children: (
+                            <StatusTag status={status}/>
+                        ),
+                    }
+                }
+            },
             this.renderActionColumn(),
         ];
         this.actionColumns = {
@@ -75,15 +147,90 @@ class ProductListPage extends ListBasePage {
         };
     }
 
+    handleRouting(parentId, parentName) {
+        const { location: { search }, history } = this.props;
+        const queryString = qs.parse(search);
+        const result = {};
+        Object.keys(queryString).map(q => {
+            result[`parentSearch${q}`] = queryString[q];
+        })
+        history.push(`${sitePathConfig.product.path}-child?${qs.stringify({...result, parentId, parentName})}`);
+    }
+
+    renderActionColumn = () => {
+        const { t } = this.props;
+        return {
+            title: t("table.action"),
+            width: '100px',
+            align: 'center',
+            render: (dataRow) => {
+                return {
+                    props: {
+                        style: dataRow.labelColor === 'none' ? {} : { background: dataRow.labelColor },
+                    },
+                    children: this.getActionColumn(dataRow)
+                }
+            }
+        }
+    }
+
+    getActionColumn = (dataRow) => {
+        const actionColumns = [];
+        if(this.actionColumns.isEdit) {
+            actionColumns.push(this.renderEditButton((
+                <Button type="link" onClick={() => this.getDetail(dataRow.id)} className="no-padding">
+                    { this.actionColumns.isEdit.icon || <EditOutlined/> }
+                </Button>
+            )))
+        }
+        if(this.actionColumns.isChangeStatus) {
+            actionColumns.push(
+                <Button type="link" onClick={() => this.showChangeStatusConfirm(dataRow) } className="no-padding">
+                    {
+                        dataRow.status === STATUS_ACTIVE
+                        ?
+                        <LockOutlined/>
+                        :
+                        <CheckOutlined/>
+                    }
+                </Button>
+            )
+        }
+        if(this.actionColumns.isDelete) {
+            actionColumns.push(
+                this.renderDeleteButton((
+                    <Button type="link" onClick={() => this.showDeleteConfirm(dataRow.id) } className="no-padding">
+                        { this.actionColumns.isDelete.icon || <DeleteOutlined/> }
+                    </Button>
+                ))
+            )
+        }
+        const actionColumnsWithDivider = [];
+        actionColumns.forEach((action, index) => {
+            actionColumnsWithDivider.push(action);
+            if(index !== (actionColumns.length -1))
+            {
+                actionColumnsWithDivider.push(<Divider type="vertical" />);
+            }
+        })
+        return (
+            <span>
+                {
+                    actionColumnsWithDivider.map((action, index) => <span key={index}>{action}</span>)
+                }
+            </span>
+        )
+    }
+
     componentWillReceiveProps(nextProps) {
         if(nextProps.location.search !== this.props.location.search) {
-            const { location: { search } } = nextProps;
+            const { location: { search }, t } = nextProps;
             const { categoryName, categoryId } = qs.parse(search);
             this.categoryId = categoryId;
             this.pagination = { pageSize: 100 };
-            this.objectName =  "Sản phẩm";
+            this.objectName =  t("objectName");
             this.breadcrumbs = [
-                { name: "Sản phẩm" },
+                { name: t("breadcrumbs.currentPage") },
                 { name: categoryName}
             ];
             const { changeBreadcrumb } = nextProps;
@@ -131,15 +278,16 @@ class ProductListPage extends ListBasePage {
     }
 
     getSearchFields() {
+        const { t } = this.props;
         return [
             {
                 key: "name",
-                seachPlaceholder: 'Tên',
+                seachPlaceholder: t("searchPlaceHolder.productName"),
                 initialValue: this.search.name,
             },
             {
                 key: "status",
-                seachPlaceholder: "Chọn trạng thái",
+                seachPlaceholder: t("searchPlaceHolder.status"),
                 fieldType: FieldTypes.SELECT,
                 options: commonStatus,
                 initialValue: this.search.status,
@@ -159,6 +307,7 @@ class ProductListPage extends ListBasePage {
             dataList,
             loading,
             uploadFile,
+            t,
         } = this.props;
         const { isShowModifiedModal, isShowModifiedLoading } = this.state;
         const productData = dataList.data || [];
@@ -173,7 +322,7 @@ class ProductListPage extends ListBasePage {
                     type="primary"
                     onClick={() => this.onShowModifiedModal(false)}
                     >
-                        <PlusOutlined /> Thêm mới
+                        <PlusOutlined /> {t("createNewButton")}
                     </Button>
                 ))
             }
@@ -199,6 +348,7 @@ class ProductListPage extends ListBasePage {
                 dataDetail={this.isEditing ? this.dataDetail : {}}
                 uploadFile={uploadFile}
                 loadingSave={isShowModifiedLoading}
+                t={t}
             />
             </BasicModal>
         </div>
@@ -221,4 +371,4 @@ const mapDispatchToProps = (dispatch) => ({
   uploadFile: (payload) => dispatch(actions.uploadFile(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['productListPage','listBasePage','constants', 'basicModal'])(ProductListPage));

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import Utils from '../../utils';
 
 const FormItem = Form.Item;
 
@@ -16,13 +17,17 @@ const LoginForm = ({ loading, onLogin }) => {
         <Form onFinish={handleSubmit} className="login-form">
             <FormItem
                 name= "username"
-                rules = {[{ required: true, message: 'Hãy nhập tên đăng nhập!' }]}
+                rules = {[
+                    { required: true, message: 'Hãy nhập tên đăng nhập!' },
+                    { validator: Utils.validateUsernameForm }
+                ]}
             >
-                <Input 
+                <Input
                     prefix={<UserOutlined/>}
                     size="large"
-                    name="username" 
-                    placeholder="Tên đăng nhập" />    
+                    name="username"
+                    placeholder="Tên đăng nhập"
+                    />
             </FormItem>
             <FormItem
                 name= "password"
@@ -46,7 +51,7 @@ const LoginForm = ({ loading, onLogin }) => {
                 </Button>
                 
             </FormItem>
-            <center className="s-mt4px"><small>Copyright © Digi, All Rights Reserved.</small></center>
+            <center className="s-mt4px"><small>Copyright © Nails, All Rights Reserved.</small></center>
         </Form>
     );
 }

@@ -1,4 +1,5 @@
 import apiConfig from './apiConfig';
+import { actions } from '../actions';
 
 export const sitePathConfig = {
     login: {
@@ -86,6 +87,7 @@ export const sitePathConfig = {
     },
     product: {
         path: '/product',
+        childrenKeys: ['/product-child'],
         permissions: [
             apiConfig.product.getList.path,
             apiConfig.product.getById.path,
@@ -125,5 +127,103 @@ export const sitePathConfig = {
             apiConfig.user.updateAdmin.path,
             apiConfig.user.deleteAdmin.path,
         ]
+    },
+    booking: {
+        path: '/booking',
+        permissions: [
+            apiConfig.booking.getProductAutoComplete.path,
+            apiConfig.booking.getCustomerAutoComplete.path,
+            apiConfig.booking.createOrders.path,
+        ],
+        siteConfig: {
+            contentClass: 'booking-site',
+        }
+    },
+    orders: {
+        path: '/orders-management',
+        permissions: [
+            apiConfig.orders.getList.path,
+            apiConfig.orders.getById.path,
+            'no-create',
+            apiConfig.orders.updateState.path,
+            apiConfig.orders.cancelOrders.path,
+            apiConfig.orders.update.path,
+        ],
+    },
+    collaborator: {
+        path: '/collaborator',
+        permissions: [
+            apiConfig.collaborator.getList.path,
+            apiConfig.collaborator.getById.path,
+            apiConfig.collaborator.create.path,
+            apiConfig.collaborator.update.path,
+            apiConfig.collaborator.delete.path,
+            apiConfig.collaboratorProduct.getList.path,
+        ]
+    },
+    employeeCollaborator: {
+        path: '/employee-collaborator',
+        childrenKeys: ['/collaborator', '/collaborator-product', '/collaborator-orders'],
+        permissions: [
+            apiConfig.collaborator.getEmployeeCollaboratorList.path,
+            apiConfig.user.getAdminById.path,
+            apiConfig.user.createAdmin.path,
+            apiConfig.user.updateAdmin.path,
+            apiConfig.user.deleteAdmin.path,
+            apiConfig.collaboratorProduct.getList.path,
+        ]
+    },
+    collaboratorProduct: {
+        path: '/collaborator-product',
+        permissions: [
+            apiConfig.collaboratorProduct.getList.path,
+            apiConfig.collaboratorProduct.getById.path,
+            apiConfig.collaboratorProduct.create.path,
+            apiConfig.collaboratorProduct.update.path,
+            apiConfig.collaboratorProduct.delete.path,
+        ],
+        siteConfig: {
+            contentClass: 'collaborator-site',
+        }
+    },
+    collaboratorCategory: {
+        path: '/collaborator-category',
+        childrenKeys: ['/collaborator-category-product'],
+        permissions: [
+            apiConfig.category.getList.path,
+            apiConfig.category.getById.path,
+            apiConfig.category.create.path,
+            apiConfig.category.update.path,
+            apiConfig.category.delete.path,
+        ],
+        // TODO Handle show menu, permission depend on settings
+        // settingConfig: {
+        //     enableShow() {
+        //         actions
+        //     }
+        // }
+    },
+    collaboratorCategoryProduct: {
+        path: '/collaborator-category-product',
+        permissions: [
+            apiConfig.collaboratorCategoryProduct.getList.path,
+            apiConfig.collaboratorCategoryProduct.getById.path,
+            apiConfig.collaboratorCategoryProduct.create.path,
+            apiConfig.collaboratorCategoryProduct.update.path,
+            apiConfig.collaboratorCategoryProduct.delete.path,
+        ],
+        siteConfig: {
+            contentClass: 'collaborator-site',
+        }
+    },
+    wrapperCollaboratorOrders: {
+        path: '/collaborator-orders',
+        permissions: [
+            apiConfig.orders.getCollaboratorOrdersList.path,
+            apiConfig.orders.getById.path,
+        ],
+        siteConfig: {
+            contentClass: 'wrapper-collaborator-orders',
+        }
     },
 }

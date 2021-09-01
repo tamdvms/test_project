@@ -1,0 +1,673 @@
+.booking-site {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0 8px !important;
+    min-height: calc(100vh - 162px) !important;
+    margin: 0 !important;
+    // max-width: 1200px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    background-color: transparent !important;
+    * {
+        /* width */
+        ::-webkit-scrollbar {
+            width: 1px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: rgb(211, 211, 211);
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    .booking-container {
+        background-color: #fff;
+        padding: 16px 24px;
+        padding-right: 0;
+        max-height: calc(100vh - 162px);
+        display: flex;
+        flex: 1;
+        .booking-page {
+            width: 100%;
+            display: flex;
+            align-items: stretch;
+            .content {
+                max-height: 100%;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                margin-bottom: -16px;
+                .auto-complete {
+                    margin-bottom: 16px;
+                    padding-bottom: 13px;
+                    flex-shrink: 0;
+                    border-bottom: 1px solid #f0f0f0;
+                    .input {
+                        width: 350px;
+                    }
+                }
+                .list {
+                    flex: 1;
+                    overflow: hidden;
+                    .products {
+                        max-height: 100%;
+                        min-height: 100%;
+                        overflow-y: auto;
+                        overflow-x: hidden;
+                        padding-right: 14px;
+                        position: relative;
+                        .product-item {
+                            position: relative;
+                            cursor: pointer;
+                            padding: 2px 16px;
+                            padding-left: 10px;
+                            margin-bottom: 8px;
+                            border-radius: 10px;
+                            border: 1px solid #d9d9d9;
+                            display: flex;
+                            align-items: center;
+                            .overlay {
+                                transition: all 0.5s;
+                                font-size: 36px;
+                                color: #fff;
+                                background-color: #188fff9d;
+                                position: absolute;
+                                left: 0;
+                                right: 0;
+                                bottom: 0;
+                                top: 0;
+                                opacity: 0;
+                                border-radius: 10px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
+                            &:hover {
+                                border: 1px solid #fff;
+                                .overlay {
+                                    opacity: 1;
+                                }
+                            }
+                            .avatar {
+                                padding: 8px;
+                                width: 54px;
+                                height: 54px;
+                                flex-shrink: 0;
+                                img {
+                                    border-radius: 50%;
+                                }
+                            }
+                            .name {
+                                margin-left: 16px;
+                                font-size: 1.1rem;
+                                margin-right: 8px;
+                            }
+                            .price {
+                                margin-left: auto;
+                                color: #000;
+                                font-weight: 500;
+                                font-size: 1.1rem !important;
+                                flex-shrink: 0;
+                                line-height: 1.35;
+                                text-align: right;
+                                .original-price.line-through {
+                                    text-decoration: line-through;
+                                    font-size: 14px;
+                                    font-style: italic;
+                                    font-weight: normal;
+                                }
+                                .saleoff-price {
+                                    
+                                }
+                            }
+                        }
+                        .loading {
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                        .load-more {
+                            position: relative;
+                            .loader-container {
+                                justify-content: center;
+                                z-index: 1;
+                                &::before {
+                                    display: none;
+                                }
+                                .loader {
+                                    -webkit-animation-delay: -0.16s !important;
+                                    animation-delay: -0.16s !important;
+                                }
+                                .loader,
+                                .loader:before,
+                                .loader:after {
+                                    background: #808080;
+                                    -webkit-animation: loadmore-booking 1s infinite ease-in-out;
+                                    animation: loadmore-booking 1s infinite ease-in-out;
+                                    width: 0.5em;
+                                    height: 2em;
+                                    box-shadow: 0 0 #808080;
+                                }
+                                .loader:before,
+                                .loader:after {
+                                    position: absolute;
+                                    top: 0;
+                                    content: '';
+                                }
+                                .loader:before {
+                                    left: -1em;
+                                    -webkit-animation-delay: -0.32s;
+                                    animation-delay: -0.32s;
+                                }
+                                .loader:after {
+                                    left: 1em;
+                                }
+                                @-webkit-keyframes loadmore-booking {
+                                    0%,
+                                    80%,
+                                    100% {
+                                        height: 1em;
+                                        box-shadow: 0 0 #808080;
+                                    }
+                                    40% {
+                                        height: 2em;
+                                        box-shadow: 0 -0.5em #808080;
+                                    }
+                                }
+                                @keyframes loadmore-booking {
+                                    0%,
+                                    80%,
+                                    100% {
+                                        height: 1em;
+                                        box-shadow: 0 0 #808080;
+                                    }
+                                    40% {
+                                        height: 2em;
+                                        box-shadow: 0 -0.5em #808080;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .content.disabled {
+                &::before {
+                    content: "";
+                    cursor: inherit;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                    z-index: 2;
+                    background-color: #80808086;
+                }
+            }
+            .sidebar {
+                height: calc(100% + 32px);
+                width: 500px;
+                flex-shrink: 0;
+                margin: -16px 0;
+                margin-left: 14px;
+                box-shadow: -8px 3px 8px -8px rgba(66, 66, 66, 0.1);
+                padding: 16px;
+                padding-bottom: 0;
+                position: relative;
+                z-index: 2;
+                background-color: #fff;
+                .cart.hide, .payment-form.hide {
+                    display: none;
+                }
+                .cart, .payment-form {
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    .header {
+                        padding: 0 16px;
+                        margin: 0;
+                        border-bottom: #f0f0f0 1px solid;
+                        margin-top: -5px;
+                        height: 37px;
+                        display: flex;
+                        justify-content: center;
+                        padding-bottom: 8px;
+                        padding-top: 4px;
+                        box-sizing: content-box;
+                        h2 {
+                            text-transform: uppercase;
+                            text-align: center;
+                            font-size: 1.1rem !important;
+                            margin-bottom: 0 !important;
+                        }
+                    }
+                    .list {
+                        flex: 1;
+                        overflow: hidden;
+                        padding: 16px 0;
+                        margin-right: -4px;
+                        .orders {
+                            max-height: 100%;
+                            overflow-y: auto;
+                            overflow-x: hidden;
+                            padding-right: 8px;
+                            .item {
+                                padding: 8px;
+                                padding-left: 8px;
+                                padding-right: 16px;
+                                position: relative;
+                                border-bottom: 1px solid #f0f0f0;
+                                &:first-child {
+                                    margin-top: 4px;
+                                }
+                                &:last-child {
+                                    border-bottom: none;
+                                }
+                                .item-content {
+                                    display: flex;
+                                    position: relative;
+                                    .col-1 {
+                                        flex: 1;
+                                        .title {
+                                            font-weight: 400;
+                                            margin-bottom: 8px;
+                                        }
+                                        .action {
+                                            display: flex;
+                                            align-items: center;
+                                            .note-btn {
+                                                font-size: 0.7rem;
+                                                padding: 0 8px;
+                                                height: 25px;
+                                                background-color: #fff;
+                                            }
+                                            .delete-btn {
+                                                cursor: pointer;
+                                                padding: 10px;
+                                                color: red;
+                                                position: absolute;
+                                                top: 50%;
+                                                right: -15px;
+                                                transform: translateY(-50%);
+                                                font-size: 18px;
+                                            }
+                                        }
+                                    }
+                                    .col-2 {
+                                        width: fit-content;
+                                        flex-shrink: 0;
+                                        margin-left: 16px;
+                                        margin-right: 28px;
+                                        display: flex;
+                                        flex-direction: column;
+                                        align-items: flex-end;
+                                        justify-content: space-between;
+                                        .price {
+                                            color: #000;
+                                            font-weight: 400;
+                                            margin-bottom: 8px;
+                                        }
+                                        .quantity-edition {
+                                            display: flex;
+                                            .minus, .plus {
+                                                margin-top: auto;
+                                                width: 25px;
+                                                height: 25px;
+                                                padding: 0;
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                            }
+                                            .quantity {
+                                                margin-top: auto;
+                                                font-weight: bold;
+                                                margin: 0 8px;
+                                            }
+                                        }
+                                    }
+                                }
+                                .note {
+                                    width: 100%;
+                                    height: 144px;
+                                    position: relative;
+                                    .form {
+                                        height: 100%;
+                                        width: 100%;
+                                        padding-left: 1px;
+                                        textarea {
+                                            resize: none;
+                                            width: 100%;
+                                            height: calc(100% - 45px);
+                                            border: #d9d9d9 1px solid;
+                                            border-radius: 5px;
+                                            margin-top: 8px;
+                                            outline: none;
+                                            padding: 8px;
+                                            overflow-y: auto;
+                                            word-break: break-word;
+                                        }
+                                    }
+                                    .submit-note {
+                                        position: absolute;
+                                        bottom: 0;
+                                        right: 0;
+                                    }
+                                }
+                                .note.hide {
+                                    display: none;
+                                }
+                                .note-content {
+                                    width: 100%;
+                                    margin-top: 8px;
+                                    font-style: italic;
+                                    font-size: 0.8rem;
+                                    word-break: break-word;
+                                }
+                            }
+                        }
+                    }
+                    .bottom {
+                        height: 163px;
+                        margin-top: auto;
+                        display: flex;
+                        flex-direction: column;
+                        border-top: 1px solid #f0f0f0;
+                        padding-top: 4px;
+                        padding-bottom: 0;
+                        margin-left: -16px;
+                        margin-right: -16px;
+                        .calculate-total {
+                            display: flex;
+                            justify-content: space-between;
+                            
+                        }
+                        .calculate-total {
+                            display: flex;
+                            justify-content: space-between;
+                            padding: 0px 24px;
+                        }
+                        .calculate-total.product {
+                            padding-top: 8px;
+                        }
+                        .calculate-total.product, .calculate-total.vat, .calculate-total.discount {
+                            .title, .total {
+                                font-weight: 500;
+                                font-size: 14px;
+                            }
+                        }
+                        .calculate-total.vat {
+                            padding-bottom: 8px !important;
+                        }
+                        .calculate-total.product-vat {
+                            padding: 8px 24px;
+                            border-top: 1px solid #f0f0f0;
+                            .title, .total {
+                                font-weight: bold;
+                                font-size: 14px;
+                            }
+                            .total {
+                                font-weight: 500;
+                            }
+                        }
+                        .payment {
+                            display: block;
+                            width: 50%;
+                            margin: auto auto 16px auto;
+                            min-width: 100px;
+                            height: 38px;
+                            text-transform: uppercase;
+                            font-weight: bold;
+                        }
+                    }
+                }
+                .payment-form {
+                    position: relative;
+                    .header {
+                        margin-bottom: 8px;
+                        padding-bottom: 4px;
+                        .back {
+                            position: absolute;
+                            left: -4px;
+                            top: -4px;
+                            cursor: pointer;
+                        }
+                    }
+                    .payment-content {
+                        flex: 1;
+                        overflow-y: auto;
+                        overflow-x: hidden;
+                        padding-right: 16px;
+                        margin-right: -16px;
+                        .form {
+                            margin-top: 8px;
+                            .form-item-email, .form-item-discount {
+                                margin-bottom: 8px;
+                            }
+                            .form-item-phone, .form-item-fullname {
+                                margin-bottom: 12px;
+                            }
+                        }
+                        .list {
+                            padding-top: 0;
+                            margin-right: 0 !important;
+                            .orders {
+                                padding-right:  0 !important;
+                                .item {
+                                    margin: 0 !important;
+                                    padding-right: 0;
+                                    .col-2 {
+                                        margin-right: 8px !important;
+                                    }
+                                    .title {
+                                        margin: 0 !important;
+                                    }
+                                    .price {
+                                        margin: 0 !important;
+                                    }
+                                }
+                                .note-content {
+                                    margin: 0 !important;
+                                    padding-left: 22px;
+                                }
+                            }
+                        }
+                    }
+                    .bottom {
+                        height: 185px !important;
+                        .calculate-total {
+                            display: flex;
+                            justify-content: space-between;
+                            padding: 0px 24px !important;
+                        }
+                        .calculate-total.product-vat {
+                            padding-top: 8px !important;
+                            padding-bottom: 8px !important;
+                        }
+                    }
+                }
+            }
+        }
+        .ant-avatar.avatar.ant-avatar-circle {
+            width: 46px !important;
+            height: 46px !important;
+            margin: 8px;
+            padding: 0 !important;
+        }
+    }
+}
+
+.product-child-list-modal {
+    .product-child-list {
+        .list {
+            flex: 1;
+            overflow: hidden;
+            .products {
+                max-height: 100%;
+                min-height: 100%;
+                overflow-y: auto;
+                overflow-x: hidden;
+                padding: 0;
+                position: relative;
+                .product-item {
+                    position: relative;
+                    cursor: pointer;
+                    padding: 2px 16px;
+                    padding-left: 10px;
+                    margin-bottom: 8px;
+                    border-radius: 10px;
+                    border: 1px solid #d9d9d9;
+                    display: flex;
+                    align-items: center;
+                    .overlay {
+                        transition: all 0.5s;
+                        font-size: 36px;
+                        color: #fff;
+                        background-color: #188fff9d;
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        top: 0;
+                        opacity: 0;
+                        border-radius: 10px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    &:hover {
+                        border: 1px solid #fff;
+                        .overlay {
+                            opacity: 1;
+                        }
+                    }
+                    .avatar {
+                        margin: 8px;
+                        width: 45px;
+                        height: 45px;
+                        flex-shrink: 0;
+                        img {
+                            border-radius: 50%;
+                        }
+                    }
+                    .name {
+                        margin-left: 16px;
+                        font-size: 1.1rem;
+                        margin-right: 8px;
+                    }
+                    .price {
+                        margin-left: auto;
+                        color: #000;
+                        font-weight: 500;
+                        font-size: 1.1rem !important;
+                        flex-shrink: 0;
+                        line-height: 1.35;
+                        text-align: right;
+                        .original-price.line-through {
+                            text-decoration: line-through;
+                            font-size: 14px;
+                            font-style: italic;
+                            font-weight: normal;
+                        }
+                        .saleoff-price {
+                            
+                        }
+                    }
+                }
+                .loading {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .load-more {
+                    position: relative;
+                    .loader-container {
+                        justify-content: center;
+                        z-index: 1;
+                        &::before {
+                            display: none;
+                        }
+                        .loader {
+                            -webkit-animation-delay: -0.16s !important;
+                            animation-delay: -0.16s !important;
+                        }
+                        .loader,
+                        .loader:before,
+                        .loader:after {
+                            background: #808080;
+                            -webkit-animation: loadmore-booking 1s infinite ease-in-out;
+                            animation: loadmore-booking 1s infinite ease-in-out;
+                            width: 0.5em;
+                            height: 2em;
+                            box-shadow: 0 0 #808080;
+                        }
+                        .loader:before,
+                        .loader:after {
+                            position: absolute;
+                            top: 0;
+                            content: '';
+                        }
+                        .loader:before {
+                            left: -1em;
+                            -webkit-animation-delay: -0.32s;
+                            animation-delay: -0.32s;
+                        }
+                        .loader:after {
+                            left: 1em;
+                        }
+                        @-webkit-keyframes loadmore-booking {
+                            0%,
+                            80%,
+                            100% {
+                                height: 1em;
+                                box-shadow: 0 0 #808080;
+                            }
+                            40% {
+                                height: 2em;
+                                box-shadow: 0 -0.5em #808080;
+                            }
+                        }
+                        @keyframes loadmore-booking {
+                            0%,
+                            80%,
+                            100% {
+                                height: 1em;
+                                box-shadow: 0 0 #808080;
+                            }
+                            40% {
+                                height: 2em;
+                                box-shadow: 0 -0.5em #808080;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .ant-modal-footer {
+        display: none;
+    }
+}

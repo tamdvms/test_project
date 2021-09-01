@@ -29,6 +29,15 @@ import ProductListPage from '../containers/product/ProductListPage';
 import ImportManagementListPage from "../containers/importManagement/ImportManagementListPage";
 import ExportManagementListPage from "../containers/exportManagement/ExportManagementListPage";
 import EmployeeListPage from "../containers/employee/EmployeeListPage";
+import BookingContainer from "../containers/booking/BookingContainer";
+import OrdersListPage from "../containers/orders/OrdersListPage";
+import ProductListPageChild from "../containers/product/ProductListPageChild";
+import CollaboratorListPage from "../containers/collaborator/CollaboratorListPage";
+import CollaboratorProductListPage from "../containers/collaborator/CollaboratorProductListPage";
+import CollaboratorCategoryListPage from "../containers/collaborator/CollaboratorCategoryListPage";
+import CollaboratorCategoryProductListPage from "../containers/collaborator/CollaboratorCategoryProductListPage";
+import EmployeeCollaboratorListPage from "../containers/collaborator/EmployeeCollaboratorListPage";
+import WrapperCollaboratorOrders from '../containers/CollaboratorOrders/WrapperCollaboratorOrders';
 
 const RootRoute = () => {
     const {
@@ -46,6 +55,14 @@ const RootRoute = () => {
         importManagement,
         exportManagement,
         employee,
+        booking,
+        orders,
+        collaborator,
+        collaboratorProduct,
+        collaboratorCategory,
+        collaboratorCategoryProduct,
+        employeeCollaborator,
+        wrapperCollaboratorOrders,
     } = sitePathConfig;
 
     return (
@@ -73,9 +90,18 @@ const RootRoute = () => {
                 <PrivateRoute exact path={categoryProduct.path} component={CategoryProductListPage}/>
                 <PrivateRoute exact path={categoryProduct.childrenKeys[0]} component={CategoryProductListPageChild}/>
                 <PrivateRoute exact path={product.path + "/:id"} component={ProductListPage}/>
+                <PrivateRoute exact path={product.childrenKeys[0]} component={ProductListPageChild}/>
                 <PrivateRoute exact path={importManagement.path} component={ImportManagementListPage}/>
                 <PrivateRoute exact path={exportManagement.path} component={ExportManagementListPage}/>
                 <PrivateRoute exact path={employee.path} component={EmployeeListPage}/>
+                <PrivateRoute exact path={collaborator.path} component={CollaboratorListPage}/>
+                <PrivateRoute exact path={booking.path} component={BookingContainer}/>
+                <PrivateRoute exact path={orders.path} component={OrdersListPage}/>
+                <PrivateRoute exact path={collaboratorProduct.path} component={CollaboratorProductListPage}/>
+                <PrivateRoute exact path={collaboratorCategory.path} component={CollaboratorCategoryListPage}/>
+                <PrivateRoute exact path={collaboratorCategoryProduct.path} component={CollaboratorCategoryProductListPage}/>
+                <PrivateRoute exact path={employeeCollaborator.path} component={EmployeeCollaboratorListPage}/>
+                <PrivateRoute exact path={wrapperCollaboratorOrders.path} component={WrapperCollaboratorOrders}/>
                 {/* Error Page */}
                 <PrivateRoute exact path={forbidden.path} component={Forbidden}/>
                 {/* <Route exact path="/error" component={ErrorServer} /> */}

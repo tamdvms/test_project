@@ -2,6 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Button } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { withTranslation } from "react-i18next";
 
 import ListBasePage from "../ListBasePage";
 import SettingForm from "../../compoments/settings/SettingForm";
@@ -11,25 +12,23 @@ import BasicModal from "../../compoments/common/modal/BasicModal";
 import { actions } from "../../actions";
 
 class SettingsListPage extends ListBasePage {
-  initialSearch() {
-    return { key: "", group: ""};
-  }
 
   constructor(props) {
     super(props);
+    const { t } = props;
     this.objectName = "cài đặt";
     this.breadcrumbs = [{ name: "Cài đặt" }];
     this.columns = [
       this.renderIdColumn(),
-      { title: "Tên", dataIndex: "name" },
+      { title: t("table.name"), dataIndex: "name" },
       {
-        title: <div style={{paddingRight: "2vw"}}>Giá trị</div>,
+        title: <div style={{paddingRight: "2vw"}}>{t("table.value")}</div>,
         dataIndex: "value",
         render: (value) => (
           <div style={{paddingRight: "2vw"}}>{value}</div>
         )
       },
-      { title: "Mô tả", dataIndex: "description"},
+      { title: t("table.description"), dataIndex: "description"},
       this.renderActionColumn(),
     ];
     this.actionColumns = {
@@ -68,6 +67,7 @@ class SettingsListPage extends ListBasePage {
     const {
       dataList,
       loading,
+      t,
     } = this.props;
     const { isShowModifiedModal, isShowModifiedLoading } = this.state;
     const settings = dataList.data || [];
@@ -98,6 +98,7 @@ class SettingsListPage extends ListBasePage {
             isEditing={this.isEditing}
             dataDetail={this.isEditing ? this.dataDetail : {}}
             loadingSave={isShowModifiedLoading}
+            t={t}
           />
         </BasicModal>
       </div>
@@ -118,4 +119,4 @@ const mapDispatchToProps = (dispatch) => ({
   deleteData: (payload) => dispatch(actions.deleteSetting(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(withTranslation(['settingsListPage','listBasePage','constants', 'basicModal'])(SettingsListPage));

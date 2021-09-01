@@ -10,6 +10,10 @@ import product from './product';
 import importManagement from './importManagement';
 import exportManagement from './exportManagement';
 import employee from './employee';
+import orders from './orders';
+import collaborator from './collaborator';
+import collaboratorProduct from './collaboratorProduct';
+import collaboratorCategoryProduct from './collaboratorCategoryProduct';
 
 const rootReducer = combineReducers({
     appCommon: appCommon.reducer,
@@ -23,6 +27,10 @@ const rootReducer = combineReducers({
     importManagement: importManagement.reducer,
     exportManagement: exportManagement.reducer,
     employee: employee.reducer,
+    orders: orders.reducer,
+    collaborator: collaborator.reducer,
+    collaboratorProduct: collaboratorProduct.reducer,
+    collaboratorCategoryProduct: collaboratorCategoryProduct.reducer,
 });
 
 export default rootReducer;
