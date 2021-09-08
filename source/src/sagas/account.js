@@ -4,6 +4,7 @@ import { sendRequest } from "../services/apiService";
 import { actionTypes, reduxUtil } from "../actions/account";
 import { actions } from "../actions";
 import apiConfig from "../constants/apiConfig";
+import { APP } from "../constants";
 // import { handleApiResponse } from '../utils/apiHelper';
 import { UserTypes } from "../constants";
 
@@ -17,7 +18,7 @@ const {
 
 function* login({ payload: { params, onCompleted, onError } }) {
   try {
-    const result = yield call(sendRequest, apiConfig.account.login, params);
+    const result = yield call(sendRequest, apiConfig.account.login, {...params, app: APP });
     const { success, responseData } = result;
     if (success && responseData.result) {
       const profileResult = yield call(

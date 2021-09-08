@@ -7,7 +7,7 @@ const AppConstants = {
     langKey: 'vi'
 };
 
-
+export const APP = 'BACKEND_ADMIN'
 
 const StorageKeys = {
     userData: 'nails-user-data'
