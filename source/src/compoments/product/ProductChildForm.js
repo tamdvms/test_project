@@ -151,8 +151,8 @@ class ProductChildForm extends BasicForm {
             <Row gutter={16}>
                 <Col span={12}>
                     <TextField
-                    fieldName={t("form.label.productName")}
-                    label="Tên"
+                    fieldName="productName"
+                    label={t("form.label.productName")}
                     required
                     disabled={loadingSave}
                     />
